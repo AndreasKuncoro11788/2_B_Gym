@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:2_B_Gym/View/view_list.dart';
-import 'package:2_B_Gym/view/isi_home.dart';
+import 'package:flutter_application_1/view/view_list.dart';
+import 'package:flutter_application_1/view/isi_home.dart';
+import 'package:flutter_application_1/view/home.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
