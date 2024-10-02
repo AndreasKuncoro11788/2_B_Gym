@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:guidedlayout2_1788/View/home.dart';
+import 'package:guidedlayout2_1788/View/login.dart';
+import 'package:guidedlayout2_1788/View/profile.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,11 +13,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Andreas Kuncoro-220711788'),
-        ),
-      ),
+      home: HomeView(),
     );
   }
 }
