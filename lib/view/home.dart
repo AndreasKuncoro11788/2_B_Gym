@@ -24,7 +24,7 @@ class HomeViewState extends State<HomeView> {
     ),
     ListNamaView(),
     Center(
-      child: Text('Index 3: Profile'),
+      child: userProfile(),
     ),
   ];
 
