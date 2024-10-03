@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/View/view_list.dart';
-import 'package:flutter_application_1/component/constant.dart';
 
 class IsiHomeView extends StatefulWidget {
   const IsiHomeView({super.key});
