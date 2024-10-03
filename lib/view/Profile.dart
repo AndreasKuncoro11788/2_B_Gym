@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:2_B_Gym/component/constant.dart';
 
 class userProfile extends StatelessWidget {
   const userProfile({super.key});
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:2_B_Gym/view/home.dart';
-import 'package:2_B_Gym/view/register.dart';
-import 'package:2_B_Gym/component/form_component.dart';
+import 'package:flutter_application_1/view/home.dart';
+import 'package:flutter_application_1/view/register.dart';
+import 'package:flutter_application_1/component/form_component.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
