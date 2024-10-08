@@ -21,7 +21,7 @@ class HomeViewState extends State<HomeView> {
 
   static const List<Widget> widgetOptions = <Widget>[
     Center(
-      child: IsiHomeView(),
+      child: IsiHome(),
     ),
     ListNamaView(),
     Center(
