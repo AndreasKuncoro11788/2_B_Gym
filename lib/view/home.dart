@@ -23,9 +23,9 @@ class HomeViewState extends State<HomeView> {
     Center(
       child: IsiHome(),
     ),
-    ListNamaView(),
+      ListViewScreen(),
     Center(
-      child: userProfile(),
+      child: UserProfile()
     ),
   ];
 
