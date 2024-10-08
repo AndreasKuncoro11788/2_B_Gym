@@ -1,128 +1,332 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
-class IsiHomeView extends StatefulWidget {
-  const IsiHomeView({super.key});
+class IsiHome extends StatefulWidget {
+  const IsiHome({super.key});
 
   @override
-  State<IsiHomeView> createState() => HomeViewState();
+  State<IsiHome> createState() => _IsiHomeState();
 }
 
-class HomeViewState extends State<IsiHomeView> {
+class _IsiHomeState extends State<IsiHome> {
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final bool isLargeScreen = width > 800;
-
-    return Theme(
-      data: ThemeData.light(),
-      child: Scaffold(
-        //key: _scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-          elevation: 0,
-          titleSpacing: 0,
-          leading: isLargeScreen
-              ? null
-              : IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => (),
-                ),
-          title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "BowGym",
-                  style: TextStyle(
-                      color: Colors.green, fontWeight: FontWeight.bold),
-                ),
-                if (isLargeScreen) Expanded(child: _navBarItems())
-              ],
-            ),
-          ),
-          actions: const [
+    return Scaffold(
+      backgroundColor: Colors.blue[800],
+      body: SafeArea(
+        child: Column(
+          children: [
             Padding(
-              padding: EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(child: _ProfileIcon()),
-            )
-          ],
-        ),
-        drawer: isLargeScreen ? null : _drawer(),
-        body: const Center(
-          child: Text(
-            "Body",
-          ),
-        ),
-      ),
-    );
-  }
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                    Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hi, Users', 
+                            style: TextStyle(
+                              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Text(
+                            '10 Okt 2024',
+                            style: TextStyle(
+                              color: Colors.blue[200]),
+                          )
+                        ],
+                      ),
+                    ),
+                
+                    Container(
+                      decoration:  BoxDecoration(
+                        color: Colors.blue[600],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.all(12),
+                      child: Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                      ),
+                    )
+                    ],
+                  ),
+              
+                  SizedBox(
+                    height: 25,
+                  ),
+              
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue[600],
+                      borderRadius: BorderRadius.circular(12)),
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: 5,),
+                        Text(
+                          'Search',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              
+                  SizedBox(
+                    height: 25,
+                  ),
+              
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'How do you feel?', 
+                        style: TextStyle(
+                          color: Colors.white, 
+                          fontSize: 18, 
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Icon(
+                        Icons.more_horiz,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+              
+                  SizedBox(
+                    height: 25,
+                  ),
+              
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            decoration:  BoxDecoration(
+                              color: Colors.blue[600],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.all(12),
+                            child: Center(
+                              child: Text(
+                                '☹️',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                ),
+                              ),
+                          
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Bad',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+              
+                      Column(
+                        children: [
+                          Container(
+                            decoration:  BoxDecoration(
+                              color: Colors.blue[600],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.all(12),
+                            child: Center(
+                              child: Text(
+                                '🙂',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                ),
+                              ),
+                          
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Fine',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      
+                      Column(
+                        children: [
+                          Container(
+                            decoration:  BoxDecoration(
+                              color: Colors.blue[600],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.all(12),
+                            child: Center(
+                              child: Text(
+                                '😀',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                ),
+                              ),
+                          
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Well',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+              
+                      Column(
+                        children: [
+                          Container(
+                            decoration:  BoxDecoration(
+                              color: Colors.blue[600],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.all(12),
+                            child: Center(
+                              child: Text(
+                                '🤩',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                ),
+                              ),
+                          
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            'Exellent',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(25),
+                color: Colors.grey[100],
+                child: Center(
+                  child: Column(
+                    children: [
 
-  Widget _drawer() => Drawer(
-        child: ListView(
-          children: _menuItems
-              .map((item) => ListTile(
-                    onTap: () {
-                      ();
-                    },
-                    title: Text(item),
-                  ))
-              .toList(),
-        ),
-      );
 
-  Widget _navBarItems() => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: _menuItems
-            .map(
-              (item) => InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 24.0, horizontal: 16),
-                  child: Text(
-                    item,
-                    style: const TextStyle(fontSize: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Exercises',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Icon(Icons.more_horiz),
+                        ],
+                      ),
+
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16) 
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    color: Colors.orange,
+                                    child: Icon(
+                                      Icons.favorite,
+                                      color: Colors.white,
+                                    )
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Favorite',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      '100 exercises',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.grey
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                            Icon(Icons.more_horiz),
+                          ],
+                        )
+                      )
+
+                    ],
                   ),
                 ),
               ),
             )
-            .toList(),
-      );
-}
-
-final List<String> _menuItems = <String>[
-  'About',
-  'Contact',
-  'Settings',
-  'Sign Out',
-];
-
-enum Menu { itemOne, itemTwo, itemThree }
-
-class _ProfileIcon extends StatelessWidget {
-  const _ProfileIcon({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<Menu>(
-        icon: const Icon(Icons.person),
-        offset: const Offset(0, 40),
-        onSelected: (Menu item) {},
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
-              const PopupMenuItem<Menu>(
-                value: Menu.itemOne,
-                child: Text('Account'),
-              ),
-              const PopupMenuItem<Menu>(
-                value: Menu.itemTwo,
-                child: Text('Settings'),
-              ),
-              const PopupMenuItem<Menu>(
-                value: Menu.itemThree,
-                child: Text('Sign Out'),
-              ),
-      ]);
+        
+          ],
+        ),
+      ),
+    );
   }
 }
