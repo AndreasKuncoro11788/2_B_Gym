@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ListNamaView extends StatelessWidget {
-  const ListNamaView({super.key});
+class ListViewScreen extends StatelessWidget {
+  const ListViewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +32,7 @@ class ListNamaView extends StatelessWidget {
 // Tampilan untuk layar sempit
 class NarrowLayout extends StatelessWidget {
   const NarrowLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DataList(
@@ -81,7 +82,7 @@ class _WideLayoutState extends State<WideLayout> {
         Expanded(
           flex: 3,
           child: _selectedData == null
-              ? const Placeholder()
+              ? const Center(child: Text("Pilih data untuk melihat detail"))
               : DataDetail(_selectedData!),
         ),
       ],
@@ -134,11 +135,15 @@ class DataList extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: ListTile(
-              leading: Icon(item["icon"],
-                  size: 40,
-                  color: Colors.blue), // Menampilkan icon sesuai dengan data
-              title: Text(item["name"]!,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              leading: Icon(
+                item["icon"],
+                size: 40,
+                color: Colors.blue, // Menampilkan icon sesuai dengan data
+              ),
+              title: Text(
+                item["name"]!,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               subtitle: Text(item["info"]!),
               onTap: () => onDataTap(item),
             ),
@@ -148,7 +153,7 @@ class DataList extends StatelessWidget {
   }
 }
 
-// Komponen untuk menampilkan detail data saat item di klik
+// Komponen untuk menampilkan detail data saat item diklik
 class DataDetail extends StatelessWidget {
   final Map<String, dynamic> data;
 
@@ -170,21 +175,29 @@ class DataDetail extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.network(data['image']!,
-                    height: 150, width: 150, fit: BoxFit.cover),
+                child: Image.network(
+                  data['image']!,
+                  height: 150,
+                  width: 150,
+                  fit: BoxFit.cover,
+                ),
               ),
               const SizedBox(height: 16),
-              Text(data['name']!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                data['name']!,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
               Text(data['info']!),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  // Aksi lain seperti menghubungi atau booking
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("${data['name']} dipilih")),
+                  );
                 },
                 child: const Text("Aksi"),
               ),
