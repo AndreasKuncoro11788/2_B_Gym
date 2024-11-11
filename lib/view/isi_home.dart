@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'dart:async'; 
+import 'pesanan.dart';
+import 'kelasSaya.dart';
+import 'riwayat.dart';
 
 class IsiHome extends StatefulWidget {
   const IsiHome({super.key});
@@ -171,18 +172,15 @@ class _IsiHomeState extends State<IsiHome> {
                       SizedBox(
                         height: 20,
                       ),
-                      buildMenuItem(Icons.list_alt_outlined, 'Pesanan',
-                          const Color.fromRGBO(116, 234, 163, 100)),
+                      buildMenuItem(Icons.list_alt_outlined, 'Pesanan',const Color.fromRGBO(116, 234, 163, 100), const PesananPage()),
                       SizedBox(
                         height: 16,
                       ),
-                      buildMenuItem(Icons.sports_gymnastics, 'Kelas Saya',
-                          const Color.fromRGBO(131, 137, 252, 100)),
+                      buildMenuItem(Icons.sports_gymnastics, 'Kelas Saya',const Color.fromRGBO(131, 137, 252, 100), const kelasSayaPage()),
                       SizedBox(
                         height: 16,
                       ),
-                      buildMenuItem(Icons.history, 'Riwayat',
-                          const Color.fromRGBO(236, 236, 127, 100)),
+                      buildMenuItem(Icons.history, 'Riwayat',const Color.fromRGBO(236, 236, 127, 100), const RiwayatPage()),
                     ],
                   ),
                 ),
@@ -194,44 +192,51 @@ class _IsiHomeState extends State<IsiHome> {
     );
   }
 
-  Widget buildMenuItem(IconData icon, String title, Color color) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  color: color,
-                  child: Icon(
-                    icon,
-                    color: Colors.black,
+    Widget buildMenuItem(IconData icon, String title, Color color, Widget destination) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => destination),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    color: color,
+                    child: Icon(
+                      icon,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                SizedBox(width: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Icon(Icons.more_horiz),
-        ],
+              ],
+            ),
+            Icon(Icons.more_horiz),
+          ],
+        ),
       ),
     );
   }
+
 }
