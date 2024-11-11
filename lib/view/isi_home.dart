@@ -85,14 +85,9 @@ class _IsiHomeState extends State<IsiHome> {
                         ),
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue[600],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
                         padding: EdgeInsets.all(12),
-                        child: Icon(
-                          Icons.notifications,
-                          color: Colors.white,
+                        child: Image.asset(
+                          'lib/assets/logo Atma GYM.png',
                         ),
                       ),
                     ],
