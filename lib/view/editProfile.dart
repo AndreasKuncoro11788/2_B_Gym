@@ -12,14 +12,13 @@ class Editprofile extends StatelessWidget {
           "Edit Profile",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        centerTitle: true, // Center the title
+        centerTitle: true,
         backgroundColor: Colors.white,
-        elevation: 0, // Optional: removes the shadow under the AppBar
+        elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
             onTap: () {
-              // Handle back button press
               Navigator.of(context).pop();
             },
             child: Container(
@@ -30,13 +29,13 @@ class Editprofile extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.arrow_back,
-                color: Color.fromARGB(255, 40, 40, 40), // Customize the icon color
+                color: Color.fromARGB(255, 40, 40, 40),
               ),
             ),
           ),
         ),
       ),
-      body: SingleChildScrollView( // Add SingleChildScrollView for scrollable content
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Column(
@@ -46,18 +45,17 @@ class Editprofile extends StatelessWidget {
                 child: Column(
                   children: [
                     CircleAvatar(
-                      radius: 80,  // Increase the size of the avatar
+                      radius: 80,
                       backgroundColor: Color(0xFFD9D9D9),
                       backgroundImage: NetworkImage(
                         'https://storage.googleapis.com/a1aa/image/r2zxfcEaRKRIQyJ93rkhZOGaF5nkwCef8wobNoQ7cCHDOcJnA.jpg',
                       ),
                     ),
                     const SizedBox(height: 8),
-                    // Text with underline
                     GestureDetector(
                       onTap: () {
                         print('Upload new profile picture clicked');
-                        // Add logic for uploading new profile picture
+
                       },
                       child: Text(
                         'Upload new profile picture',
@@ -65,7 +63,7 @@ class Editprofile extends StatelessWidget {
                           color: Color(0xFFFB3286),
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,  // Underline the text
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
@@ -73,53 +71,56 @@ class Editprofile extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              // Nama Depan
+
               _buildInputField(
                 label: 'Nama Depan',
                 placeholder: 'Masukkan Nama Depan',
                 icon: Icons.person,
               ),
               const SizedBox(height: 20),
-              // Nama Belakang
+
               _buildInputField(
                 label: 'Nama Belakang',
                 placeholder: 'Masukkan Nama Belakang',
                 icon: Icons.person,
               ),
               const SizedBox(height: 20),
+
               _buildInputField(
                 label: 'Nomor Identitas',
                 placeholder: 'Masukkan Nomor ID',
                 icon: Icons.badge,
               ),
               const SizedBox(height: 20),
+
               _buildInputField(
                 label: 'Jenis Kelamin',
                 placeholder: 'Masukkan Jenis Kelamin',
                 icon: Icons.wc,
               ),
               const SizedBox(height: 20),
+
               _buildInputField(
                 label: 'Umur',
                 placeholder: 'Masukkan Umur',
                 icon: Icons.volunteer_activism,
               ),
+
               const SizedBox(height: 20),
-              // Alamat Email
               _buildInputField(
                 label: 'Alamat Email',
                 placeholder: 'Masukkan Email',
                 icon: Icons.email,
               ),
               const SizedBox(height: 20),
-              // Nomor Telepon
+
               _buildInputField(
                 label: 'Nomor Telepon',
                 placeholder: 'Masukkan Nomor Telepon',
                 icon: Icons.phone,
               ),
               const SizedBox(height: 20),
-              // Save Button
+
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -131,7 +132,6 @@ class Editprofile extends StatelessWidget {
                   ),
                   onPressed: () {
                     print('Simpan Perubahan clicked');
-                    // Add logic to save the edited profile
                   },
                   child: const Text(
                     'Simpan Perubahan',
@@ -150,13 +150,12 @@ class Editprofile extends StatelessWidget {
     );
   }
 
-  // Reusable widget for each input field
   Widget _buildInputField({
     required String label,
     required String placeholder,
     required IconData icon,
   }) {
-    return Center(  // Center the input field horizontally
+    return Center( 
       child: Container(
         width: 350,
         height: 72,
@@ -169,7 +168,7 @@ class Editprofile extends StatelessWidget {
                 width: 350,
                 height: 61,
                 decoration: ShapeDecoration(
-                  color: Colors.white, // White background for the input fields
+                  color: Colors.white,
                   shape: RoundedRectangleBorder(
                     side: const BorderSide(width: 1, color: Color(0xFFFB3286)),
                     borderRadius: BorderRadius.circular(12),
@@ -217,7 +216,7 @@ class Editprofile extends StatelessWidget {
               child: Icon(
                 icon,
                 color: Colors.black,
-                size: 24, // Set the icon size to 24
+                size: 24,
               ),
             ),
           ],
