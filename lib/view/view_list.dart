@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/viewList/alat_gym.dart';
+import 'package:flutter_application_1/view/viewList/kelas_olahraga.dart';
+import 'package:flutter_application_1/view/viewList/personal_trainer.dart';
+import 'package:flutter_application_1/view/Profile.dart';
 
 class ListViewScreen extends StatelessWidget {
   const ListViewScreen({super.key});
@@ -7,16 +11,33 @@ class ListViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Data BowGym"),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.green],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Add "Hi, Users" and date below it in the AppBar
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Hi, Users',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '10 Okt 2024',
+                  style: TextStyle(
+                    color: Colors.blue[200],
+                    fontSize: 14, // Smaller text size for the date
+                  ),
+                ),
+              ],
             ),
-          ),
+          ],
         ),
+        backgroundColor: Colors.pink, // Set to pink to match the design
       ),
       body: LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
@@ -29,7 +50,6 @@ class ListViewScreen extends StatelessWidget {
   }
 }
 
-// Tampilan untuk layar sempit
 class NarrowLayout extends StatelessWidget {
   const NarrowLayout({super.key});
 
@@ -37,25 +57,20 @@ class NarrowLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return DataList(
       onDataTap: (data) => Navigator.of(context).push(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) {
-            return FadeTransition(
-              opacity: animation,
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text("Detail: ${data['name']}"),
-                ),
-                body: DataDetail(data),
-              ),
-            );
-          },
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              title: Text("Detail: ${data['name']}"),
+              backgroundColor: Colors.pink,
+            ),
+            body: DataDetail(data),
+          ),
         ),
       ),
     );
   }
 }
 
-// Tampilan untuk layar lebar
 class WideLayout extends StatefulWidget {
   const WideLayout({super.key});
 
@@ -90,7 +105,6 @@ class _WideLayoutState extends State<WideLayout> {
   }
 }
 
-// Komponen untuk menampilkan list data
 class DataList extends StatelessWidget {
   final void Function(Map<String, dynamic>) onDataTap;
 
@@ -100,26 +114,22 @@ class DataList extends StatelessWidget {
     {
       "name": "Data Pengguna",
       "info": "Profile Pengguna",
-      "image": "https://via.placeholder.com/150",
-      "icon": Icons.person, // Menambahkan icon untuk Data Pengguna
+      "icon": Icons.person,
     },
     {
       "name": "Personal Trainer",
       "info": "Booking Personal Trainer",
-      "image": "https://via.placeholder.com/150",
-      "icon": Icons.fitness_center, // Menambahkan icon untuk Personal Trainer
+      "icon": Icons.fitness_center,
     },
     {
       "name": "Alat GYM",
       "info": "Rental Alat Gym",
-      "image": "https://via.placeholder.com/150",
-      "icon": Icons.sports_martial_arts, // Menambahkan icon untuk Alat GYM
+      "icon": Icons.sports_martial_arts,
     },
     {
       "name": "Kelas Olahraga",
       "info": "Booking Kelas Olahraga",
-      "image": "https://via.placeholder.com/150",
-      "icon": Icons.sports_basketball, // Menambahkan icon untuk Kelas Olahraga
+      "icon": Icons.sports_basketball,
     },
   ];
 
@@ -129,8 +139,8 @@ class DataList extends StatelessWidget {
       children: [
         for (var item in data)
           Card(
+            color: Colors.pink, // Set card background to pink
             margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -138,13 +148,19 @@ class DataList extends StatelessWidget {
               leading: Icon(
                 item["icon"],
                 size: 40,
-                color: Colors.blue, // Menampilkan icon sesuai dengan data
+                color: Colors.white, // Icon color to white
               ),
               title: Text(
                 item["name"]!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white), // Text color to white
               ),
-              subtitle: Text(item["info"]!),
+              subtitle: Text(
+                item["info"]!,
+                style: const TextStyle(
+                    color: Colors.white70), // Subtitle color to a lighter shade
+              ),
               onTap: () => onDataTap(item),
             ),
           ),
@@ -153,7 +169,6 @@ class DataList extends StatelessWidget {
   }
 }
 
-// Komponen untuk menampilkan detail data saat item diklik
 class DataDetail extends StatelessWidget {
   final Map<String, dynamic> data;
 
@@ -161,6 +176,24 @@ class DataDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (data['name'] == "Data Pengguna") {
+      return const UserProfile();
+    }
+
+    // Show details based on the selected data
+    if (data['name'] == "Personal Trainer") {
+      return const PersonalTrainerDetail();
+    }
+
+    if (data['name'] == "Alat GYM") {
+      return const AlatGymDetail();
+    }
+
+    if (data['name'] == "Kelas Olahraga") {
+      return const KelasOlahragaDetail();
+    }
+
+    // Ini yang lama jangan dihapus dulu
     return Center(
       child: Card(
         margin: const EdgeInsets.all(16),
@@ -173,27 +206,24 @@ class DataDetail extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  data['image']!,
-                  height: 150,
-                  width: 150,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              Icon(data['icon'],
+                  size: 80, color: Colors.pink), // Display icon in larger size
               const SizedBox(height: 16),
               Text(
                 data['name']!,
                 style: Theme.of(context)
                     .textTheme
                     .headlineMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+                    .copyWith(fontWeight: FontWeight.bold, color: Colors.pink),
               ),
               const SizedBox(height: 8),
-              Text(data['info']!),
+              Text(data['info']!,
+                  style: const TextStyle(color: Colors.black54)),
               const SizedBox(height: 16),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.pink,
+                ),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("${data['name']} dipilih")),
