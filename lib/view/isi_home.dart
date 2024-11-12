@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async'; 
-import 'pesananPage/pesanan.dart';
-import 'kelasSayaPage/kelasSaya.dart';
-import 'riwayatPage/riwayat.dart';
+import 'package:flutter_application_1/view/pesananPage/pesanan.dart';
+import 'package:flutter_application_1/view/kelasSayaPage/kelasSaya.dart';
+import 'package:flutter_application_1/view/riwayatPage/riwayat.dart';
 
 class IsiHome extends StatefulWidget {
   const IsiHome({super.key});
@@ -171,7 +171,7 @@ class _IsiHomeState extends State<IsiHome> {
                       SizedBox(
                         height: 16,
                       ),
-                      buildMenuItem(Icons.sports_gymnastics, 'Kelas Saya',const Color.fromRGBO(131, 137, 252, 100), const kelasSayaPage()),
+                      buildMenuItem(Icons.sports_gymnastics, 'Kelas Saya', const Color.fromRGBO(131, 137, 252, 100), const KelasSayaPage()),
                       SizedBox(
                         height: 16,
                       ),
@@ -233,5 +233,4 @@ class _IsiHomeState extends State<IsiHome> {
       ),
     );
   }
-
 }
