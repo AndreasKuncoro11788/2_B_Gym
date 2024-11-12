@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/kelasSayaPage/refund.dart';
+import 'package:flutter_application_1/view/kelasSayaPage/detailTransaction.dart';
 
 class KelasSayaPage extends StatelessWidget {
   const KelasSayaPage({super.key});
@@ -71,7 +72,6 @@ class KelasSayaPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    // Nomor di sebelah kiri
                     Container(
                       width: 40,
                       height: 40,
@@ -90,7 +90,6 @@ class KelasSayaPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    // Informasi Kelas
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,17 +111,16 @@ class KelasSayaPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Tombol "Lihat Detail" dan "Batalkan"
                     Column(
                       children: [
                         SizedBox(
-                          width: 100, // Menyamakan lebar tombol
+                          width: 100,
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const RefundPage(),
+                                  builder: (context) => const DetailTransaction(),
                                 ),
                               );
                             },
@@ -137,30 +135,36 @@ class KelasSayaPage extends StatelessWidget {
                               'Lihat Detail',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12, // Ukuran teks lebih kecil
+                                fontSize: 12, 
                               ),
                             ),
                           ),
                         ),
                         const SizedBox(height: 8),
                         SizedBox(
-                          width: 100, // Menyamakan lebar tombol
+                          width: 100,
                           child: OutlinedButton(
                             onPressed: () {
-                              // Aksi untuk membatalkan
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RefundPage(),
+                                ),
+                              );
                             },
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.pink,
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.red,
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              side: const BorderSide(color: Colors.pink),
+                              side: const BorderSide(color: Colors.red),
                             ),
                             child: const Text(
                               'Batalkan',
                               style: TextStyle(
-                                fontSize: 12, // Ukuran teks lebih kecil
+                                fontSize: 12, 
                               ),
                             ),
                           ),
