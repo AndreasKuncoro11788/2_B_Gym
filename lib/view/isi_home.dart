@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async'; 
-import 'pesanan.dart';
-import 'kelasSaya.dart';
-import 'riwayat.dart';
+import 'pesananPage/pesanan.dart';
+import 'kelasSayaPage/kelasSaya.dart';
+import 'riwayatPage/riwayat.dart';
 
 class IsiHome extends StatefulWidget {
   const IsiHome({super.key});
