@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/editProfile.dart';
-import 'dart:ui'; // Import untuk BackdropFilter
+import 'dart:ui';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -97,7 +97,6 @@ class UserProfile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // New "Log out" Button with modal
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
@@ -107,7 +106,7 @@ class UserProfile extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              _showLogoutDialog(context); // Show the logout confirmation modal
+              _showLogoutDialog(context);
             },
             child: const Text(
               'Log out',
@@ -123,32 +122,30 @@ class UserProfile extends StatelessWidget {
     );
   }
 
-  // Function to show the logout confirmation dialog with blur effect
   void _showLogoutDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return Stack(
         children: [
-          // Add a BackdropFilter to blur the background
           Positioned.fill(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0), // Apply blur effect
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
               child: Container(
-                color: Colors.black.withOpacity(0.3), // Optional dark background behind the blur
+                color: Colors.black.withOpacity(0.3),
               ),
             ),
           ),
-          // The dialog itself
+
           Align(
-            alignment: Alignment.center, // Center the dialog
+            alignment: Alignment.center,
             child: Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Container(
                 width: 304,
-                height: 140, // Adjusted height to prevent text from being cut off
+                height: 140,
                 child: Stack(
                   children: [
                     Positioned(
@@ -170,7 +167,7 @@ class UserProfile extends StatelessWidget {
                       top: 24,
                       child: SizedBox(
                         width: 283,
-                        height: 40, // Increased height to avoid text cut-off
+                        height: 40,
                         child: Text(
                           'Yakin ingin Logout?',
                           textAlign: TextAlign.center,
@@ -185,10 +182,10 @@ class UserProfile extends StatelessWidget {
                     ),
                     Positioned(
                       left: 37,
-                      top: 70, // Adjusted to give space
+                      top: 70,
                       child: InkWell(
                         onTap: () {
-                          Navigator.pop(context); // Close the dialog when "Tidak" is clicked
+                          Navigator.pop(context);
                         },
                         child: Container(
                           width: 103,
@@ -202,7 +199,7 @@ class UserProfile extends StatelessWidget {
                                   width: 103,
                                   height: 35,
                                   decoration: ShapeDecoration(
-                                    color: Colors.red, // Set color to red for "Tidak"
+                                    color: Colors.red,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -230,11 +227,10 @@ class UserProfile extends StatelessWidget {
                     ),
                     Positioned(
                       left: 164.50,
-                      top: 70, // Adjusted to give space
+                      top: 70,
                       child: InkWell(
                         onTap: () {
-                          Navigator.pop(context); // Close the dialog when "Ya" is clicked
-                          // Add the logic to handle logout here
+                          Navigator.pop(context);
                           print('Akun dihapus');
                         },
                         child: Container(
@@ -286,8 +282,6 @@ class UserProfile extends StatelessWidget {
   );
 }
 
-
-  // Helper method to build each data section in a separate container
   Widget _buildDataContainer(IconData icon, String mainText, String subText) {
     return Container(
       padding: const EdgeInsets.all(12),
