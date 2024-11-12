@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/pembayaranPage/pembayaran.dart';
 
 class PesananPage extends StatelessWidget {
   const PesananPage({super.key});
@@ -213,7 +214,13 @@ class PesananPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Pembayaran()),
+                      );
+                    },
                     child: const Text(
                       'Pesan Sekarang',
                       style: TextStyle(
