@@ -12,13 +12,15 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController namaDepanController = TextEditingController();
+  TextEditingController namaBelakangController = TextEditingController();
+  TextEditingController nomorIdentitasController = TextEditingController();
+  TextEditingController jenisKelaminController = TextEditingController();
+  TextEditingController umurController = TextEditingController();
+  TextEditingController alamatEmailController = TextEditingController();
+  TextEditingController kataSandiController = TextEditingController();
+  TextEditingController konfirmasiKataSandiController = TextEditingController();
+  TextEditingController nomorTeleponController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,52 +36,58 @@ class _RegisterViewState extends State<RegisterView> {
                   inputForm(
                     (p0) {
                       if (p0 == null || p0.isEmpty) {
-                        return 'First name cannot be empty';
+                        return 'tidak boleh kosong';
                       }
                       return null;
                     },
-                    controller: firstNameController,
-                    hintTxt: 'First Name',
-                    helperTxt: 'Bow',
+                    controller: namaDepanController,
+                    hintTxt: 'Nama Depan',
+                    helperTxt: '',
                     iconData: Icons.person),
                   inputForm(
                     (p0) {
                       if (p0 == null || p0.isEmpty) {
-                        return 'Last name cannot be empty';
+                        return 'tidak boleh kosong';
                       }
                       return null;
                     },
-                    controller: lastNameController,
-                    hintTxt: 'Last Name',
-                    helperTxt: 'ty',
+                    controller: namaBelakangController,
+                    hintTxt: 'Nama Belakang',
+                    helperTxt: '',
                     iconData: Icons.person),
                   inputForm(
                     (p0) {
                       if (p0 == null || p0.isEmpty) {
-                        return 'Username cannot be empty';
-                      }
-                      if (p0.toLowerCase() == 'anjing') {
-                        return 'Tidak boleh menggunakan kata kasar';
+                        return 'tidak boleh kosong';
                       }
                       return null;
                     },
-                    controller: usernameController,
-                    hintTxt: 'Username',
-                    helperTxt: 'Bowtyla',
-                    iconData: Icons.person),
+                    controller: nomorIdentitasController,
+                    hintTxt: 'ID Number',
+                    helperTxt: 'ktp/sim',
+                    iconData: Icons.card_membership),
                   inputForm(
                     (p0) {
                       if (p0 == null || p0.isEmpty) {
-                        return 'Email cannot be empty';
-                      }
-                      if (!p0.contains('@')) {
-                        return 'Must consist @';
+                        return 'tidak boleh kosong';
                       }
                       return null;
                     },
-                    controller: emailController,
-                    hintTxt: 'Email',
-                    helperTxt: 'bowt@gmail.com',
+                    controller: umurController,
+                    hintTxt: 'Umur',
+                    helperTxt: '',
+                    iconData: Icons.view_agenda),  
+                  inputForm(
+                    (p0) {
+                      if (p0 == null || p0.isEmpty) {
+                        return 'tidak boleh kosong';
+                      }
+
+                      return null;
+                    },
+                    controller: alamatEmailController,
+                    hintTxt: 'Alamat Online',
+                    helperTxt: '@gmail.com',
                     iconData: Icons.email),
                   inputForm(
                     (p0) {
@@ -91,8 +99,8 @@ class _RegisterViewState extends State<RegisterView> {
                       }
                       return null;
                     },
-                    controller: passwordController,
-                    hintTxt: 'Password',
+                    controller: kataSandiController,
+                    hintTxt: 'Kata Sandi',
                     helperTxt: '12345678',
                     iconData: Icons.password,
                     password: true),
@@ -101,24 +109,24 @@ class _RegisterViewState extends State<RegisterView> {
                       if (p0 == null || p0.isEmpty) {
                         return 'Confirm password cannot be empty';
                       }
-                      if (p0 != passwordController.text) {
+                      if (p0 != kataSandiController.text) {
                         return 'Wrong Password';
                       }
                       return null;
                     },
-                    controller: confirmPasswordController,
-                    hintTxt: 'Confirm Password',
+                    controller: konfirmasiKataSandiController,
+                    hintTxt: 'Konfirmasi Kata Sandi',
                     helperTxt: '12345678',
                     iconData: Icons.password,
                     password: true),
                   inputForm(
                     (p0) {
                       if (p0 == null || p0.isEmpty) {
-                        return 'Phone cannot be empty';
+                        return 'tidak boleh kosong';
                       }
                       return null;
                     },
-                    controller: phoneController,
+                    controller: nomorTeleponController,
                     hintTxt: 'Phone',
                     helperTxt: '08211223344',
                     iconData: Icons.phone_android),
@@ -128,12 +136,15 @@ class _RegisterViewState extends State<RegisterView> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Map<String, dynamic> formData = {};
-                        formData['firstName'] = firstNameController.text;
-                        formData['lastName'] = lastNameController.text;
-                        formData['username'] = usernameController.text;
-                        formData['email'] = emailController.text;
-                        formData['password'] = passwordController.text;
-                        formData['phone'] = phoneController.text;
+                        formData['namaDepan'] = namaDepanController.text;
+                        formData['namaBelakang'] = namaBelakangController.text;
+                        formData['nomorIdentitas'] = nomorIdentitasController.text;
+                        formData['jenisKelamin'] = jenisKelaminController.text;
+                        formData['umur'] = umurController.text;
+                        formData['alamatEmail'] = alamatEmailController.text;
+                        formData['kataSandi'] = kataSandiController.text;
+                        formData['konfirmasiKataSandi'] = konfirmasiKataSandiController.text;
+                        formData['nomorTelepon'] = nomorTeleponController.text;
 
                         Navigator.push(
                           context,
@@ -143,7 +154,7 @@ class _RegisterViewState extends State<RegisterView> {
                         );
                       }
                     },
-                    child: const Text('Register'),
+                    child: const Text('Daftar'),
                   ),
     
                   const SizedBox(height: 16),
@@ -157,7 +168,7 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                       );
                     },
-                    child: const Text('Have an account? Back to Login'),
+                    child: const Text('Sudah punya akun? Kembali ke Login'),
                   ),
                 ],
               ),
