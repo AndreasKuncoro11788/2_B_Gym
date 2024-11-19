@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/riwayatPage/review.dart';
 
 class RiwayatPage extends StatelessWidget {
   const RiwayatPage({super.key});
@@ -122,33 +123,41 @@ class RiwayatPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
 
-                        Center(
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {
-                            },
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.black,
                           ),
+                          onPressed: () {
+                          },
                         ),
                         const SizedBox(height: 8),
-
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.yellow,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Text(
-                            'Review',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Teks berwarna hitam
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ReviewPage(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.yellow,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              'Review',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
+
                       ],
                     ),
                   ],
