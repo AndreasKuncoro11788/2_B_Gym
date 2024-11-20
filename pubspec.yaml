@@ -10,6 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.2.0
+  intl: ^0.19.0
+  image_picker: ^1.1.2
+  uuid: ^3.0.7
+  pdf: ^3.11.1
+  barcode_widget: ^2.0.4
+  printing: ^5.13.3
+  responsive_sizer: ^3.3.1
+  path_provider: ^2.1.5
   
 dev_dependencies:
   flutter_test:
@@ -19,3 +27,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - lib/assets/logo Atma GYM.png
+    - lib/assets/bca_mobile.png
+    - lib/assets/bni.png
+    - lib/assets/gopay.png
+    - lib/assets/Shopeepay.png
+
+

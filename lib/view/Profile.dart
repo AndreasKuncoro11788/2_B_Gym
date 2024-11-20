@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_application_1/view/editProfile.dart';
+import 'dart:ui';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Profile"),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.green],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-      ),
-      body: LayoutBuilder(builder: (context, constraints) {
-        return const UserProfile();
-      }),
+    return const MaterialApp(
+      home: UserProfile(),
     );
   }
 }
@@ -31,249 +19,311 @@ class UserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Profile',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+      backgroundColor: const Color(0xFFEFEFEF),
+      body: Column(
+        children: [
+          Container(
+            height: 318,
+            color: const Color(0xFFFB3286),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                SizedBox(height: 26),
+                Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              const CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(
-                  'https://storage.googleapis.com/a1aa/image/r2zxfcEaRKRIQyJ93rkhZOGaF5nkwCef8wobNoQ7cCHDOcJnA.jpg',
+                SizedBox(height: 20),
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Color(0xFFD9D9D9),
+                  backgroundImage: NetworkImage(
+                    'https://storage.googleapis.com/a1aa/image/r2zxfcEaRKRIQyJ93rkhZOGaF5nkwCef8wobNoQ7cCHDOcJnA.jpg',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                'Gaspar Rivaldi',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                SizedBox(height: 16),
+                Text(
+                  'Gaspar Rivaldi',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const Text(
-                'Account Number: 043423802',
-                style: TextStyle(
-                  color: Colors.blue,
+                Text(
+                  'Nomor Akun : 11111111',
+                  style: TextStyle(
+                    color: Color(0xFFD9D9D9),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              _buildProfileItem(
-                context,
-                icon: FontAwesomeIcons.user,
-                title: '@GasparR',
-                subtitle: 'Account Name',
-              ),
-              _buildProfileItem(
-                context,
-                icon: FontAwesomeIcons.mapMarkerAlt,
-                title: 'Sleman, Yogyakarta',
-                subtitle: 'Address',
-              ),
-              _buildProfileItem(
-                context,
-                icon: FontAwesomeIcons.phone,
-                title: '081******007',
-                subtitle: 'Phone number',
-              ),
-              _buildProfileItem(
-                context,
-                icon: FontAwesomeIcons.envelope,
-                title: 'Gasparrr@gmail.com',
-                subtitle: 'Email Address',
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+          const SizedBox(height: 20),
+          // Separate Containers for Each Data
+          _buildDataContainer(Icons.person, 'Gaspar Rivaldi', 'Nama Pengguna'),
+          _buildDataContainer(Icons.person, '330305120840002', 'Nomor Identitas'),
+          _buildDataContainer(Icons.email, 'email@example.com', 'Email'),
+          _buildDataContainer(Icons.phone, '123-456-7890', 'Nomor Telepon'),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFB3286),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Editprofile()),
+              );
+            },
+            child: const Text(
+              'Edit Profile',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () {
+              _showLogoutDialog(context);
+            },
+            child: const Text(
+              'Log out',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildProfileItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
-    return InkWell(
-      onTap: () async {
-        // Navigate to the ProfileDetailScreen and wait for result
-        final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfileDetailScreen(
-              title: title,
-              subtitle: subtitle,
+  void _showLogoutDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Stack(
+        children: [
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: Container(
+                color: Colors.black.withOpacity(0.3),
+              ),
             ),
           ),
-        );
 
-        // Check if result contains updated data
-        if (result != null) {
-          // Handle updated data here
-          // For instance, you can refresh the UI or set the new data
-          print('Updated Data: ${result['title']}, ${result['subtitle']}');
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[400],
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                FaIcon(icon, color: Colors.blue),
-                const SizedBox(width: 16.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          Align(
+            alignment: Alignment.center,
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                width: 304,
+                height: 140,
+                child: Stack(
                   children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      child: Container(
+                        width: 304,
+                        height: 140,
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFFB3286),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                       ),
                     ),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
+                    Positioned(
+                      left: 13,
+                      top: 24,
+                      child: SizedBox(
+                        width: 283,
+                        height: 40,
+                        child: Text(
+                          'Yakin ingin Logout?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            height: 0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 37,
+                      top: 70,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 103,
+                          height: 35,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: 0,
+                                top: 0,
+                                child: Container(
+                                  width: 103,
+                                  height: 35,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 32.50,
+                                top: 7,
+                                child: Text(
+                                  'Tidak',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 164.50,
+                      top: 70,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          print('Akun dihapus');
+                        },
+                        child: Container(
+                          width: 103,
+                          height: 35,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: 0,
+                                top: 0,
+                                child: Container(
+                                  width: 103,
+                                  height: 35,
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFF27C767),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 43.50,
+                                top: 7,
+                                child: Text(
+                                  'Ya',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-            const FaIcon(
-              FontAwesomeIcons.chevronRight,
-              color: Colors.blue,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+          ),
+        ],
+      );
+    },
+  );
 }
 
-class ProfileDetailScreen extends StatefulWidget {
-  final String title;
-  final String subtitle;
-
-  const ProfileDetailScreen({
-    Key? key,
-    required this.title,
-    required this.subtitle,
-  }) : super(key: key);
-
-  @override
-  _ProfileDetailScreenState createState() => _ProfileDetailScreenState();
-}
-
-class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
-  late TextEditingController _titleController;
-  late TextEditingController _subtitleController;
-
-  @override
-  void initState() {
-    super.initState();
-    _titleController = TextEditingController(text: widget.title);
-    _subtitleController = TextEditingController(text: widget.subtitle);
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _subtitleController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Profile Data'),
+  Widget _buildDataContainer(IconData icon, String mainText, String subText) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Edit Details',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Title',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                labelText: 'Title',
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Subtitle',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _subtitleController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                labelText: 'Subtitle',
-              ),
-            ),
-            const SizedBox(height: 40),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  // Save or update logic here
-                  Navigator.pop(context, {
-                    'title': _titleController.text,
-                    'subtitle': _subtitleController.text,
-                  });
-                },
-                icon: const Icon(Icons.save),
-                label: const Text('Save'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 12.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.black, size: 24),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                mainText,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
-          ],
-        ),
+              Text(
+                subText,
+                style: const TextStyle(
+                  color: Color(0xFF696969),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
