@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/View/login.dart';
+import 'package:flutter_application_1/view/login.dart';
 import 'package:flutter_application_1/component/form_component.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -12,15 +13,23 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController namaDepanController = TextEditingController();
-  TextEditingController namaBelakangController = TextEditingController();
-  TextEditingController nomorIdentitasController = TextEditingController();
-  TextEditingController jenisKelaminController = TextEditingController();
-  TextEditingController umurController = TextEditingController();
-  TextEditingController alamatEmailController = TextEditingController();
-  TextEditingController kataSandiController = TextEditingController();
-  TextEditingController konfirmasiKataSandiController = TextEditingController();
-  TextEditingController nomorTeleponController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  Future<void> saveUserData(Map<String, dynamic> formData) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String username = '${firstNameController.text}${lastNameController.text}'.toLowerCase();
+  await prefs.setString('username', username);
+  await prefs.setString('password', formData['password']);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,147 +39,203 @@ class _RegisterViewState extends State<RegisterView> {
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                    controller: namaDepanController,
-                    hintTxt: 'Nama Depan',
-                    helperTxt: '',
-                    iconData: Icons.person),
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                    controller: namaBelakangController,
-                    hintTxt: 'Nama Belakang',
-                    helperTxt: '',
-                    iconData: Icons.person),
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                    controller: nomorIdentitasController,
-                    hintTxt: 'ID Number',
-                    helperTxt: 'ktp/sim',
-                    iconData: Icons.card_membership),
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                    controller: umurController,
-                    hintTxt: 'Umur',
-                    helperTxt: '',
-                    iconData: Icons.view_agenda),  
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'tidak boleh kosong';
-                      }
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "ATMAGYM",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const Text(
+                      "FITNESS CENTER",
+                      style: TextStyle(fontSize: 18, color: Colors.black54),
+                    ),
+                    const SizedBox(height: 40),
 
-                      return null;
-                    },
-                    controller: alamatEmailController,
-                    hintTxt: 'Alamat Online',
-                    helperTxt: '@gmail.com',
-                    iconData: Icons.email),
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'Password cannot be empty';
-                      }
-                      if (p0.length < 8) {
-                        return 'Min. 8 digit';
-                      }
-                      return null;
-                    },
-                    controller: kataSandiController,
-                    hintTxt: 'Kata Sandi',
-                    helperTxt: '12345678',
-                    iconData: Icons.password,
-                    password: true),
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'Confirm password cannot be empty';
-                      }
-                      if (p0 != kataSandiController.text) {
-                        return 'Wrong Password';
-                      }
-                      return null;
-                    },
-                    controller: konfirmasiKataSandiController,
-                    hintTxt: 'Konfirmasi Kata Sandi',
-                    helperTxt: '12345678',
-                    iconData: Icons.password,
-                    password: true),
-                  inputForm(
-                    (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return 'tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                    controller: nomorTeleponController,
-                    hintTxt: 'Phone',
-                    helperTxt: '08211223344',
-                    iconData: Icons.phone_android),
-                  
+                    // Nama Depan
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Nama Depan tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: firstNameController,
+                      hintTxt: 'Nama Depan',
+                      helperTxt: 'Masukkan Nama Depan',
+                      iconData: Icons.person,
+                    ),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Map<String, dynamic> formData = {};
-                        formData['namaDepan'] = namaDepanController.text;
-                        formData['namaBelakang'] = namaBelakangController.text;
-                        formData['nomorIdentitas'] = nomorIdentitasController.text;
-                        formData['jenisKelamin'] = jenisKelaminController.text;
-                        formData['umur'] = umurController.text;
-                        formData['alamatEmail'] = alamatEmailController.text;
-                        formData['kataSandi'] = kataSandiController.text;
-                        formData['konfirmasiKataSandi'] = konfirmasiKataSandiController.text;
-                        formData['nomorTelepon'] = nomorTeleponController.text;
+                    // Nama Belakang
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Nama Belakang tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: lastNameController,
+                      hintTxt: 'Nama Belakang',
+                      helperTxt: 'Masukkan Nama Belakang',
+                      iconData: Icons.person,
+                    ),
 
+                    // Nomor Identitas
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Nomor Identitas tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: idController,
+                      hintTxt: 'ID Number',
+                      helperTxt: 'Masukkan Nomor Identitas',
+                      iconData: Icons.credit_card,
+                    ),
+
+                    // Jenis Kelamin
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Jenis Kelamin tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: genderController,
+                      hintTxt: 'Jenis Kelamin',
+                      helperTxt: 'Masukkan Jenis Kelamin',
+                      iconData: Icons.transgender,
+                    ),
+
+                    // Umur
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Umur tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: ageController,
+                      hintTxt: 'Umur',
+                      helperTxt: 'Masukkan Umur',
+                      iconData: Icons.calendar_today,
+                    ),
+
+                    // Alamat Email
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: emailController,
+                      hintTxt: 'Alamat Email',
+                      helperTxt: 'Masukkan Alamat Email',
+                      iconData: Icons.email,
+                    ),
+
+                    // Kata Sandi
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Kata Sandi tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      hintTxt: 'Kata Sandi',
+                      helperTxt: 'Masukkan Kata Sandi',
+                      iconData: Icons.lock,
+                      password: true,
+                    ),
+
+                    // Konfirmasi Kata Sandi
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Konfirmasi Kata Sandi tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: confirmPasswordController,
+                      hintTxt: 'Konfirmasi Kata Sandi',
+                      helperTxt: 'Masukkan Konfirmasi Kata Sandi',
+                      iconData: Icons.lock,
+                      password: true,
+                    ),
+
+                    // Nomor Telepon
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Nomor Telepon tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: phoneController,
+                      hintTxt: 'Nomor Telepon',
+                      helperTxt: 'Masukkan Nomor Telepon',
+                      iconData: Icons.phone,
+                    ),
+
+
+                    const SizedBox(height: 16),
+
+                    // Tombol Daftar
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pink,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          Map<String, dynamic> formData = {
+                            'username': emailController.text,
+                            'password': passwordController.text,
+                          };
+
+                          await saveUserData(formData);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => LoginView(data: formData),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Daftar'),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Tautan ke Login
+                    TextButton(
+                      onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => LoginView(data: formData),
+                            builder: (_) => const LoginView(),
                           ),
                         );
-                      }
-                    },
-                    child: const Text('Daftar'),
-                  ),
-    
-                  const SizedBox(height: 16),
-
-                  ElevatedButton(
-                    onPressed: () {          
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const LoginView(),
-                        ),
-                      );
-                    },
-                    child: const Text('Sudah punya akun? Kembali ke Login'),
-                  ),
-                ],
+                      },
+                      child: const Text(
+                        'Sudah punya akun? Kembali ke Login',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
