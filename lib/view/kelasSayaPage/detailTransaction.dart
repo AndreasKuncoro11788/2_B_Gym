@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/kelasSayaPage/viewPDF.dart';
 
 class DetailTransaction extends StatelessWidget {
   const DetailTransaction({super.key});
@@ -153,25 +154,30 @@ class DetailTransaction extends StatelessWidget {
   }
 
   Widget _buildActionButton(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFB3286),
-          minimumSize: const Size(200, 50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        onPressed: () {},
-        child: const Text(
-          'Buka PDF',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+  return Center(
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFFB3286),
+        minimumSize: const Size(200, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
-    );
-  }
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PdfGenerator()),
+        );
+      },
+      child: const Text(
+        'Buka PDF',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
+}
 }
