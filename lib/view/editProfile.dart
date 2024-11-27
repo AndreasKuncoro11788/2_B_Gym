@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/form_component.dart';
 
 class Editprofile extends StatelessWidget {
   const Editprofile({super.key});
@@ -55,7 +56,6 @@ class Editprofile extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         print('Upload new profile picture clicked');
-
                       },
                       child: Text(
                         'Upload new profile picture',
@@ -72,52 +72,88 @@ class Editprofile extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              _buildInputField(
-                label: 'Nama Depan',
-                placeholder: 'Masukkan Nama Depan',
-                icon: Icons.person,
+              // Menggunakan inputForm dari form_component.dart
+              inputForm(
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nama Pengguna tidak boleh kosong';
+                  }
+                  return null;
+                },
+                controller: TextEditingController(),
+                hintTxt: 'Masukkan Nama Pengguna',
+                helperTxt: 'Masukkan Nama Pengguna Anda',
+                iconData: Icons.person,
               ),
               const SizedBox(height: 20),
 
-              _buildInputField(
-                label: 'Nama Belakang',
-                placeholder: 'Masukkan Nama Belakang',
-                icon: Icons.person,
+              inputForm(
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nomor Identitas tidak boleh kosong';
+                  }
+                  return null;
+                },
+                controller: TextEditingController(),
+                hintTxt: 'Masukkan Nomor ID',
+                helperTxt: 'Masukkan Nomor ID Anda',
+                iconData: Icons.credit_card,
               ),
               const SizedBox(height: 20),
 
-              _buildInputField(
-                label: 'Nomor Identitas',
-                placeholder: 'Masukkan Nomor ID',
-                icon: Icons.badge,
+              inputForm(
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Jenis Kelamin tidak boleh kosong';
+                  }
+                  return null;
+                },
+                controller: TextEditingController(),
+                hintTxt: 'Masukkan Jenis Kelamin',
+                helperTxt: 'Masukkan Jenis Kelamin Anda',
+                iconData: Icons.transgender,
               ),
               const SizedBox(height: 20),
 
-              _buildInputField(
-                label: 'Jenis Kelamin',
-                placeholder: 'Masukkan Jenis Kelamin',
-                icon: Icons.wc,
+              inputForm(
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Umur tidak boleh kosong';
+                  }
+                  return null;
+                },
+                controller: TextEditingController(),
+                hintTxt: 'Masukkan Umur',
+                helperTxt: 'Masukkan Umur Anda',
+                iconData: Icons.calendar_today,
               ),
               const SizedBox(height: 20),
 
-              _buildInputField(
-                label: 'Umur',
-                placeholder: 'Masukkan Umur',
-                icon: Icons.volunteer_activism,
+              inputForm(
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Alamat Email tidak boleh kosong';
+                  }
+                  return null;
+                },
+                controller: TextEditingController(),
+                hintTxt: 'Masukkan Email',
+                helperTxt: 'Masukkan Alamat Email Anda',
+                iconData: Icons.email,
               ),
-
-              const SizedBox(height: 20),
-              _buildInputField(
-                label: 'Alamat Email',
-                placeholder: 'Masukkan Email',
-                icon: Icons.email,
-              ),
               const SizedBox(height: 20),
 
-              _buildInputField(
-                label: 'Nomor Telepon',
-                placeholder: 'Masukkan Nomor Telepon',
-                icon: Icons.phone,
+              inputForm(
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nomor Telepon tidak boleh kosong';
+                  }
+                  return null;
+                },
+                controller: TextEditingController(),
+                hintTxt: 'Masukkan Nomor Telepon',
+                helperTxt: 'Masukkan Nomor Telepon Anda',
+                iconData: Icons.phone,
               ),
               const SizedBox(height: 20),
 
@@ -145,81 +181,6 @@ class Editprofile extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInputField({
-    required String label,
-    required String placeholder,
-    required IconData icon,
-  }) {
-    return Center( 
-      child: Container(
-        width: 350,
-        height: 72,
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 11,
-              child: Container(
-                width: 350,
-                height: 61,
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(width: 1, color: Color(0xFFFB3286)),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 17,
-              top: 0,
-              child: SizedBox(
-                width: 85,
-                height: 22,
-                child: Text(
-                  label,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 52,
-              top: 29,
-              child: SizedBox(
-                width: 222,
-                height: 22,
-                child: Text(
-                  placeholder,
-                  style: const TextStyle(
-                    color: Color(0xFF999999),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 17,
-              top: 29,
-              child: Icon(
-                icon,
-                color: Colors.black,
-                size: 24,
-              ),
-            ),
-          ],
         ),
       ),
     );
