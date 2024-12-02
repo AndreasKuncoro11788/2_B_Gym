@@ -18,6 +18,23 @@ class _AlatGymDetailState extends State<AlatGymDetail> {
     futureAlatGym = AlatGymClient().fetchAlatGym();
   }
 
+  IconData _getIconForAlat(String namaAlat) {
+    switch (namaAlat) {
+      case 'Barbell':
+        return Icons.fitness_center;
+      case 'Treadmill':
+        return Icons.directions_run;
+      case 'Bola Gym':
+        return Icons.accessibility;
+      case 'Yoga Mat':
+        return Icons.border_all;
+      case 'Punching Bag':
+        return Icons.sports_martial_arts;
+      default:
+        return Icons.fitness_center; // Default icon
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<AlatGym>>(
@@ -32,16 +49,37 @@ class _AlatGymDetailState extends State<AlatGymDetail> {
             child: Column(
               children: [
                 const SizedBox(height: 12),
-                ...snapshot.data!
-                    .map((item) => Card(
-                          child: ListTile(
-                            title: Text(
-                                item.namaAlat), // Hanya menampilkan nama alat
-                            subtitle: Text(
-                                'Harga: ${item.harga}'), // Menampilkan harga
-                          ),
-                        ))
-                    .toList(),
+                ...snapshot.data!.map((item) {
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Card(
+                      elevation: 4,
+                      child: ListTile(
+                        leading: Icon(
+                          _getIconForAlat(item.namaAlat),
+                          size: 40,
+                          color: Colors.blueAccent,
+                        ),
+                        title: Text(
+                          item.namaAlat,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        subtitle: Text(
+                          'Harga: Rp ${item.harga}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        onTap: () {
+                          // Tambahkan aksi saat item ditekan jika diperlukan
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Anda memilih ${item.namaAlat}')),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }).toList(),
               ],
             ),
           );
