@@ -1,84 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart'; // Paket untuk animasi
+import 'package:flutter_application_1/client/KelasOlahragaClient.dart'; // Import API client
+import 'package:flutter_application_1/entity/KelasOlahraga.dart'; // Import KelasOlahraga model
+import 'package:flutter_animate/flutter_animate.dart'; // Import animation package
 
 class KelasOlahragaDetail extends StatelessWidget {
   const KelasOlahragaDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 12),
-          ..._buildKelasItems()
-              .map((item) => item.animate().fade(duration: 500.ms).slide())
-              .toList(),
-        ],
+    return Scaffold(
+      body: FutureBuilder<List<KelasOlahraga>>(
+        future: KelasOlahragaClient().fetchKelasOlahraga(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No classes found.'));
+          }
+
+          final kelasList = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: kelasList.length,
+            itemBuilder: (context, index) {
+              final kelas = kelasList[index];
+              return KelasItem(
+                namaKelas: kelas.namaKelas,
+                jadwalKelas:
+                    kelas.jadwalKelas, // Use jadwalKelas instead of jadwal
+                id_alatGym: kelas.idAlatGym.toString(), // Use id_alatGym
+                id_personalTrainer: kelas.idPersonalTrainer
+                    .toString(), // Use id_personalTrainer
+              ).animate().fade(duration: 500.ms).slide();
+            },
+          );
+        },
       ),
     );
-  }
-
-  List<KelasItem> _buildKelasItems() {
-    return const [
-      KelasItem(
-        namaKelas: 'Yoga',
-        idKelas: 'YOGA856#57',
-        idPemesanan: 'FG6980#',
-        jadwal: 'Senin-Jumat\n06.00 - 07.00 | 08.00 - 09.00 | 10.00 - 11.00',
-        icon: Icons.accessibility_new,
-        backgroundColor: Colors.blueAccent,
-      ),
-      KelasItem(
-        namaKelas: 'Boxing',
-        idKelas: 'BOXING856#59',
-        idPemesanan: 'FG6982#',
-        jadwal: 'Senin-Jumat\n12.00 - 14.00 | 16.00 - 18.00',
-        icon: Icons.fitness_center,
-        backgroundColor: Colors.greenAccent,
-      ),
-      KelasItem(
-        namaKelas: 'Pilates',
-        idKelas: 'PILATES856#60',
-        idPemesanan: 'FG6983#',
-        jadwal: 'Senin-Jumat\n10.00 - 11.00 | 15.00 - 16.00 | 18.00 - 19.00',
-        icon: Icons.pool,
-        backgroundColor: Colors.orangeAccent,
-      ),
-      KelasItem(
-        namaKelas: 'Body Combat',
-        idKelas: 'BODYCOMBAT856#61',
-        idPemesanan: 'FG6984#',
-        jadwal: 'Senin-Jumat\n16.00 - 17.00 | 19.00 - 20.00',
-        icon: Icons.directions_run,
-        backgroundColor: Colors.purpleAccent,
-      ),
-      KelasItem(
-        namaKelas: 'Zumba',
-        idKelas: 'ZUMBA856#58',
-        idPemesanan: 'FG6981#',
-        jadwal: 'Senin-Jumat\n10.30 - 12.00 | 13.30 - 15.00 | 16.00 - 17.30',
-        icon: Icons.music_note,
-        backgroundColor: Colors.redAccent,
-      ),
-    ];
   }
 }
 
 class KelasItem extends StatelessWidget {
   final String namaKelas;
-  final String idKelas;
-  final String idPemesanan;
-  final String jadwal;
-  final IconData icon;
-  final Color backgroundColor;
+  final String jadwalKelas; // Updated to jadwalKelas
+  final String id_alatGym; // Updated to id_alatGym
+  final String id_personalTrainer; // Updated to id_personalTrainer
 
   const KelasItem({
     required this.namaKelas,
-    required this.idKelas,
-    required this.idPemesanan,
-    required this.jadwal,
-    required this.icon,
-    required this.backgroundColor,
+    required this.jadwalKelas,
+    required this.id_alatGym,
+    required this.id_personalTrainer,
   });
 
   @override
@@ -87,9 +61,9 @@ class KelasItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
       child: Container(
         width: double.infinity,
-        height: 120,
+        height: 120, // Adjust height as needed
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: Colors.blueAccent, // Background color
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -101,17 +75,26 @@ class KelasItem extends StatelessWidget {
         ),
         child: Row(
           children: [
+            // Styled Icon Container
             Container(
               margin: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.white, // Background color for the icon
                 borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               padding: const EdgeInsets.all(12),
               child: Icon(
-                icon,
+                Icons
+                    .fitness_center, // You can change this to any icon you prefer
                 size: 40,
-                color: backgroundColor,
+                color: Colors.blueAccent, // Icon color
               ),
             ),
             Expanded(
@@ -129,21 +112,21 @@ class KelasItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'ID Kelas: $idKelas',
+                    'ID Alat Gym: $id_alatGym', // Display id_alatGym
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    'ID Pemesanan: $idPemesanan',
+                    'ID Personal Trainer: $id_personalTrainer', // Display id_personalTrainer
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    'Jadwal: $jadwal',
+                    'Jadwal: $jadwalKelas', // Display jadwalKelas
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
