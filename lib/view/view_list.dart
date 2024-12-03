@@ -60,8 +60,31 @@ class NarrowLayout extends StatelessWidget {
         MaterialPageRoute(
           builder: (context) => Scaffold(
             appBar: AppBar(
-              title: Text("Detail: ${data['name']}"),
+              title: Text(
+                "Detail: ${data['name']}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               backgroundColor: Colors.pink,
+              centerTitle: true, // Correctly placed centerTitle
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.pink,
+                  ),
+                ),
+              ),
             ),
             body: DataDetail(data),
           ),
@@ -177,7 +200,7 @@ class DataDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data['name'] == "Data Pengguna") {
-      return const UserProfile();
+      return const UserProfile(userId: 1);
     }
 
     // Show details based on the selected data

@@ -23,25 +23,38 @@ class HomeViewState extends State<HomeView> {
     Center(
       child: IsiHome(),
     ),
-      ListViewScreen(),
+    ListViewScreen(),
     Center(
-      child: UserProfile()
+      child: UserProfile(userId: 1),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'List'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped, // Fixed function call
-      ),
       body: widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: NavigationBar(
+        animationDuration: const Duration(milliseconds: 300),
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        destinations: const <NavigationDestination>[
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded, color: Colors.pink), // Change color to pink
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.list_outlined),
+            selectedIcon: Icon(Icons.list_rounded, color: Colors.pink), // Change color to pink
+            label: 'List',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person_rounded, color: Colors.pink), // Change color to pink
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 }

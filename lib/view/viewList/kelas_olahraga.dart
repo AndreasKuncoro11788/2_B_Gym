@@ -1,126 +1,142 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/client/KelasOlahragaClient.dart'; // Import API client
+import 'package:flutter_application_1/entity/KelasOlahraga.dart'; // Import KelasOlahraga model
+import 'package:flutter_animate/flutter_animate.dart'; // Import animation package
 
 class KelasOlahragaDetail extends StatelessWidget {
   const KelasOlahragaDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildKelasItem(
-            'Yoga',
-            'FG6980#',
-            'YOGA856#57',
-            'Senin-Jumat\n06.00 - 07.00 | 08.00 - 09.00 | 10.00 - 11.00',
-            Icons.accessibility_new),
-        _buildKelasItem('Boxing', 'FG6982#', 'BOXING856#59',
-            'Senin-Jumat\n12.00 - 14.00 | 16.00 - 18.00', Icons.fitness_center),
-        _buildKelasItem(
-            'Pilates',
-            'FG6983#',
-            'PILATES856#60',
-            'Senin-Jumat\n10.00 - 11.00 | 15.00 - 16.00 | 18.00 - 19.00',
-            Icons.pool),
-        _buildKelasItem('Body Combat', 'FG6984#', 'BODYCOMBAT856#61',
-            'Senin-Jumat\n16.00 - 17.00 | 19.00 - 20.00', Icons.directions_run),
-        _buildKelasItem(
-            'Zumba',
-            'FG6981#',
-            'ZUMBA856#58',
-            'Senin-Jumat\n10.30 - 12.00 | 13.30 - 15.00 | 16.00 - 17.30',
-            Icons.music_note),
-      ],
+    return Scaffold(
+      body: FutureBuilder<List<KelasOlahraga>>(
+        future: KelasOlahragaClient().fetchKelasOlahraga(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No classes found.'));
+          }
+
+          final kelasList = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: kelasList.length,
+            itemBuilder: (context, index) {
+              final kelas = kelasList[index];
+              return KelasItem(
+                namaKelas: kelas.namaKelas,
+                jadwalKelas:
+                    kelas.jadwalKelas, // Use jadwalKelas instead of jadwal
+                id_alatGym: kelas.idAlatGym.toString(), // Use id_alatGym
+                id_personalTrainer: kelas.idPersonalTrainer
+                    .toString(), // Use id_personalTrainer
+              ).animate().fade(duration: 500.ms).slide();
+            },
+          );
+        },
+      ),
     );
   }
+}
 
-  Widget _buildKelasItem(String namaKelas, String idPemesanan, String idKelas,
-      String jadwal, IconData icon) {
-    return Container(
-      width: 400,
-      height: 108,
-      margin: const EdgeInsets.only(bottom: 8, left: 6, top: 10),
-      child: Stack(
-        children: [
-          Positioned(
-            left: 0,
-            top: 0,
-            child: Container(
-              width: 400,
-              height: 108,
-              decoration: ShapeDecoration(
-                color: const Color(0xFFBBBBBB),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+class KelasItem extends StatelessWidget {
+  final String namaKelas;
+  final String jadwalKelas; // Updated to jadwalKelas
+  final String id_alatGym; // Updated to id_alatGym
+  final String id_personalTrainer; // Updated to id_personalTrainer
+
+  const KelasItem({
+    required this.namaKelas,
+    required this.jadwalKelas,
+    required this.id_alatGym,
+    required this.id_personalTrainer,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
+      child: Container(
+        width: double.infinity,
+        height: 120, // Adjust height as needed
+        decoration: BoxDecoration(
+          color: Colors.blueAccent, // Background color
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Styled Icon Container
+            Container(
+              margin: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white, // Background color for the icon
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                Icons
+                    .fitness_center, // You can change this to any icon you prefer
+                size: 40,
+                color: Colors.blueAccent, // Icon color
               ),
             ),
-          ),
-          Positioned(
-            left: 16,
-            top: 32,
-            child: Icon(
-              icon,
-              color: Colors.black,
-              size: 24,
-            ),
-          ),
-          Positioned(
-            left: 54,
-            top: 11,
-            child: Text(
-              namaKelas,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                height: 0,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    namaKelas,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'ID Alat Gym: $id_alatGym', // Display id_alatGym
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    'ID Personal Trainer: $id_personalTrainer', // Display id_personalTrainer
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    'Jadwal: $jadwalKelas', // Display jadwalKelas
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          Positioned(
-            left: 54,
-            top: 33,
-            child: Text(
-              'ID Kelas: $idKelas',
-              style: const TextStyle(
-                color: Color(0xFF696969),
-                fontSize: 12,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                height: 0,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 54,
-            top: 63,
-            child: Text(
-              'Jadwal: $jadwal',
-              style: const TextStyle(
-                color: Color(0xFF696969),
-                fontSize: 12,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                height: 0,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 54,
-            top: 48,
-            child: Text(
-              'ID pemesanan: $idPemesanan',
-              style: const TextStyle(
-                color: Color(0xFF696969),
-                fontSize: 12,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                height: 0,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

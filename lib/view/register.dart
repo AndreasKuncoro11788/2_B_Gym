@@ -58,31 +58,17 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     const SizedBox(height: 40),
 
-                    // Nama Depan
+                    // Nama Pengguna
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Nama Depan tidak boleh kosong';
+                          return 'Nama Pengguna tidak boleh kosong';
                         }
                         return null;
                       },
                       controller: firstNameController,
-                      hintTxt: 'Nama Depan',
-                      helperTxt: 'Masukkan Nama Depan',
-                      iconData: Icons.person,
-                    ),
-
-                    // Nama Belakang
-                    inputForm(
-                      (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Nama Belakang tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                      controller: lastNameController,
-                      hintTxt: 'Nama Belakang',
-                      helperTxt: 'Masukkan Nama Belakang',
+                      hintTxt: 'Nama Pengguna',
+                      helperTxt: 'Masukkan Nama Pengguna',
                       iconData: Icons.person,
                     ),
 
@@ -95,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
                         return null;
                       },
                       controller: idController,
-                      hintTxt: 'ID Number',
+                      hintTxt: 'Nomor Identitas (KTP / SIM)',
                       helperTxt: 'Masukkan Nomor Identitas',
                       iconData: Icons.credit_card,
                     ),
@@ -114,20 +100,6 @@ class _RegisterViewState extends State<RegisterView> {
                       iconData: Icons.transgender,
                     ),
 
-                    // Umur
-                    inputForm(
-                      (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Umur tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                      controller: ageController,
-                      hintTxt: 'Umur',
-                      helperTxt: 'Masukkan Umur',
-                      iconData: Icons.calendar_today,
-                    ),
-
                     // Alamat Email
                     inputForm(
                       (value) {
@@ -140,6 +112,20 @@ class _RegisterViewState extends State<RegisterView> {
                       hintTxt: 'Alamat Email',
                       helperTxt: 'Masukkan Alamat Email',
                       iconData: Icons.email,
+                    ),
+                    
+                    // Umur
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Umur tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: ageController,
+                      hintTxt: 'Umur',
+                      helperTxt: 'Masukkan Umur',
+                      iconData: Icons.calendar_today,
                     ),
 
                     // Kata Sandi
