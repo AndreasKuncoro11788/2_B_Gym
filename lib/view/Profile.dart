@@ -5,26 +5,25 @@ import 'package:flutter_application_1/client/PenggunaClient.dart';
 import 'package:flutter_application_1/entity/Pengguna.dart';
 import 'package:flutter_application_1/view/editProfile.dart';
 
-// Provider untuk mengambil data pengguna berdasarkan ID
-final profileProvider = FutureProvider.autoDispose.family<Pengguna, int>((ref, userId) async {
-  return await Penggunaclient.fetchUser(userId);
+// Provider untuk mengambil data pengguna login
+final profileProvider = FutureProvider<Pengguna>((ref) async {
+  return await Penggunaclient.fetchCurrentUser();
 });
 
-class UserProfile extends ConsumerWidget {
-  final int userId; // ID pengguna yang akan ditampilkan
 
-  const UserProfile({super.key, required this.userId});
+class UserProfile extends ConsumerWidget {
+  const UserProfile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileAsyncValue = ref.watch(profileProvider(userId));
+    var listener = ref.watch(profileProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFEFEFEF),
-      body: profileAsyncValue.when(
+      body: listener.when(
         data: (pengguna) => _buildProfileContent(context, ref, pengguna),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, stack) => Center(child: Text(err.toString())),
       ),
     );
   }
@@ -100,7 +99,7 @@ class UserProfile extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Editprofile()),
-              ).then((_) => ref.refresh(profileProvider(userId))); // Refresh data setelah edit
+              ).then((_) => ref.refresh(profileProvider)); // Refresh data setelah edit
             },
             child: const Text(
               'Edit Profile',
