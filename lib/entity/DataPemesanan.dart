@@ -7,10 +7,10 @@ class DataPemesanan {
   final String namaTrainer;
   final String namaAlat;
   final String jadwalKelas;
-  final String id_pengguna;
-  final String id_kelasOlahraga;
-  final String id_PersonalTrainer;
-  final String id_alatGym;
+  final int id_pengguna;
+  final int id_kelasOlahraga;
+  final int id_personalTrainer;
+  final int id_alatGym;
 
   DataPemesanan({
     required this.id,
@@ -21,7 +21,7 @@ class DataPemesanan {
     required this.jadwalKelas,
     required this.id_pengguna,
     required this.id_kelasOlahraga,
-    required this.id_PersonalTrainer,
+    required this.id_personalTrainer,
     required this.id_alatGym,
 
   });
@@ -38,7 +38,7 @@ class DataPemesanan {
       jadwalKelas: json["jadwalKelas"],
       id_pengguna: json["id_pengguna"],
       id_kelasOlahraga: json["id_kelasOlahraga"],
-      id_PersonalTrainer: json["id_PersonalTrainer"],
+      id_personalTrainer: json["id_personalTrainer"],
       id_alatGym: json["id_alatGym"],
     );
   }
@@ -54,7 +54,7 @@ class DataPemesanan {
     "jadwalKelas": jadwalKelas,
     "id_pengguna": id_pengguna,
     "id_kelasOlahraga": id_kelasOlahraga,
-    "id_PersonalTrainer": id_PersonalTrainer,
+    "id_personalTrainer": id_personalTrainer,
     "id_alatGym": id_alatGym,
   };
 }
