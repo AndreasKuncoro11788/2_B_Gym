@@ -1,84 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart'; // Paket untuk animasi
+import 'package:flutter_application_1/client/PersonalTrainerClient.dart'; // Import API client
+import 'package:flutter_application_1/entity/PersonalTrainer.dart'; // Import PersonalTrainer model
+import 'package:flutter_animate/flutter_animate.dart'; // Import animation package
 
 class PersonalTrainerDetail extends StatelessWidget {
   const PersonalTrainerDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 12),
-          ..._buildTrainerCards()
-              .map((item) => item.animate().fade(duration: 500.ms).slide())
-              .toList(),
-        ],
+    return Scaffold(
+      body: FutureBuilder<List<PersonalTrainer>>(
+        future: PersonalTrainerClient().fetchPersonalTrainers(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No trainers found.'));
+          }
+
+          final trainers = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: trainers.length,
+            itemBuilder: (context, index) {
+              final trainer = trainers[index];
+              return TrainerCard(trainer: trainer)
+                  .animate()
+                  .fade(duration: 500.ms)
+                  .slide();
+            },
+          );
+        },
       ),
     );
-  }
-
-  List<Widget> _buildTrainerCards() {
-    return const [
-      TrainerCard(
-        trainerName: 'Agus',
-        trainerType: 'Yoga',
-        identityNumber: '1234567',
-        orderId: 'YOGA856#57',
-        backgroundColor: Colors.lightGreen,
-      ),
-      TrainerCard(
-        trainerName: 'Deven',
-        trainerType: 'Pilates',
-        identityNumber: '4567890',
-        orderId: 'PILATES856#60',
-        backgroundColor: Colors.pinkAccent,
-      ),
-      TrainerCard(
-        trainerName: 'Charlie',
-        trainerType: 'Boxing',
-        identityNumber: '3456789',
-        orderId: 'BOXING856#59',
-        backgroundColor: Colors.redAccent,
-      ),
-      TrainerCard(
-        trainerName: 'Bowo',
-        trainerType: 'Zumba',
-        identityNumber: '2345678',
-        orderId: 'ZUMBA856#58',
-        backgroundColor: Colors.orangeAccent,
-      ),
-      TrainerCard(
-        trainerName: 'Evan',
-        trainerType: 'Body Combat',
-        identityNumber: '5678901',
-        orderId: 'BODYCOMBAT856#61',
-        backgroundColor: Colors.blueAccent,
-      ),
-    ].map((card) {
-      return Container(
-        width: 400, // Set the desired width here
-        margin: const EdgeInsets.only(left: 6.5), // Set the left margin here
-        child: card,
-      );
-    }).toList();
   }
 }
 
 class TrainerCard extends StatelessWidget {
-  final String trainerName;
-  final String trainerType;
-  final String identityNumber;
-  final String orderId;
-  final Color backgroundColor;
+  final PersonalTrainer trainer;
 
-  const TrainerCard({
-    required this.trainerName,
-    required this.trainerType,
-    required this.identityNumber,
-    required this.orderId,
-    required this.backgroundColor,
-  });
+  const TrainerCard({Key? key, required this.trainer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +51,7 @@ class TrainerCard extends StatelessWidget {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: Colors.blueAccent, // Set a default background color
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -108,8 +71,8 @@ class TrainerCard extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage(
-                      _getImageByType(trainerType)), // Memuat gambar dari aset
+                  image: AssetImage(_getImageByIdentity(trainer
+                      .nomorIdentitas)), // Load image based on identity number
                   fit: BoxFit.cover,
                 ),
               ),
@@ -120,32 +83,18 @@ class TrainerCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    trainerName,
+                    trainer.namaTrainer,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Trainer: $trainerType',
+                    'Nomor Identitas: ${trainer.nomorIdentitas}',
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    'ID pemesanan: $orderId',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    'Nomor identitas: $identityNumber',
-                    style: const TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
@@ -158,20 +107,9 @@ class TrainerCard extends StatelessWidget {
     );
   }
 
-  String _getImageByType(String type) {
-    switch (type.toLowerCase()) {
-      case 'yoga':
-        return 'lib/assets/yoga_trainer.png';
-      case 'pilates':
-        return 'lib/assets/pilates_trainer.jpg';
-      case 'boxing':
-        return 'lib/assets/boxing_trainer.jpg';
-      case 'zumba':
-        return 'lib/assets/zumba_trainer.jpg';
-      case 'body combat':
-        return 'lib/assets/body_combat_trainer.jpg';
-      default:
-        return 'lib/assets/default_trainer.jpg'; // Gambar default jika tidak ada yang cocok
-    }
+  String _getImageByIdentity(String identity) {
+    // You can customize the image selection logic based on the identity or any other criteria
+    // For now, we will return a default image
+    return 'lib/assets/default_trainer.jpg'; // Default image if no specific logic is applied
   }
 }
