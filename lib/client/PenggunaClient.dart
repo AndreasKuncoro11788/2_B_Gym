@@ -3,89 +3,105 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 class Penggunaclient {
-  static final String url = '10.0.2.2:8000';
+  static final String url = 'http://10.0.2.2:8000';
   static final String endpoint = '/api/pengguna';
 
   // Mengambil semua data pengguna dari API
   static Future<List<Pengguna>> fetchAll() async {
     try {
-      var response = await get(Uri.http(url, endpoint)); // Request ke API dan menyimpan responsenya
+      final response = await get(Uri.parse('$url$endpoint'));
 
-      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+      if (response.statusCode != 200) throw Exception('Failed to load users: ${response.reasonPhrase}');
 
-      // Mengambil bagian data dari response body
       Iterable list = json.decode(response.body)['data'];
 
-      // List.map untuk membuat list objek Pengguna berdasarkan tiap elemen dari list
       return list.map((e) => Pengguna.fromJson(e)).toList();
     } catch (e) {
-      return Future.error(e.toString());
+      return Future.error('Error fetching users: $e');
     }
   }
 
   // Mencari pengguna berdasarkan ID
   static Future<Pengguna> find(int id) async {
     try {
-      var response = await get(Uri.http(url, '$endpoint/$id')); // Request ke API untuk pengguna tertentu
+      final response = await get(Uri.parse('$url$endpoint/$id'));
 
-      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+      if (response.statusCode != 200) throw Exception('Failed to find user: ${response.reasonPhrase}');
 
-      // Mengembalikan objek Pengguna dari response body
       return Pengguna.fromJson(json.decode(response.body)['data']);
     } catch (e) {
-      return Future.error(e.toString());
+      return Future.error('Error finding user: $e');
     }
   }
 
   // Mengambil data pengguna berdasarkan ID untuk profil
   static Future<Pengguna> fetchUser(int id) async {
-    return await find(id); // Menggunakan metode find untuk mengambil pengguna berdasarkan ID
+    return await find(id);
   }
 
   // Membuat pengguna baru
-  static Future<Pengguna> create(Pengguna pengguna) async {
-    try {
-      var response = await post(
-        Uri.http(url, endpoint),
+  static Future<Response> create(Pengguna pengguna) async {
+      final response = await post(
+        Uri.parse('$url$endpoint'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(pengguna.toJson()), // Mengonversi objek Pengguna ke JSON
+        body: json.encode(pengguna.toJson()),
       );
 
-      if (response.statusCode != 201) throw Exception(response.reasonPhrase);
-
-      // Mengembalikan objek Pengguna yang baru dibuat
-      return Pengguna.fromJson(json.decode(response.body));
-    } catch (e) {
-      return Future.error(e.toString());
-    }
+      if (response.statusCode != 201) {
+        print('Response body: ${response.body}');
+        throw Exception('Failed to create user: ${response.reasonPhrase}');
+      }
+      return response;
   }
 
   // Memperbarui data pengguna
-  static Future<Pengguna> update(Pengguna pengguna) async {
+  static Future<void> update(Pengguna pengguna) async {
     try {
-      var response = await put(
-        Uri.http(url, '$endpoint/${pengguna.id}'),
+      final response = await put(
+        Uri.parse('$url$endpoint/${pengguna.id}'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(pengguna.toJson()), // Mengonversi objek Pengguna ke JSON
+        body: jsonEncode(pengguna.toJson()),
       );
 
-      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
-
-      // Mengembalikan objek Pengguna yang diperbarui
-      return Pengguna.fromJson(json.decode(response.body));
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        print('User updated successfully');
+      } else {
+        throw Exception('Failed to update user. Status: ${response.statusCode}');
+      }
     } catch (e) {
-      return Future.error(e.toString());
+      return Future.error('Error updating user: $e');
     }
   }
 
   // Menghapus pengguna berdasarkan ID
   static Future<void> destroy(int id) async {
     try {
-      var response = await delete(Uri.http(url, '$endpoint/$id')); // Request ke API untuk menghapus pengguna
+      final response = await delete(Uri.parse('$url$endpoint/$id'));
 
-      if (response.statusCode != 204) throw Exception(response.reasonPhrase);
+      if (response.statusCode != 204) throw Exception('Failed to delete user: ${response.reasonPhrase}');
     } catch (e) {
-      return Future.error(e.toString());
+      return Future.error('Error deleting user: $e');
+    }
+  }
+
+  // Metode untuk login pengguna
+  static Future<Response> login(String namaPengguna, String password) async {
+    try {
+      final response = await post(
+        Uri.parse('$url$endpoint/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'namaPengguna': namaPengguna,
+          'kataSandi': password,
+        }),
+      );
+
+
+      if (response.statusCode != 200) throw Exception('Failed to login: ${response.reasonPhrase}');
+
+      return response;
+    } catch (e) {
+      return Future.error('Error logging in: $e');
     }
   }
 }
