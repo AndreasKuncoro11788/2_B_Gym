@@ -13,7 +13,9 @@ class RiwayatPemesanan {
     required this.id_pembayaran,
   });
 
-  factory RiwayatPemesanan.fromRawJson(String str) => RiwayatPemesanan.fromJson(json.decode(str));
+  factory RiwayatPemesanan.fromRawJson(String str) =>
+      RiwayatPemesanan.fromJson(json.decode(str));
+
   factory RiwayatPemesanan.fromJson(Map<String, dynamic> json) {
     return RiwayatPemesanan(
       id: json["id"],
@@ -24,10 +26,24 @@ class RiwayatPemesanan {
   }
 
   String toRawJson() => json.encode(toJson());
+
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "review": review,
-    "rating": rating,
-    "id_pembayaran": id_pembayaran,
-  };
+        "id": id,
+        "review": review,
+        "rating": rating,
+        "id_pembayaran": id_pembayaran,
+      };
+
+  // copyWith method with only optional fields that can change
+  RiwayatPemesanan copyWith({
+    int? rating,
+    String? review,
+  }) {
+    return RiwayatPemesanan(
+      id: this.id, 
+      rating: rating ?? this.rating,
+      review: review ?? this.review,
+      id_pembayaran: this.id_pembayaran,
+    );
+  }
 }
