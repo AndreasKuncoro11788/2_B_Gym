@@ -73,13 +73,4 @@ class PersonalTrainerClient {
       throw Exception('Failed to delete personal trainer');
     }
   }
-
-  Future<PersonalTrainer> fetchPersonalTrainerById(int pemesananId) async {
-    final response = await http.get(Uri.parse('$url$endpoint/$pemesananId'));
-    if (response.statusCode == 200) {
-      return PersonalTrainer.fromJson(json.decode(response.body)['data']);
-    } else {
-      throw Exception('Failed to load personal trainer');
-    }
-  }
 }
