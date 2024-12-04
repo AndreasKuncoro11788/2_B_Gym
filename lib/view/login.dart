@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/home.dart';
 import 'package:flutter_application_1/view/register.dart';
 import 'package:flutter_application_1/component/form_component.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:local_auth/local_auth.dart'; // Import local_auth
+import 'package:flutter_application_1/client/PenggunaClient.dart';
+import 'package:flutter_application_1/entity/Pengguna.dart';
+import 'package:local_auth/local_auth.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -17,13 +18,18 @@ class _LoginViewState extends State<LoginView> {
   final formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final LocalAuthentication auth = LocalAuthentication(); // Inisialisasi LocalAuthentication
+  final LocalAuthentication auth = LocalAuthentication();
 
-  Future<bool> checkLogin(String username, String password) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? savedUsername = prefs.getString('username');
-    String? savedPassword = prefs.getString('password');
-    return savedUsername == username && savedPassword == password;
+  Future<void> login(String username, String password) async {
+    try {
+      await Penggunaclient.login(username, password);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeView()),
+      );
+    } catch (e) {
+      showLoginErrorDialog(context, e.toString());
+    }
   }
 
   Future<bool> isBiometricSupported() async {
@@ -49,26 +55,25 @@ class _LoginViewState extends State<LoginView> {
       return;
     }
 
-  try {
-    bool authenticated = await auth.authenticate(
-      localizedReason: 'Silakan autentikasi menggunakan sidik jari',
-      options: const AuthenticationOptions(
-        useErrorDialogs: true,
-        stickyAuth: true,
-      ),
-    );
-
-    if (authenticated) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeView()),
+    try {
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'Silakan autentikasi menggunakan sidik jari',
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: true,
+        ),
       );
-    }
-  } catch (e) {
-    print(e); // Tangani kesalahan jika diperlukan
-  }
-}
 
+      if (authenticated) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeView()),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +101,7 @@ class _LoginViewState extends State<LoginView> {
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     const SizedBox(height: 40),
-                    
-                    // Menggunakan inputForm dari form_component.dart
+
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -110,9 +114,9 @@ class _LoginViewState extends State<LoginView> {
                       helperTxt: 'Masukkan pengguna terdaftar',
                       iconData: Icons.person,
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -124,11 +128,11 @@ class _LoginViewState extends State<LoginView> {
                       hintTxt: 'Kata Sandi',
                       helperTxt: 'Masukkan kata sandi',
                       iconData: Icons.lock,
-                      password: true, // Untuk menyembunyikan teks
+                      password: true,
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
@@ -139,28 +143,24 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          bool isValid = await checkLogin(
+                          await login(
                             usernameController.text,
                             passwordController.text,
                           );
-                          if (isValid) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => const HomeView()),
-                            );
-                          } else {
-                            showLoginErrorDialog(context);
-                          }
                         }
                       },
-                      child: const Text('Masuk'),
+                      child: const Text(
+                        'Masuk',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    
+
                     const SizedBox(height: 20),
 
-                    // Logo fingerprint
                     GestureDetector(
-                      onTap: authenticateWithFingerprint, // Panggil fungsi autentikasi saat ditekan
+                      onTap: authenticateWithFingerprint,
                       child: Column(
                         children: [
                           Icon(
@@ -201,12 +201,12 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  void showLoginErrorDialog(BuildContext context) {
+  void showLoginErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Kata Sandi Salah'),
-        content: const Text('Nama pengguna atau kata sandi salah.'),
+        title: const Text('Login Gagal'),
+        content: Text(message),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context),
