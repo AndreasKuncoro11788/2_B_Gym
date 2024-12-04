@@ -82,4 +82,18 @@ class RiwayatPemesananClient {
       throw Exception('Failed to load riwayat pemesanan by id');
     }
   }
+
+  static Future<List<RiwayatPemesanan>> fetchRiwayatPemesananByPembayaranId(int idPembayaran) async {
+  final response = await http.get(Uri.parse('$url$endpoint')); // Ambil semua data riwayat
+
+  if (response.statusCode == 200) {
+    List jsonResponse = json.decode(response.body)['data'];
+    List<RiwayatPemesanan> allRiwayat = jsonResponse.map((data) => RiwayatPemesanan.fromJson(data)).toList();
+    List<RiwayatPemesanan> filteredRiwayat = allRiwayat.where((riwayat) => riwayat.id_pembayaran == idPembayaran).toList();
+    return filteredRiwayat;
+  } else {
+    throw Exception('Gagal mengambil data riwayat pemesanan');
+  }
+}
+
 }

@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/entity/DataPemesanan.dart';
+import 'package:flutter_application_1/entity/Pembayaran.dart';
+import 'package:flutter_application_1/entity/AlatGym.dart';
+import 'package:flutter_application_1/entity/KelasOlahraga.dart';
+import 'package:flutter_application_1/entity/Pengguna.dart';
 import 'package:flutter_application_1/view/kelasSayaPage/viewPDF.dart';
+import 'package:flutter_application_1/client/PembayaranClient.dart';
+import 'package:flutter_application_1/client/AlatGymClient.dart';
+import 'package:flutter_application_1/client/KelasOlahragaClient.dart';
+import 'package:flutter_application_1/client/DataPemesananClient.dart';
+import 'package:flutter_application_1/client/PenggunaClient.dart';
 
 class DetailTransaction extends StatelessWidget {
-  const DetailTransaction({super.key});
+  final String pemesananId;
+  final String jadwalKelas;
+
+  const DetailTransaction({
+    super.key,
+    required this.pemesananId,
+    required this.jadwalKelas,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,58 +51,111 @@ class DetailTransaction extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        color: const Color(0xFFF9F9F9),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const Text(
-                'Detail',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Text(
-                'ID Pembayaran : 12#3456',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              const Text(
-                'ID Pemesanan : uytr34',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 10),
-              _buildClassInfoCard(),
-              const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                child: const Divider(
-                  color: Color(0xFFD9D9D9),
-                  thickness: 8,
-                ),
-              ),
+      body: FutureBuilder<DataPemesanan>(
+        future: DataPemesananClient.fetchDataPemesananById(int.parse(pemesananId)),
+        builder: (context, snapshotPemesanan) {
+          if (snapshotPemesanan.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshotPemesanan.hasError) {
+            return Center(child: Text('Error: ${snapshotPemesanan.error}'));
+          } else if (snapshotPemesanan.hasData) {
+            DataPemesanan dataPemesanan = snapshotPemesanan.data!;
 
-              const SizedBox(height: 10),
-              _buildPaymentInfo(),
-              const Spacer(),
-              _buildActionButton(context),
-            ],
+            // Panggil data pengguna berdasarkan id_pengguna
+            return FutureBuilder<Pengguna>(
+              future: Penggunaclient.find(dataPemesanan.id_pengguna),
+              builder: (context, snapshotPengguna) {
+                if (snapshotPengguna.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshotPengguna.hasError) {
+                  return Center(child: Text('Error: ${snapshotPengguna.error}'));
+                } else if (snapshotPengguna.hasData) {
+                  Pengguna pengguna = snapshotPengguna.data!;
+
+            // Lanjutkan untuk mengambil data alat gym, kelas olahraga, dan pembayaran
+            return FutureBuilder<List<dynamic>>(
+              future: Future.wait([
+                AlatGymClient().fetchAlatGymById(dataPemesanan.id_alatGym),
+                KelasOlahragaClient().fetchKelasOlahragaById(dataPemesanan.id_kelasOlahraga),
+                PembayaranClient.fetchPembayaranByPemesananId(int.parse(pemesananId)),
+              ]),
+              builder: (context, snapshotData) {
+                if (snapshotData.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshotData.hasError) {
+                  return Center(child: Text('Error: ${snapshotData.error}'));
+                } else if (snapshotData.hasData) {
+                  AlatGym alatGym = snapshotData.data![0];
+                  KelasOlahraga kelasOlahraga = snapshotData.data![1];
+
+                  // Ambil data pembayaran dari List<Pembayaran>
+                  List<Pembayaran> listPembayaran = snapshotData.data![2];
+                  Pembayaran pembayaran = listPembayaran.isNotEmpty
+                      ? listPembayaran.first
+                      : throw Exception('Data pembayaran tidak ditemukan');
+
+                  return _buildDetailPage(context, dataPemesanan, alatGym, kelasOlahraga, pembayaran, pengguna);
+                } else {
+                  return const Center(child: Text('No Data Available'));
+                }
+              },
+            );
+          } else {
+            return const Center(child: Text('No Data Available'));
+          }
+        },
+      );
+    } else {
+      return const Center(child: Text('No Data Available'));
+    }
+  },
+)
+
+    );
+  }
+
+  Widget _buildDetailPage(BuildContext context, DataPemesanan dataPemesanan, AlatGym alatGym, KelasOlahraga kelasOlahraga, Pembayaran pembayaran, Pengguna pengguna) {
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFFF9F9F9),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          const Text(
+            'Detail',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
+          Text(
+            'ID Pemesanan: ${dataPemesanan.id}',
+            style: const TextStyle(fontSize: 16),
+          ),
+          Text(
+            'ID Pembayaran: ${pembayaran.id}',
+            style: const TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 10),
+          _buildClassInfoCard(alatGym, kelasOlahraga, dataPemesanan),
+          const SizedBox(height: 20),
+          const Divider(
+            color: Color(0xFFD9D9D9),
+            thickness: 2,
+          ),
+          const SizedBox(height: 10),
+          _buildPaymentInfo(pembayaran),
+          const Spacer(),
+          _buildActionButton(context, dataPemesanan, pembayaran),
+        ],
       ),
     );
   }
 
-  Widget _buildClassInfoCard() {
+  Widget _buildClassInfoCard(AlatGym alatGym, KelasOlahraga kelasOlahraga, DataPemesanan dataPemesanan) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -95,89 +165,86 @@ class DetailTransaction extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Jenis Kelas : Yoga',
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 5),
-          Text(
-            'Trainer : Bowo',
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 5),
-          Text(
-            'Alat GYM : Yoga Matt',
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 5),
-          Text(
-            'Jadwal : Senin 08.00 - 09.00',
-            style: TextStyle(fontSize: 16),
-          ),
+        children: [
+          Text('Jenis Kelas: ${kelasOlahraga.namaKelas}', style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 5),
+          Text('Trainer: ${dataPemesanan.namaTrainer}', style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 5),
+          Text('Alat GYM: ${alatGym.namaAlat}', style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 5),
+          Text('Jadwal: $jadwalKelas', style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
   }
 
-  Widget _buildPaymentInfo() {
+  Widget _buildPaymentInfo(Pembayaran pembayaran) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text('Metode Pembayaran: ${pembayaran.jenisPembayaran}', style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 5),
-        const Text(
-          'E-Wallet : ShopeePay',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(height: 5),
-        const Text(
-          'No : 08123456789',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
+        Text('Status: ${pembayaran.statusPembayaran}', style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 15),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              'Total Pembayaran',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Rp. 65.000',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+          children: [
+            const Text('Total Pembayaran', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Rp. ${pembayaran.totalPembayaran}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildActionButton(BuildContext context) {
-  return Center(
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFB3286),
-        minimumSize: const Size(200, 50),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+  Widget _buildActionButton(BuildContext context, DataPemesanan dataPemesanan, Pembayaran pembayaran) {
+    return Center(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFFB3286),
+          minimumSize: const Size(200, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        onPressed: () async {
+          // Dapatkan data pengguna
+          Pengguna pengguna = await Penggunaclient.find(dataPemesanan.id_pengguna);
+
+          // Pindah ke PdfGenerator dan kirimkan data pengguna
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PdfGenerator(
+                paymentId: pemesananId,
+                orderId: pemesananId,
+                name: pengguna.namaPengguna,
+                email: pengguna.email,
+                phone: pengguna.nomorTelepon,
+                address: pengguna.jenisKelamin ?? 'Unknown',
+                orderDate: dataPemesanan.status,
+                paymentMethod: pembayaran.jenisPembayaran,
+                paymentNumber: pembayaran.id.toString(),
+
+                soldProducts: [
+                  {
+                    'name': 'Kelas ${dataPemesanan.namaKelas}',
+                    'price': '${pembayaran.totalPembayaran}',
+                  },
+                ],
+              ),
+            ),
+          );
+        },
+        child: const Text(
+          'Buka PDF',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PdfGenerator()),
-        );
-      },
-      child: const Text(
-        'Buka PDF',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
-}
+    );
+  }
 }
