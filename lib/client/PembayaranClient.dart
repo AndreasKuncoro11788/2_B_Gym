@@ -67,4 +67,33 @@ class PembayaranClient {
       throw Exception('Failed to find pembayaran');
     }
   }
+
+  static Future<List<Pembayaran>> fetchPembayaranByPemesananId(int idPemesanan) async {
+  final response = await http.get(Uri.parse('$url$endpoint')); // Ambil semua data pembayaran
+
+  if (response.statusCode == 200) {
+    List jsonResponse = json.decode(response.body)['data'];
+    List<Pembayaran> allPayments = jsonResponse.map((data) => Pembayaran.fromJson(data)).toList();
+    List<Pembayaran> filteredPayments = allPayments.where((pembayaran) => pembayaran.id_pemesanan == idPemesanan).toList();
+    return filteredPayments;
+  } else {
+    throw Exception('Gagal mengambil data pembayaran');
+  }
 }
+
+
+  static Future<void> deletePembayaranByPemesananId(int idPemesanan) async {
+    final response = await http.delete(
+      Uri.parse('$url$endpoint/$idPemesanan'), // Endpoint untuk menghapus data pembayaran berdasarkan id_pemesanan
+    );
+
+    if (response.statusCode == 200) {
+      // Data pembayaran berhasil dihapus
+      print('Pembayaran dengan id_pemesanan $idPemesanan berhasil dihapus');
+    } else {
+      throw Exception('Gagal menghapus data pembayaran');
+    }
+  }
+
+}
+

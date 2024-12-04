@@ -7,6 +7,7 @@ class DataPemesanan {
   final String namaTrainer;
   final String namaAlat;
   final String jadwalKelas;
+  final String status;
   final int id_pengguna;
   final int id_kelasOlahraga;
   final int id_personalTrainer;
@@ -19,6 +20,7 @@ class DataPemesanan {
     required this.namaTrainer,
     required this.namaAlat,
     required this.jadwalKelas,
+    required this.status,
     required this.id_pengguna,
     required this.id_kelasOlahraga,
     required this.id_personalTrainer,
@@ -36,6 +38,7 @@ class DataPemesanan {
       namaTrainer: json["namaTrainer"],
       namaAlat: json["namaAlat"],
       jadwalKelas: json["jadwalKelas"],
+      status: json["status"],
       id_pengguna: json["id_pengguna"],
       id_kelasOlahraga: json["id_kelasOlahraga"],
       id_personalTrainer: json["id_personalTrainer"],
@@ -52,6 +55,7 @@ class DataPemesanan {
     "namaTrainer": namaTrainer,
     "namaAlat": namaAlat,
     "jadwalKelas": jadwalKelas,
+    "status": status,
     "id_pengguna": id_pengguna,
     "id_kelasOlahraga": id_kelasOlahraga,
     "id_personalTrainer": id_personalTrainer,

@@ -56,13 +56,23 @@ class KelasOlahragaClient {
   }
 
   // Delete Kelas Olahraga
-  Future<void> deleteKelasOlahraga(int id) async { // Change to int
+  Future<void> deleteKelasOlahraga(int id) async { 
     final response = await http.delete(
-      Uri.parse('$url$endpoint/$id'), // Use id instead of idKelas
+      Uri.parse('$url$endpoint/$id'), 
     );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to delete kelas olahraga');
+    }
+  }
+
+  // Fetch Kelas Olahraga by id
+  Future<KelasOlahraga> fetchKelasOlahragaById(int id) async { 
+    final response = await http.get(Uri.parse('$url$endpoint/$id'));
+    if (response.statusCode == 200) {
+      return KelasOlahraga.fromJson(json.decode(response.body)['data']);
+    } else {
+      throw Exception('Failed to load kelas olahraga');
     }
   }
 }
