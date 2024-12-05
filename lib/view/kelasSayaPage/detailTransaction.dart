@@ -149,7 +149,7 @@ class DetailTransaction extends StatelessWidget {
           const SizedBox(height: 10),
           _buildPaymentInfo(pembayaran),
           const Spacer(),
-          _buildActionButton(context, dataPemesanan, pembayaran),
+          _buildActionButton(context, dataPemesanan, pembayaran, kelasOlahraga, alatGym),
         ],
       ),
     );
@@ -197,7 +197,7 @@ class DetailTransaction extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(BuildContext context, DataPemesanan dataPemesanan, Pembayaran pembayaran) {
+  Widget _buildActionButton(BuildContext context, DataPemesanan dataPemesanan, Pembayaran pembayaran, KelasOlahraga kelasOlahraga, AlatGym alatGym) {
     return Center(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -221,17 +221,25 @@ class DetailTransaction extends StatelessWidget {
                 name: pengguna.namaPengguna,
                 email: pengguna.email,
                 phone: pengguna.nomorTelepon,
-                address: pengguna.jenisKelamin ?? 'Unknown',
+                address: pengguna.jenisKelamin,
                 orderDate: dataPemesanan.status,
                 paymentMethod: pembayaran.jenisPembayaran,
                 paymentNumber: pembayaran.id.toString(),
+                totalPayment: pembayaran.totalPembayaran.toString(),
 
-                soldProducts: [
+                kelasOlahraga: [
                   {
-                    'name': 'Kelas ${dataPemesanan.namaKelas}',
-                    'price': '${pembayaran.totalPembayaran}',
+                    'name': 'Kelas ${kelasOlahraga.namaKelas}',
+                    'price': '${kelasOlahraga.hargaKelas}',
                   },
                 ],
+
+                dataAlatGym: [
+                  {
+                    'name': alatGym.namaAlat,
+                    'price': '${alatGym.harga}',
+                  },
+                ]
               ),
             ),
           );

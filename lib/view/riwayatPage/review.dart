@@ -51,7 +51,6 @@ class _ReviewPageState extends State<ReviewPage> {
         _idPembayaran = pembayaranList[0].id;
 
         final riwayat = await RiwayatPemesananClient.fetchRiwayatPemesananByPembayaranId(_idPembayaran);
-        print('Riwayat List: $riwayat'); // Debug log
 
         if (riwayat.isNotEmpty) {
           final singleRiwayat = riwayat[0];
@@ -62,11 +61,18 @@ class _ReviewPageState extends State<ReviewPage> {
             _isLoading = false;
           });
         } else {
+          // Inisialisasi riwayat baru jika tidak ditemukan
           setState(() {
+            _updatedRiwayat = RiwayatPemesanan(
+              id: 0,
+              review: '',
+              rating: 0,
+              id_pembayaran: _idPembayaran,
+            );
             _isLoading = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Riwayat pemesanan tidak ditemukan!')),
+            const SnackBar(content: Text('Membuat riwayat baru!')),
           );
         }
       } else {
@@ -279,6 +285,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),
