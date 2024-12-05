@@ -16,7 +16,9 @@ class PdfGenerator extends StatefulWidget {
   final String orderDate;
   final String paymentMethod;
   final String paymentNumber;
-  final List<Map<String, dynamic>> soldProducts;
+  final String totalPayment;
+  final List<Map<String, dynamic>> kelasOlahraga;
+  final List<Map<String, dynamic>> dataAlatGym;
 
   const PdfGenerator({
     super.key,
@@ -29,7 +31,9 @@ class PdfGenerator extends StatefulWidget {
     required this.orderDate,
     required this.paymentMethod,
     required this.paymentNumber,
-    required this.soldProducts,
+    required this.totalPayment,
+    required this.kelasOlahraga,
+    required this.dataAlatGym,
   });
 
   @override
@@ -89,20 +93,38 @@ class _PdfGeneratorState extends State<PdfGenerator> {
               ),
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: widget.soldProducts.map((item) {
-                  return pw.Padding(
-                    padding: const pw.EdgeInsets.symmetric(vertical: 5),
-                    child: pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pw.Expanded(child: pw.Text(item['name'])),
-                        pw.Text("Rp. ${item['price']}"),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                children: [
+                  // Menampilkan data kelas olahraga
+                  ...widget.kelasOlahraga.map((item) {
+                    return pw.Padding(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 5),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Expanded(child: pw.Text(item['name'])),
+                          pw.Text("Rp. ${item['price']}"),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+
+                  // Menampilkan data alat gym
+                  ...widget.dataAlatGym.map((item) {
+                    return pw.Padding(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 5),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Expanded(child: pw.Text(item['name'])),
+                          pw.Text("Rp. ${item['price']}"),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ],
               ),
             ),
+
             pw.SizedBox(height: 15),
 
             // Payment method
@@ -113,7 +135,7 @@ class _PdfGeneratorState extends State<PdfGenerator> {
             pw.Align(
               alignment: pw.Alignment.centerRight,
               child: pw.Text(
-                "Total Pembayaran : Rp. 65.000",
+                "Total Pembayaran : Rp. ${widget.totalPayment}",
                 style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
             ),
