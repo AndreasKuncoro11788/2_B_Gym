@@ -10,7 +10,7 @@ class Pengguna {
   String email;
   String kataSandi;
   String nomorTelepon;
-  String fotoProfile;
+  String fotoProfil;
 
   Pengguna({
     this.id,
@@ -21,7 +21,7 @@ class Pengguna {
     required this.email,
     required this.kataSandi,
     required this.nomorTelepon,
-    required this.fotoProfile,
+    required this.fotoProfil,
   });
 
   factory Pengguna.fromRawJson(String str) => Pengguna.fromJson(jsonDecode(str));
@@ -35,11 +35,10 @@ class Pengguna {
       email: json['email'],
       kataSandi: json['kataSandi'],
       nomorTelepon: json['nomorTelepon'],
-      fotoProfile: json['fotoProfile'],
+      fotoProfil: json['fotoProfil'],
     );
   }
 
-  String toRawJson() => json.encode(toJson());
   Map<String, dynamic> toJson() {
     return {
       'namaPengguna': namaPengguna,
@@ -49,7 +48,8 @@ class Pengguna {
       'email': email,
       'kataSandi': kataSandi,
       'nomorTelepon': nomorTelepon,
-      'fotoProfile': fotoProfile,
+      'fotoProfil': fotoProfil,
     };
   }
+  String toRawJson() => json.encode(toJson());
 }

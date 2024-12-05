@@ -22,19 +22,80 @@ class Penggunaclient {
     }
   }
 
+  // Mencari pengguna berdasarkan ID
+  static Future<Pengguna> find(int id) async {
+    try {
+      final response = await get(Uri.parse('$url$endpoint/$id'));
+
+      if (response.statusCode != 200) throw Exception('Failed to find user: ${response.reasonPhrase}');
+
+      return Pengguna.fromJson(json.decode(response.body)['data']);
+    } catch (e) {
+      return Future.error('Error finding user: $e');
+    }
+  }
+
+  // Mengambil data pengguna berdasarkan ID untuk profil
+  static Future<Pengguna> fetchUser(int id) async {
+    return await find(id);
+  }
+
   // Membuat pengguna baru
-  static Future<Response> create(Pengguna pengguna) async {
+  static Future<Pengguna> create(Pengguna pengguna) async {
       final response = await post(
         Uri.parse('$url$endpoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(pengguna.toJson()),
+        headers:<String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: pengguna.toRawJson(),
       );
 
-      if (response.statusCode != 201) {
-        print('Response body: ${response.body}');
+      if (response.statusCode == 201) {
+        return Pengguna.fromJson(json.decode(response.body)['data']);
+      }else {
         throw Exception('Failed to create user: ${response.reasonPhrase}');
       }
-      return response;
+  }
+
+  // Memperbarui data pengguna
+  static Future<Pengguna> update(Pengguna pengguna) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+
+    if (token == null) {
+      throw Exception("Token tidak ditemukan. Silakan login kembali.");
+    }
+
+    try {
+      final response = await put(
+        Uri.parse('$url/api/update'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: pengguna.toRawJson(),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['data'];
+        return Pengguna.fromJson(data);
+      } else {
+        throw Exception('Gagal memperbarui data pengguna: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      return Future.error('Error updating user: $e');
+    }
+  }
+
+  // Menghapus pengguna berdasarkan ID
+  static Future<void> destroy(int id) async {
+    try {
+      final response = await delete(Uri.parse('$url$endpoint/$id'));
+
+      if (response.statusCode != 204) throw Exception('Failed to delete user: ${response.reasonPhrase}');
+    } catch (e) {
+      return Future.error('Error deleting user: $e');
+    }
   }
 
   // Metode untuk login pengguna
@@ -69,11 +130,36 @@ class Penggunaclient {
       return Future.error('Error logging in: $e');
     }
   }
+	
+static Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
 
-  // Mengambil data pengguna yang sedang login
+    if (token == null) {
+      throw Exception("Token tidak ditemukan. Anda mungkin sudah logout.");
+    }
+
+    final response = await post(
+      Uri.parse('$url/api/logout'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      await prefs.remove('authToken'); // Hapus token dari perangkat lokal
+    } else {
+      throw Exception(
+        'Logout gagal: ${response.statusCode} - ${json.decode(response.body)['message']}',
+      );
+    }
+  }
+
+// Mengambil data pengguna yang sedang login
   static Future<Pengguna> fetchCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('authToken'); // Ambil token dari SharedPreferences
+    final token = prefs.getString('authToken');
 
     if (token == null) {
       throw Exception("Token tidak ditemukan. Silakan login kembali.");
@@ -83,7 +169,7 @@ class Penggunaclient {
       Uri.parse('$url/api/me'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token', // Kirim token di header Authorization
+        'Authorization': 'Bearer $token',
       },
     );
 
@@ -94,6 +180,5 @@ class Penggunaclient {
     final data = json.decode(response.body)['data'];
     return Pengguna.fromJson(data);
   }
-
 
 }
