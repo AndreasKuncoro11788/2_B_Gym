@@ -5,7 +5,8 @@ import 'package:flutter_application_1/entity/Pengguna.dart';
 import 'package:flutter_application_1/client/PenggunaClient.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  final Map?data;
+  const RegisterView({super.key, this.data});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -14,16 +15,16 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
 
-  final _namaController = TextEditingController();
-  final _nomorIdentitasController = TextEditingController();
-  final _jenisKelaminController = TextEditingController();
-  final _umurController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _kataSandiController = TextEditingController();
-  final _confirmKataSandiController = TextEditingController();
-  final _nomorTeleponController = TextEditingController();
+  TextEditingController _namaController = TextEditingController();
+  TextEditingController _nomorIdentitasController = TextEditingController();
+  TextEditingController _jenisKelaminController = TextEditingController();
+  TextEditingController _umurController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _kataSandiController = TextEditingController();
+  TextEditingController _confirmKataSandiController = TextEditingController();
+  TextEditingController _nomorTeleponController = TextEditingController();
   
-  final _fotoProfileController = TextEditingController(text: 'https://media.istockphoto.com/id/1495088043/id/vektor/ikon-profil-pengguna-avatar-atau-ikon-orang-gambar-profil-simbol-potret-gambar-potret.jpg?s=612x612&w=0&k=20&c=vMnxIgiQh5EFyQrFGGNKtbb6tuGCT04L58nwwEGzIbc');
+  final _fotoProfilController = TextEditingController(text: 'https://media.istockphoto.com/id/1495088043/id/vektor/ikon-profil-pengguna-avatar-atau-ikon-orang-gambar-profil-simbol-potret-gambar-potret.jpg?s=612x612&w=0&k=20&c=vMnxIgiQh5EFyQrFGGNKtbb6tuGCT04L58nwwEGzIbc');
 
   Future<void> _registerUser() async {
     if (_kataSandiController.text != _confirmKataSandiController.text) {
@@ -38,10 +39,10 @@ class _RegisterViewState extends State<RegisterView> {
         nomorIdentitas: _nomorIdentitasController.text,
         jenisKelamin: _jenisKelaminController.text,
         email: _emailController.text,
-        umur: int.parse(_umurController.text).toString(),
+        umur: _umurController.text,
         kataSandi: _kataSandiController.text,
         nomorTelepon: _nomorTeleponController.text,
-        fotoProfile: _fotoProfileController.text,
+        fotoProfil: _fotoProfilController.text,
       );
 
 
@@ -60,7 +61,8 @@ class _RegisterViewState extends State<RegisterView> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pendaftaran gagal: $e')),
+        SnackBar(content: Text(
+          'Pendaftaran gagal: $e ')),
       );
     }
   }

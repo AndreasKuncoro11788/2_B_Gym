@@ -38,7 +38,6 @@ class Pengguna {
     );
   }
 
-  String toRawJson() => json.encode(toJson());
   Map<String, dynamic> toJson() {
     return {
       'namaPengguna': namaPengguna,
@@ -51,4 +50,5 @@ class Pengguna {
       'fotoProfil': fotoProfil,
     };
   }
+  String toRawJson() => json.encode(toJson());
 }

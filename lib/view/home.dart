@@ -25,7 +25,7 @@ class HomeViewState extends State<HomeView> {
     ),
     ListViewScreen(),
     Center(
-      child: UserProfile(userId: 1),
+      child: UserProfile(),
     ),
   ];
 
