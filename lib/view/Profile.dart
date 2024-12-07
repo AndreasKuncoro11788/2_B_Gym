@@ -4,27 +4,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_1/client/PenggunaClient.dart';
 import 'package:flutter_application_1/entity/Pengguna.dart';
 import 'package:flutter_application_1/view/editProfile.dart';
+import 'package:flutter_application_1/view/login.dart';
 
-// Provider untuk mengambil data pengguna berdasarkan ID
-final profileProvider = FutureProvider.autoDispose.family<Pengguna, int>((ref, userId) async {
-  return await Penggunaclient.fetchUser(userId);
+// Provider untuk mengambil data pengguna login
+final profileProvider = FutureProvider<Pengguna>((ref) async {
+  return await Penggunaclient.fetchCurrentUser();
 });
 
-class UserProfile extends ConsumerWidget {
-  final int userId; // ID pengguna yang akan ditampilkan
 
-  const UserProfile({super.key, required this.userId});
+class UserProfile extends ConsumerWidget {
+  const UserProfile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileAsyncValue = ref.watch(profileProvider(userId));
+    var listener = ref.watch(profileProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFEFEFEF),
-      body: profileAsyncValue.when(
+      body: listener.when(
         data: (pengguna) => _buildProfileContent(context, ref, pengguna),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, stack) => Center(child: Text(err.toString())),
       ),
     );
   }
@@ -100,7 +100,7 @@ class UserProfile extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Editprofile()),
-              ).then((_) => ref.refresh(profileProvider(userId))); // Refresh data setelah edit
+              ).then((_) => ref.refresh(profileProvider)); // Refresh data setelah edit
             },
             child: const Text(
               'Edit Profile',
@@ -139,80 +139,95 @@ class UserProfile extends ConsumerWidget {
 
   // Dialog Logout
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                child: Container(
-                  color: Colors.black.withOpacity(0.3),
-                ),
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Stack(
+        children: [
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: Container(
+                color: Colors.black.withOpacity(0.3),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  width: 304,
-                  height: 140,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Yakin ingin Logout?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                width: 304,
+                height: 140,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Yakin ingin Logout?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Tidak'),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF27C767),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Tidak'),
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF27C767),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              // Tambahkan logika logout di sini
-                              print('Akun Berhasil Logout');
-                            },
-                            child: const Text('Ya'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          onPressed: () async {
+                            try {
+                              // Panggil fungsi logout
+                              await Penggunaclient.logout();
+
+                              // Navigasi ke LoginView
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginView(),
+                                ),
+                                (route) => false,
+                              );
+                            } catch (e) {
+                              // Tangani error
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Error: $e')),
+                              );
+                            }
+                          },
+                          child: const Text('Ya'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        );
-      },
-    );
-  }
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   // Widget Container untuk Data Pengguna
   Widget _buildDataContainer(IconData icon, String mainText, String subText) {

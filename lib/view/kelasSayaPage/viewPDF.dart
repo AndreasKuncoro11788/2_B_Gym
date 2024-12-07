@@ -7,28 +7,40 @@ import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 
 class PdfGenerator extends StatefulWidget {
-  const PdfGenerator({super.key});
+  final String paymentId;
+  final String orderId;
+  final String name;
+  final String phone;
+  final String email;
+  final String address;
+  final String orderDate;
+  final String paymentMethod;
+  final String paymentNumber;
+  final String totalPayment;
+  final List<Map<String, dynamic>> kelasOlahraga;
+  final List<Map<String, dynamic>> dataAlatGym;
+
+  const PdfGenerator({
+    super.key,
+    required this.paymentId,
+    required this.orderId,
+    required this.name,
+    required this.phone,
+    required this.email,
+    required this.address,
+    required this.orderDate,
+    required this.paymentMethod,
+    required this.paymentNumber,
+    required this.totalPayment,
+    required this.kelasOlahraga,
+    required this.dataAlatGym,
+  });
 
   @override
   _PdfGeneratorState createState() => _PdfGeneratorState();
 }
 
 class _PdfGeneratorState extends State<PdfGenerator> {
-  final String id = "30DT-919848-AAB45372-G57";
-  final String paymentId = "12#3456";
-  final String orderId = "uyt34";
-  final String name = "Gaspar Rivaldi";
-  final String phone = "08123456789";
-  final String email = "gasparr@gmail.com";
-  final String address = "Jl. Kebon Jeruk No. 1";
-  final String orderDate = "20 September 2024";
-  final String paymentMethod = "ShopeePay";
-  final String paymentNumber = "08123456789";
-  final List<Map<String, dynamic>> soldProducts = [
-    {"name": "Jenis Kelas : Yoga", "price": 50000, "trainer": "Bowo", "schedule": "Senin 08.00 - 09.00"},
-    {"name": "Alat GYM : Yoga Matt", "price": 15000},
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -62,14 +74,14 @@ class _PdfGeneratorState extends State<PdfGenerator> {
             // Payment and Order Details
             pw.Text("Bukti Pembayaran", style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
             pw.SizedBox(height: 5),
-            pw.Text("ID Pembayaran : $paymentId"),
-            pw.Text("ID Pemesanan : $orderId"),
+            pw.Text("ID Pembayaran : ${widget.paymentId}"),
+            pw.Text("ID Pemesanan : ${widget.orderId}"),
             pw.SizedBox(height: 10),
             pw.Text("id : 330305120750002"),
-            pw.Text("pengguna : $name"),
-            pw.Text("email : $email"),
-            pw.Text("no telepon : ${phone.replaceRange(3, 11, "*******")}"),
-            pw.Text("Tanggal Pemesanan : $orderDate"),
+            pw.Text("pengguna : ${widget.name}"),
+            pw.Text("email : ${widget.email}"),
+            pw.Text("no telepon : ${widget.phone}"),
+            pw.Text("Tanggal Pemesanan : ${widget.orderDate}"),
             pw.SizedBox(height: 15),
 
             // Product details
@@ -81,31 +93,49 @@ class _PdfGeneratorState extends State<PdfGenerator> {
               ),
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: soldProducts.map((item) {
-                  return pw.Padding(
-                    padding: const pw.EdgeInsets.symmetric(vertical: 5),
-                    child: pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pw.Expanded(child: pw.Text(item['name'])),
-                        pw.Text("Rp. ${item['price'].toStringAsFixed(0)}"),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                children: [
+                  // Menampilkan data kelas olahraga
+                  ...widget.kelasOlahraga.map((item) {
+                    return pw.Padding(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 5),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Expanded(child: pw.Text(item['name'])),
+                          pw.Text("Rp. ${item['price']}"),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+
+                  // Menampilkan data alat gym
+                  ...widget.dataAlatGym.map((item) {
+                    return pw.Padding(
+                      padding: const pw.EdgeInsets.symmetric(vertical: 5),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Expanded(child: pw.Text(item['name'])),
+                          pw.Text("Rp. ${item['price']}"),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ],
               ),
             ),
+
             pw.SizedBox(height: 15),
 
             // Payment method
-            pw.Text("Metode Pembayaran : $paymentMethod"),
-            pw.Text("No : $paymentNumber"),
+            pw.Text("Metode Pembayaran : ${widget.paymentMethod}"),
+            pw.Text("No : ${widget.paymentNumber}"),
             pw.SizedBox(height: 15),
             pw.Divider(),
             pw.Align(
               alignment: pw.Alignment.centerRight,
               child: pw.Text(
-                "Total Pembayaran : Rp. 65.000",
+                "Total Pembayaran : Rp. ${widget.totalPayment}",
                 style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
             ),
@@ -115,12 +145,12 @@ class _PdfGeneratorState extends State<PdfGenerator> {
             pw.Center(
               child: pw.BarcodeWidget(
                 barcode: pw.Barcode.code128(),
-                data: id,
+                data: widget.paymentId,
                 width: 200,
                 height: 70,
               ),
             ),
-            pw.Center(child: pw.Text(id)),
+            pw.Center(child: pw.Text(widget.paymentId)),
           ],
         ),
       ),
