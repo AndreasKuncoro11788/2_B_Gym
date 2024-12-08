@@ -1,452 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/client/alatGymClient.dart';
+import 'package:flutter_application_1/entity/AlatGym.dart';
 
-class AlatGymDetail extends StatelessWidget {
+class AlatGymDetail extends StatefulWidget {
   const AlatGymDetail({super.key});
 
   @override
+  _AlatGymDetailState createState() => _AlatGymDetailState();
+}
+
+class _AlatGymDetailState extends State<AlatGymDetail> {
+  late Future<List<AlatGym>> futureAlatGym;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAlatGym = AlatGymClient().fetchAlatGym();
+  }
+
+  IconData _getIconForAlat(String namaAlat) {
+    switch (namaAlat) {
+      case 'Barbell':
+        return Icons.fitness_center;
+      case 'Treadmill':
+        return Icons.directions_run;
+      case 'Bola Gym':
+        return Icons.accessibility;
+      case 'Yoga Mat':
+        return Icons.border_all;
+      case 'Punching Bag':
+        return Icons.sports_martial_arts;
+      default:
+        return Icons.fitness_center; // Default icon
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 12),
-        // Barbell Item
-        SizedBox(
-          width: 490, // Lebar dikurangi
-          height: 90, // Tinggi dikurangi
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 400, // Lebar dikurangi
-                height: 90, // Tinggi dikurangi
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 400, // Lebar dikurangi
-                        height: 90, // Tinggi dikurangi
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFBBBBBB),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+    return FutureBuilder<List<AlatGym>>(
+      future: futureAlatGym,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                ...snapshot.data!.map((item) {
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Card(
+                      elevation: 4,
+                      child: ListTile(
+                        leading: Icon(
+                          _getIconForAlat(item.namaAlat),
+                          size: 40,
+                          color: Colors.blueAccent,
                         ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 31,
-                      child: Text(
-                        'ID Alat: BARBELL856#31',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
+                        title: Text(
+                          item.namaAlat,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 11,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.fitness_center,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Barbell',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 46,
-                      child: Text(
-                        'ID pemesanan: YOGA856#57',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
+                        subtitle: Text(
+                          'Harga: Rp ${item.harga}',
+                          style: const TextStyle(fontSize: 16),
                         ),
+                        onTap: () {
+                          // Tambahkan aksi saat item ditekan jika diperlukan
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Anda memilih ${item.namaAlat}')),
+                          );
+                        },
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12), // Jarak antar item
-
-        // Treadmill Item
-        SizedBox(
-          width: 490, // Lebar dikurangi
-          height: 90, // Tinggi dikurangi
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 400, // Lebar dikurangi
-                height: 90, // Tinggi dikurangi
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 400, // Lebar dikurangi
-                        height: 90, // Tinggi dikurangi
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFBBBBBB),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 62,
-                      child: Text(
-                        'ID Alat: TREADMILL856#32',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 11,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.directions_run,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Treadmill',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 46,
-                      child: Text(
-                        'ID pemesanan: YOGA856#58',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12), // Jarak antar item
-
-        // Bola Gym Item
-        SizedBox(
-          width: 490, // Lebar dikurangi
-          height: 90, // Tinggi dikurangi
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 400, // Lebar dikurangi
-                height: 90, // Tinggi dikurangi
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 400, // Lebar dikurangi
-                        height: 90, // Tinggi dikurangi
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFBBBBBB),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 31,
-                      child: Text(
-                        'ID Alat: BOLAGYM856#33',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 11,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.accessibility,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Bola Gym',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 46,
-                      child: Text(
-                        'ID pemesanan: YOGA856#59',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12), // Jarak antar item
-
-        // Yoga Mat Item
-        SizedBox(
-          width: 490, // Lebar dikurangi
-          height: 90, // Tinggi dikurangi
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 400, // Lebar dikurangi
-                height: 90, // Tinggi dikurangi
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 400, // Lebar dikurangi
-                        height: 90, // Tinggi dikurangi
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFBBBBBB),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 31,
-                      child: Text(
-                        'ID Alat: YOGAMAT856#34',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 11,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.border_all,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Yoga Mat',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 46,
-                      child: Text(
-                        'ID pemesanan: YOGA856#60',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        SizedBox(
-          width: 490, // Lebar dikurangi
-          height: 90, // Tinggi dikurangi
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 400, // Lebar dikurangi
-                height: 90, // Tinggi dikurangi
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 400, // Lebar dikurangi
-                        height: 90, // Tinggi dikurangi
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFBBBBBB),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 31,
-                      child: Text(
-                        'ID Alat: PUNCHINGBAG856#35',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 11,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.border_all,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Punching Bag',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                              height: 0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Positioned(
-                      left: 54,
-                      top: 46,
-                      child: Text(
-                        'ID pemesanan: YOGA856#61',
-                        style: TextStyle(
-                          color: Color(0xFF696969),
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+                  );
+                }).toList(),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }

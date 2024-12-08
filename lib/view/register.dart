@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/login.dart';
 import 'package:flutter_application_1/component/form_component.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/entity/Pengguna.dart';
+import 'package:flutter_application_1/client/PenggunaClient.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  final Map?data;
+  const RegisterView({super.key, this.data});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -13,23 +15,57 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController idController = TextEditingController();
-  TextEditingController genderController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController _namaController = TextEditingController();
+  TextEditingController _nomorIdentitasController = TextEditingController();
+  TextEditingController _jenisKelaminController = TextEditingController();
+  TextEditingController _umurController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _kataSandiController = TextEditingController();
+  TextEditingController _confirmKataSandiController = TextEditingController();
+  TextEditingController _nomorTeleponController = TextEditingController();
+  
+  final _fotoProfilController = TextEditingController(text: 'https://media.istockphoto.com/id/1495088043/id/vektor/ikon-profil-pengguna-avatar-atau-ikon-orang-gambar-profil-simbol-potret-gambar-potret.jpg?s=612x612&w=0&k=20&c=vMnxIgiQh5EFyQrFGGNKtbb6tuGCT04L58nwwEGzIbc');
 
-  Future<void> saveUserData(Map<String, dynamic> formData) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String username = '${firstNameController.text}${lastNameController.text}'.toLowerCase();
-  await prefs.setString('username', username);
-  await prefs.setString('password', formData['password']);
-}
+  Future<void> _registerUser() async {
+    if (_kataSandiController.text != _confirmKataSandiController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Kata sandi tidak cocok!')),
+      );
+      return;
+    }
 
+      Pengguna pengguna = Pengguna(
+        namaPengguna: _namaController.text,
+        nomorIdentitas: _nomorIdentitasController.text,
+        jenisKelamin: _jenisKelaminController.text,
+        email: _emailController.text,
+        umur: _umurController.text,
+        kataSandi: _kataSandiController.text,
+        nomorTelepon: _nomorTeleponController.text,
+        fotoProfil: _fotoProfilController.text,
+      );
+
+
+    try {
+      await Penggunaclient.create(pengguna);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pendaftaran berhasil!')),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const LoginView(),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(
+          'Pendaftaran gagal: $e ')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,35 +94,19 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     const SizedBox(height: 40),
 
-                    // Nama Depan
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Nama Depan tidak boleh kosong';
+                          return 'Nama Pengguna tidak boleh kosong';
                         }
                         return null;
                       },
-                      controller: firstNameController,
-                      hintTxt: 'Nama Depan',
-                      helperTxt: 'Masukkan Nama Depan',
+                      controller: _namaController,
+                      hintTxt: 'Nama Pengguna',
+                      helperTxt: 'Masukkan Nama Pengguna',
                       iconData: Icons.person,
                     ),
 
-                    // Nama Belakang
-                    inputForm(
-                      (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Nama Belakang tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                      controller: lastNameController,
-                      hintTxt: 'Nama Belakang',
-                      helperTxt: 'Masukkan Nama Belakang',
-                      iconData: Icons.person,
-                    ),
-
-                    // Nomor Identitas
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -94,13 +114,12 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: idController,
-                      hintTxt: 'ID Number',
+                      controller: _nomorIdentitasController,
+                      hintTxt: 'Nomor Identitas (KTP / SIM)',
                       helperTxt: 'Masukkan Nomor Identitas',
                       iconData: Icons.credit_card,
                     ),
 
-                    // Jenis Kelamin
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -108,27 +127,12 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: genderController,
+                      controller: _jenisKelaminController,
                       hintTxt: 'Jenis Kelamin',
                       helperTxt: 'Masukkan Jenis Kelamin',
                       iconData: Icons.transgender,
                     ),
 
-                    // Umur
-                    inputForm(
-                      (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Umur tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                      controller: ageController,
-                      hintTxt: 'Umur',
-                      helperTxt: 'Masukkan Umur',
-                      iconData: Icons.calendar_today,
-                    ),
-
-                    // Alamat Email
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -136,13 +140,25 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: emailController,
+                      controller: _emailController,
                       hintTxt: 'Alamat Email',
                       helperTxt: 'Masukkan Alamat Email',
                       iconData: Icons.email,
                     ),
 
-                    // Kata Sandi
+                    inputForm(
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Umur tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                      controller: _umurController,
+                      hintTxt: 'Umur',
+                      helperTxt: 'Masukkan Umur',
+                      iconData: Icons.calendar_today,
+                    ),
+
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -150,14 +166,13 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: passwordController,
+                      controller: _kataSandiController,
                       hintTxt: 'Kata Sandi',
                       helperTxt: 'Masukkan Kata Sandi',
                       iconData: Icons.lock,
                       password: true,
                     ),
 
-                    // Konfirmasi Kata Sandi
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -165,14 +180,13 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: confirmPasswordController,
+                      controller: _confirmKataSandiController,
                       hintTxt: 'Konfirmasi Kata Sandi',
                       helperTxt: 'Masukkan Konfirmasi Kata Sandi',
                       iconData: Icons.lock,
                       password: true,
                     ),
 
-                    // Nomor Telepon
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -180,16 +194,14 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: phoneController,
+                      controller: _nomorTeleponController,
                       hintTxt: 'Nomor Telepon',
                       helperTxt: 'Masukkan Nomor Telepon',
                       iconData: Icons.phone,
                     ),
 
-
                     const SizedBox(height: 16),
 
-                    // Tombol Daftar
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
@@ -200,26 +212,19 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          Map<String, dynamic> formData = {
-                            'username': emailController.text,
-                            'password': passwordController.text,
-                          };
-
-                          await saveUserData(formData);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => LoginView(data: formData),
-                            ),
-                          );
+                          await _registerUser();
                         }
                       },
-                      child: const Text('Daftar'),
+                      child: const Text(
+                        'Daftar',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
 
                     const SizedBox(height: 16),
 
-                    // Tautan ke Login
                     TextButton(
                       onPressed: () {
                         Navigator.push(

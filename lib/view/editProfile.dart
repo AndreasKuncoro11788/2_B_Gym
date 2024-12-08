@@ -1,12 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/form_component.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_application_1/client/PenggunaClient.dart';
+import 'package:flutter_application_1/entity/Pengguna.dart';
 
-class Editprofile extends StatelessWidget {
-  const Editprofile({super.key});
+final profileProvider = FutureProvider<Pengguna>((ref) async {
+  return await Penggunaclient.fetchCurrentUser();
+});
+
+class Editprofile extends ConsumerStatefulWidget {
+  const Editprofile({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<Editprofile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends ConsumerState<Editprofile> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController nomorIdentitasController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    nomorIdentitasController.dispose();
+    genderController.dispose();
+    ageController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final profileData = ref.watch(profileProvider);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFEFEFEF),
       appBar: AppBar(
         title: const Text(
           "Edit Profile",
@@ -15,133 +48,31 @@ class Editprofile extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 137, 137, 137),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: Color.fromARGB(255, 40, 40, 40),
-              ),
-            ),
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      body: profileData.when(
+        data: (pengguna) {
+          nameController.text = pengguna.namaPengguna;
+          nomorIdentitasController.text = pengguna.nomorIdentitas;
+          genderController.text = pengguna.jenisKelamin;
+          ageController.text = pengguna.umur.toString();
+          emailController.text = pengguna.email;
+          phoneController.text = pengguna.nomorTelepon;
+
+          return _buildForm(pengguna);
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundColor: Color(0xFFD9D9D9),
-                      backgroundImage: NetworkImage(
-                        'https://storage.googleapis.com/a1aa/image/r2zxfcEaRKRIQyJ93rkhZOGaF5nkwCef8wobNoQ7cCHDOcJnA.jpg',
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: () {
-                        print('Upload new profile picture clicked');
-
-                      },
-                      child: Text(
-                        'Upload new profile picture',
-                        style: TextStyle(
-                          color: Color(0xFFFB3286),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              _buildInputField(
-                label: 'Nama Depan',
-                placeholder: 'Masukkan Nama Depan',
-                icon: Icons.person,
-              ),
-              const SizedBox(height: 20),
-
-              _buildInputField(
-                label: 'Nama Belakang',
-                placeholder: 'Masukkan Nama Belakang',
-                icon: Icons.person,
-              ),
-              const SizedBox(height: 20),
-
-              _buildInputField(
-                label: 'Nomor Identitas',
-                placeholder: 'Masukkan Nomor ID',
-                icon: Icons.badge,
-              ),
-              const SizedBox(height: 20),
-
-              _buildInputField(
-                label: 'Jenis Kelamin',
-                placeholder: 'Masukkan Jenis Kelamin',
-                icon: Icons.wc,
-              ),
-              const SizedBox(height: 20),
-
-              _buildInputField(
-                label: 'Umur',
-                placeholder: 'Masukkan Umur',
-                icon: Icons.volunteer_activism,
-              ),
-
-              const SizedBox(height: 20),
-              _buildInputField(
-                label: 'Alamat Email',
-                placeholder: 'Masukkan Email',
-                icon: Icons.email,
-              ),
-              const SizedBox(height: 20),
-
-              _buildInputField(
-                label: 'Nomor Telepon',
-                placeholder: 'Masukkan Nomor Telepon',
-                icon: Icons.phone,
-              ),
-              const SizedBox(height: 20),
-
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFB3286),
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    print('Simpan Perubahan clicked');
-                  },
-                  child: const Text(
-                    'Simpan Perubahan',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
+              Text('Error: $error'),
+              ElevatedButton(
+                onPressed: () => ref.refresh(profileProvider),
+                child: const Text('Retry'),
               ),
             ],
           ),
@@ -150,77 +81,137 @@ class Editprofile extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField({
-    required String label,
-    required String placeholder,
-    required IconData icon,
-  }) {
-    return Center( 
-      child: Container(
-        width: 350,
-        height: 72,
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 11,
-              child: Container(
-                width: 350,
-                height: 61,
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(width: 1, color: Color(0xFFFB3286)),
-                    borderRadius: BorderRadius.circular(12),
+  Widget _buildForm(Pengguna pengguna) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Column(
+        children: [
+          Center(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 80,
+                  backgroundColor: const Color(0xFFD9D9D9),
+                  backgroundImage: const NetworkImage(
+                    'https://storage.googleapis.com/a1aa/image/r2zxfcEaRKRIQyJ93rkhZOGaF5nkwCef8wobNoQ7cCHDOcJnA.jpg',
                   ),
                 ),
-              ),
-            ),
-            Positioned(
-              left: 17,
-              top: 0,
-              child: SizedBox(
-                width: 85,
-                height: 22,
-                child: Text(
-                  label,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () => print('Upload new profile picture clicked'),
+                  child: const Text(
+                    'Upload new profile picture',
+                    style: TextStyle(
+                      color: Color(0xFFFB3286),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          inputForm(
+            (value) => value!.isEmpty ? 'Nama Pengguna tidak boleh kosong' : null,
+            controller: nameController,
+            hintTxt: 'Masukkan Nama Pengguna',
+            helperTxt: 'Masukkan Nama Pengguna Anda',
+            iconData: Icons.person,
+          ),
+          const SizedBox(height: 20),
+
+          inputForm(
+            (value) => value!.isEmpty ? 'Nomor Identitas tidak boleh kosong' : null,
+            controller: nomorIdentitasController,
+            hintTxt: 'Masukkan Nomor ID',
+            helperTxt: 'Masukkan Nomor ID Anda',
+            iconData: Icons.credit_card,
+          ),
+          const SizedBox(height: 20),
+
+          inputForm(
+            (value) => value!.isEmpty ? 'Jenis Kelamin tidak boleh kosong' : null,
+            controller: genderController,
+            hintTxt: 'Masukkan Jenis Kelamin',
+            helperTxt: 'Masukkan Jenis Kelamin Anda',
+            iconData: Icons.transgender,
+          ),
+          const SizedBox(height: 20),
+
+          inputForm(
+            (value) => value!.isEmpty ? 'Umur tidak boleh kosong' : null,
+            controller: ageController,
+            hintTxt: 'Masukkan Umur',
+            helperTxt: 'Masukkan Umur Anda',
+            iconData: Icons.calendar_today,
+          ),
+          const SizedBox(height: 20),
+
+          inputForm(
+            (value) => value!.isEmpty ? 'Alamat Email tidak boleh kosong' : null,
+            controller: emailController,
+            hintTxt: 'Masukkan Email',
+            helperTxt: 'Masukkan Alamat Email Anda',
+            iconData: Icons.email,
+          ),
+          const SizedBox(height: 20),
+
+          inputForm(
+            (value) => value!.isEmpty ? 'Nomor Telepon tidak boleh kosong' : null,
+            controller: phoneController,
+            hintTxt: 'Masukkan Nomor Telepon',
+            helperTxt: 'Masukkan Nomor Telepon Anda',
+            iconData: Icons.phone,
+          ),
+          const SizedBox(height: 20),
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFB3286),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
-            Positioned(
-              left: 52,
-              top: 29,
-              child: SizedBox(
-                width: 222,
-                height: 22,
-                child: Text(
-                  placeholder,
-                  style: const TextStyle(
-                    color: Color(0xFF999999),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+            onPressed: () async {
+              try {
+                final updatedUser = Pengguna(
+                  id: pengguna.id,
+                  namaPengguna: nameController.text,
+                  nomorIdentitas: nomorIdentitasController.text,
+                  jenisKelamin: genderController.text,
+                  umur: ageController.text,
+                  email: emailController.text,
+                  nomorTelepon: phoneController.text,kataSandi: pengguna.kataSandi, // Menggunakan data sebelumnya
+                  fotoProfil: pengguna.fotoProfil,
+                );
+
+                await Penggunaclient.update(updatedUser);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Profil berhasil diperbarui')),
+                );
+
+                ref.refresh(profileProvider);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $e')),
+                );
+              }
+            },
+            child: const Text(
+              'Simpan Perubahan',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            Positioned(
-              left: 17,
-              top: 29,
-              child: Icon(
-                icon,
-                color: Colors.black,
-                size: 24,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

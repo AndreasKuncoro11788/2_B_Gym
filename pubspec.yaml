@@ -10,6 +10,20 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.2.0
+  intl: ^0.19.0
+  image_picker: ^1.1.2
+  uuid: ^3.0.7
+  pdf: ^3.11.1
+  barcode_widget: ^2.0.4
+  printing: ^5.13.3
+  responsive_sizer: ^3.3.1
+  path_provider: ^2.1.5
+  flutter_animate: ^4.0.0
+  local_auth: ^2.3.0
+  http: ^1.2.2
+  flutter_riverpod: ^2.6.1
+  flutter_rating_bar: ^4.0.0
+
   
 dev_dependencies:
   flutter_test:
@@ -21,3 +35,14 @@ flutter:
   uses-material-design: true
   assets:
     - lib/assets/logo Atma GYM.png
+    - lib/assets/bca_mobile.png
+    - lib/assets/bni.png
+    - lib/assets/gopay.png
+    - lib/assets/Shopeepay.png
+    - lib/assets/yoga_trainer.png
+    - lib/assets/pilates_trainer.jpg
+    - lib/assets/boxing_trainer.jpg
+    - lib/assets/zumba_trainer.jpg
+    - lib/assets/body_combat_trainer.jpg
+
+
