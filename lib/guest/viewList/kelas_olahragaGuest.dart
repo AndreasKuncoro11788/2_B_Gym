@@ -36,33 +36,32 @@ class KelasOlahragaDetailGuest extends StatelessWidget {
     },
   ];
 
+  IconData getClassIcon(String className) {
+    switch (className) {
+      case 'Yoga':
+        return Icons.self_improvement; 
+      case 'Zumba':
+        return Icons.music_note; 
+      case 'Boxing':
+        return Icons.sports_mma; 
+      case 'Pilates':
+        return Icons.sports_gymnastics; 
+      case 'Body Combat':
+        return Icons.fitness_center; 
+      default:
+        return Icons.help_outline;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Kelas Olahraga",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
         backgroundColor: Colors.pink,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: Container(
-            margin: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.pink,
-            ),
-          ),
         ),
       ),
       body: ListView.builder(
@@ -74,23 +73,27 @@ class KelasOlahragaDetailGuest extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            color: Colors.grey[300],
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
+            color: const Color.fromARGB(91, 224, 224, 224),
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(12.0),
+              leading: Icon(
+                getClassIcon(kelas['name']),
+                size: 40,
+                color: Colors.pink,
+              ),
+              title: Text(
+                kelas['name'],
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    kelas['name'],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
                   const SizedBox(height: 8),
                   Text("ID Kelas: ${kelas['idKelas']}"),
-                  Text("ID pemesanan: ${kelas['idPemesan']}"),
-                  Text("Jadwal: Senin-Jumat"),
+                  Text("ID Pemesanan: ${kelas['idPemesan']}"),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8.0,

@@ -33,32 +33,31 @@ class AlatGymDetailGuest extends StatelessWidget {
       },
     ];
 
+    IconData getEquipmentIcon(String equipmentName) {
+      switch (equipmentName) {
+        case 'Barbell':
+          return Icons.fitness_center; 
+        case 'Treadmill':
+          return Icons.directions_run; 
+        case 'Bola Gym':
+          return Icons.sports_baseball; 
+        case 'Yoga Mat':
+          return Icons.self_improvement; 
+        case 'Punching Bag':
+          return Icons.sports_mma; 
+        default:
+          return Icons.help_outline; 
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Alat GYM",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: Container(
-            margin: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.black,
-            ),
-          ),
         ),
       ),
       body: ListView.builder(
@@ -72,10 +71,11 @@ class AlatGymDetailGuest extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             elevation: 2,
+            color: const Color.fromARGB(91, 224, 224, 224),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
               leading: Icon(
-                Icons.fitness_center,
+                getEquipmentIcon(equipment["name"]!),
                 size: 40,
                 color: Colors.grey[700],
               ),

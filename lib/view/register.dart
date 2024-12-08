@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/login.dart';
 import 'package:flutter_application_1/component/form_component.dart';
@@ -51,9 +52,15 @@ class _RegisterViewState extends State<RegisterView> {
     try {
       await Penggunaclient.create(pengguna);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pendaftaran berhasil!')),
+      Fluttertoast.showToast(
+        msg: "Register berhasil!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: const Color.fromARGB(255, 175, 76, 135),
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
+
 
       Navigator.pushReplacement(
         context,
@@ -62,9 +69,15 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pendaftaran gagal: $e')),
+      Fluttertoast.showToast(
+        msg: "Register gagal: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
+
     }
   }
 

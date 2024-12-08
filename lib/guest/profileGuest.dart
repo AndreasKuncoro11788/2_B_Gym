@@ -10,16 +10,15 @@ class ProfileGuest extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Header Pink yang menutupi bagian atas
           Container(
-            padding: const EdgeInsets.only(top: 60, bottom: 40), // Padding atas diatur untuk menyesuaikan dengan desain
+            padding: const EdgeInsets.only(top: 60, bottom: 40), 
             color: Colors.pink,
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const CircleAvatar(
-                  radius: 50,  // Ukuran avatar lebih besar
+                  radius: 50,  
                   backgroundColor: Colors.white,
                   child: Icon(
                     Icons.person,
@@ -31,7 +30,7 @@ class ProfileGuest extends StatelessWidget {
                 const Text(
                   'Tamu',
                   style: TextStyle(
-                    fontSize: 24,  // Ukuran font lebih besar
+                    fontSize: 24,  
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -76,7 +75,6 @@ class ProfileGuest extends StatelessWidget {
     );
   }
 
-  // Fungsi untuk menampilkan dialog konfirmasi
   void _showRegisterDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -87,18 +85,18 @@ class ProfileGuest extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
-                foregroundColor: Colors.white, // Teks warna putih
-                backgroundColor: Colors.pink, // Warna latar belakang tombol Batal
+                foregroundColor: Colors.white, 
+                backgroundColor: Colors.pink, 
               ),
               onPressed: () {
-                Navigator.pop(context); // Menutup dialog
+                Navigator.pop(context); 
               },
               child: const Text('Batal'),
             ),
             TextButton(
               style: TextButton.styleFrom(
-                foregroundColor: Colors.white, // Teks warna putih
-                backgroundColor: Colors.pink, // Warna latar belakang tombol Register
+                foregroundColor: Colors.white, 
+                backgroundColor: Colors.pink, 
               ),
               onPressed: () {
                 Navigator.push(
