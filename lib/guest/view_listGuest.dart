@@ -200,7 +200,7 @@ class DataDetailGuest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data['name'] == "Data Pengguna") {
-      return const UserProfileGuest();
+      return const ProfileGuest();
     }
 
     // Show details based on the selected data
