@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/login.dart';
+import 'package:flutter_application_1/guest/homeGuest.dart';
 
 void main() {
   runApp(const MyApp());
@@ -114,24 +115,15 @@ class SelectionScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: const Text('Fitur Belum Tersedia'),
-                                  content: const Text('Masuk sebagai tamu belum tersedia.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const HomeView()),
                               );
                             },
-                            icon: const Icon(Icons.person, color: Colors.white), // Ikon berwarna putih
+                            icon: const Icon(Icons.person, color: Colors.white),
                             label: const Text(
                               'Tamu',
-                              style: TextStyle(color: Colors.white), // Warna font putih
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                           ElevatedButton.icon(
@@ -151,10 +143,10 @@ class SelectionScreen extends StatelessWidget {
                                 MaterialPageRoute(builder: (_) => const LoginView()),
                               );
                             },
-                            icon: const Icon(Icons.person_outline, color: Colors.white), // Ikon berwarna putih
+                            icon: const Icon(Icons.person_outline, color: Colors.white),
                             label: const Text(
                               'Pengguna',
-                              style: TextStyle(color: Colors.white), // Warna font putih
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ],
