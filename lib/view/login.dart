@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_application_1/view/home.dart';
 import 'package:flutter_application_1/view/register.dart';
 import 'package:flutter_application_1/component/form_component.dart';
@@ -23,12 +24,28 @@ class _LoginViewState extends State<LoginView> {
   Future<void> login(String username, String password) async {
     try {
       await Penggunaclient.login(username, password);
+      Fluttertoast.showToast(
+        msg: "Login berhasil!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: const Color.fromARGB(255, 175, 76, 117),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeView()),
       );
     } catch (e) {
-      showLoginErrorDialog(context, e.toString());
+      Fluttertoast.showToast(
+        msg: "Login gagal: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
     }
   }
 
@@ -71,6 +88,15 @@ class _LoginViewState extends State<LoginView> {
         );
       }
     } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Login gagal: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
       print(e);
     }
   }
