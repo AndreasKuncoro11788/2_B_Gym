@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'lib/assets/logo Atma GYM.png',
+              'lib/assets/logo Atma GYM1.png',
               height: 150,
             ),
             const SizedBox(height: 20),
@@ -79,7 +79,7 @@ class SelectionScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'lib/assets/logo Atma GYM.png',
+                'lib/assets/logo Atma GYM1.png',
                 height: 200,
               ),
               const SizedBox(height: 20),
