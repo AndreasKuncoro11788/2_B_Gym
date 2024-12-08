@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/View/view_list.dart';
 import 'package:flutter_application_1/guest/isi_homeGuest.dart'; // Mengarahkan ke isi_homeGuest.dart
-import 'package:flutter_application_1/view/Profile.dart';
+import 'package:flutter_application_1/guest/profileGuest.dart'; // Impor file profileGuest
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -19,13 +19,14 @@ class HomeViewState extends State<HomeView> {
     });
   }
 
+  // Widget options diubah agar tab Profile mengarahkan ke ProfileGuest
   static const List<Widget> widgetOptions = <Widget>[
     Center(
       child: IsiHomeGuest(), // Menggunakan IsiHomeGuest sebagai halaman utama untuk guest
     ),
     ListViewScreen(),
     Center(
-      child: UserProfile(),
+      child: ProfileGuest(), // Menggunakan ProfileGuest sebagai halaman profile
     ),
   ];
 
