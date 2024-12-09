@@ -68,5 +68,24 @@ class DataPemesananClient {
       throw Exception('Failed to load data pemesanan');
     }
   }
+
+  static Future<DataPemesanan> updateStatusToDoneById(int idPemesanan) async {
+    final response = await http.put(
+      Uri.parse('$url$endpoint/$idPemesanan'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'status': 'done',
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return DataPemesanan.fromJson(json.decode(response.body)['data']);
+    } else {
+      throw Exception('Failed to update status pemesanan');
+    }
+  }
+
   
 }

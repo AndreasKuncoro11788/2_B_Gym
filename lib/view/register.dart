@@ -1,10 +1,15 @@
+import 'dart:io';
+import 'package:camera/camera.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/login.dart';
 import 'package:flutter_application_1/component/form_component.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/entity/Pengguna.dart';
+import 'package:flutter_application_1/client/PenggunaClient.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  final Map? data;
+  const RegisterView({super.key, this.data});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -13,23 +18,86 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController idController = TextEditingController();
-  TextEditingController genderController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController _namaController = TextEditingController();
+  TextEditingController _nomorIdentitasController = TextEditingController();
+  TextEditingController _jenisKelaminController = TextEditingController();
+  TextEditingController _umurController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _kataSandiController = TextEditingController();
+  TextEditingController _confirmKataSandiController = TextEditingController();
+  TextEditingController _nomorTeleponController = TextEditingController();
 
-  Future<void> saveUserData(Map<String, dynamic> formData) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String username = '${firstNameController.text}${lastNameController.text}'.toLowerCase();
-  await prefs.setString('username', username);
-  await prefs.setString('password', formData['password']);
-}
+  File? _fotoProfil;
 
+  Future<void> _registerUser() async {
+    if (_kataSandiController.text != _confirmKataSandiController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Kata sandi tidak cocok!')),
+      );
+      return;
+    }
+
+    Pengguna pengguna = Pengguna(
+      namaPengguna: _namaController.text,
+      nomorIdentitas: _nomorIdentitasController.text,
+      jenisKelamin: _jenisKelaminController.text,
+      email: _emailController.text,
+      umur: _umurController.text,
+      kataSandi: _kataSandiController.text,
+      nomorTelepon: _nomorTeleponController.text,
+      fotoProfil: _fotoProfil?.path ?? 'https://default-profile-url.com/default.jpg',
+
+    );
+
+    try {
+      await Penggunaclient.create(pengguna);
+
+      Fluttertoast.showToast(
+        msg: "Register berhasil!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: const Color.fromARGB(255, 175, 76, 135),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const LoginView(),
+        ),
+      );
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Register gagal: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+    }
+  }
+
+  Future<void> _takePicture() async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePictureScreen(camera: firstCamera),
+      ),
+    );
+
+    if (result != null && result is File) {
+      setState(() {
+        _fotoProfil = result;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +126,20 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     const SizedBox(height: 40),
 
-                    // Nama Pengguna
+                    GestureDetector(
+                      onTap: _takePicture,
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.grey.shade200,
+                        backgroundImage:
+                            _fotoProfil != null ? FileImage(_fotoProfil!) : null,
+                        child: _fotoProfil == null
+                            ? const Icon(Icons.camera_alt, size: 40, color: Colors.grey)
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -66,13 +147,12 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: firstNameController,
+                      controller: _namaController,
                       hintTxt: 'Nama Pengguna',
                       helperTxt: 'Masukkan Nama Pengguna',
                       iconData: Icons.person,
                     ),
 
-                    // Nomor Identitas
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -80,13 +160,12 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: idController,
+                      controller: _nomorIdentitasController,
                       hintTxt: 'Nomor Identitas (KTP / SIM)',
                       helperTxt: 'Masukkan Nomor Identitas',
                       iconData: Icons.credit_card,
                     ),
 
-                    // Jenis Kelamin
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -94,13 +173,12 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: genderController,
+                      controller: _jenisKelaminController,
                       hintTxt: 'Jenis Kelamin',
                       helperTxt: 'Masukkan Jenis Kelamin',
                       iconData: Icons.transgender,
                     ),
 
-                    // Alamat Email
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -108,13 +186,12 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: emailController,
+                      controller: _emailController,
                       hintTxt: 'Alamat Email',
                       helperTxt: 'Masukkan Alamat Email',
                       iconData: Icons.email,
                     ),
-                    
-                    // Umur
+
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -122,13 +199,12 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: ageController,
+                      controller: _umurController,
                       hintTxt: 'Umur',
                       helperTxt: 'Masukkan Umur',
                       iconData: Icons.calendar_today,
                     ),
 
-                    // Kata Sandi
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -136,14 +212,13 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: passwordController,
+                      controller: _kataSandiController,
                       hintTxt: 'Kata Sandi',
                       helperTxt: 'Masukkan Kata Sandi',
                       iconData: Icons.lock,
                       password: true,
                     ),
 
-                    // Konfirmasi Kata Sandi
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -151,14 +226,13 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: confirmPasswordController,
+                      controller: _confirmKataSandiController,
                       hintTxt: 'Konfirmasi Kata Sandi',
                       helperTxt: 'Masukkan Konfirmasi Kata Sandi',
                       iconData: Icons.lock,
                       password: true,
                     ),
 
-                    // Nomor Telepon
                     inputForm(
                       (value) {
                         if (value == null || value.isEmpty) {
@@ -166,16 +240,14 @@ class _RegisterViewState extends State<RegisterView> {
                         }
                         return null;
                       },
-                      controller: phoneController,
+                      controller: _nomorTeleponController,
                       hintTxt: 'Nomor Telepon',
                       helperTxt: 'Masukkan Nomor Telepon',
                       iconData: Icons.phone,
                     ),
 
-
                     const SizedBox(height: 16),
 
-                    // Tombol Daftar
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
@@ -186,26 +258,19 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          Map<String, dynamic> formData = {
-                            'username': emailController.text,
-                            'password': passwordController.text,
-                          };
-
-                          await saveUserData(formData);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => LoginView(data: formData),
-                            ),
-                          );
+                          await _registerUser();
                         }
                       },
-                      child: const Text('Daftar'),
+                      child: const Text(
+                        'Daftar',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
 
                     const SizedBox(height: 16),
 
-                    // Tautan ke Login
                     TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -226,6 +291,67 @@ class _RegisterViewState extends State<RegisterView> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TakePictureScreen extends StatefulWidget {
+  final CameraDescription camera;
+
+  const TakePictureScreen({super.key, required this.camera});
+
+  @override
+  TakePictureScreenState createState() => TakePictureScreenState();
+}
+
+class TakePictureScreenState extends State<TakePictureScreen> {
+  late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(
+      widget.camera,
+      ResolutionPreset.medium,
+    );
+    _initializeControllerFuture = _controller.initialize();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _takePicture() async {
+    try {
+      await _initializeControllerFuture;
+      final image = await _controller.takePicture();
+      Navigator.pop(context, File(image.path));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Ambil Foto')),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(_controller);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _takePicture,
+        child: const Icon(Icons.camera),
       ),
     );
   }
