@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-Eirine-branch
 import 'package:flutter_application_1/View/view_list.dart'; 
-=======
-import 'package:flutter_application_1/View/view_list.dart';
-main
 import 'package:flutter_application_1/guest/isi_homeGuest.dart'; 
 import 'package:flutter_application_1/guest/profileGuest.dart'; 
 
@@ -27,6 +23,11 @@ class HomeViewState extends State<HomeView> {
     Center(
       child: IsiHomeGuest(), 
     ),
+    ListViewScreen(), // Mengganti ListViewScreenGuest ke ListViewScreen
+    Center(
+      child: ProfileGuest(), 
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
