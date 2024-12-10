@@ -25,7 +25,6 @@ class DataPemesanan {
     required this.id_kelasOlahraga,
     required this.id_personalTrainer,
     required this.id_alatGym,
-
   });
 
   factory DataPemesanan.fromRawJson(String str) => DataPemesanan.fromJson(json.decode(str));
