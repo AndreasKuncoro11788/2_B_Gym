@@ -29,10 +29,9 @@ class RiwayatPage extends ConsumerWidget {
   Future<void> onDelete(BuildContext context, int id, WidgetRef ref) async {
     try {
       await DataPemesananClient.deleteDataPemesanan(id);
-      // Refresh the list after deletion
       ref.refresh(listDataPemesananProvider);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Data pemesanan berhasil dihapus')),
+        const SnackBar(content: Text('Riwayat berhasil dihapus 😖')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -76,11 +75,10 @@ class RiwayatPage extends ConsumerWidget {
       ),
       body: dataPemesananAsync.when(
         data: (dataPemesananList) {
-          // Filter data yang memiliki status 'done'
           final filteredList = dataPemesananList.where((item) => item.status == 'done').toList();
 
           if (filteredList.isEmpty) {
-            return const Center(child: Text('Tidak ada riwayat dengan status selesai.'));
+            return const Center(child: Text('Tidak ada riwayat saat ini 😘 '));
           }
 
           return ListView.builder(

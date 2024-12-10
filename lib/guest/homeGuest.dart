@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/guest/viewList/kelas_olahragaGuest.dart';
 import 'package:flutter_application_1/guest/view_listGuest.dart'; 
 import 'package:flutter_application_1/guest/isi_homeGuest.dart'; 
 import 'package:flutter_application_1/guest/profileGuest.dart'; 
@@ -20,12 +19,11 @@ class HomeViewState extends State<HomeView> {
     });
   }
 
- 
   static const List<Widget> widgetOptions = <Widget>[
     Center(
       child: IsiHomeGuest(), 
     ),
-    ListViewScreenGuest(), 
+    ListViewScreen(),
     Center(
       child: ProfileGuest(), 
     ),
@@ -33,6 +31,7 @@ class HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: NavigationBar(

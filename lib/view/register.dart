@@ -69,14 +69,7 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       );
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Register gagal: $e",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      
 
     }
   }

@@ -1,66 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/guest/viewList/alat_gymGuest.dart';
-import 'package:flutter_application_1/guest/viewList/kelas_olahragaGuest.dart';
-import 'package:flutter_application_1/guest/viewList/personal_trainerGuest.dart';
-import 'package:flutter_application_1/guest/profileGuest.dart';
+import 'package:flutter_application_1/guest/homeGuest.dart';
+import 'package:flutter_application_1/view/viewList/alat_gym.dart';
+import 'package:flutter_application_1/view/viewList/kelas_olahraga.dart';
+import 'package:flutter_application_1/view/viewList/personal_trainer.dart';
+import 'package:flutter_application_1/view/Profile.dart';
 
-class ListViewScreenGuest extends StatelessWidget {
-  const ListViewScreenGuest({super.key});
+
+class ListViewScreen extends StatelessWidget {
+  const ListViewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Hi, Users',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '10 Okt 2024',
-                  style: TextStyle(
-                    color: Colors.blue[200],
-                    fontSize: 14, 
-                  ),
-                ),
-              ],
-            ),
-          ],
+        title: const Text(
+          'View List',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.pink, 
+        backgroundColor: Colors.pink,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const HomeView()),
+    (route) => true, // Menghapus semua route sebelumnya
+  );
+},
+          child: Container(
+            margin: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.pink,
+            ),
+          ),
+        ),
       ),
       body: LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
-          return const WideLayoutGuest();
+          return const WideLayout();
         } else {
-          return const NarrowLayoutGuest();
+          return const NarrowLayout();
         }
       }),
     );
   }
 }
 
-class NarrowLayoutGuest extends StatelessWidget {
-  const NarrowLayoutGuest({super.key});
+class NarrowLayout extends StatelessWidget {
+  const NarrowLayout({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DataListGuest(
+    return DataList(
       onDataTap: (data) => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => Scaffold(
             appBar: AppBar(
               title: Text(
-                "${data['name']}",
+                "Detail: ${data['name']}",
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -85,7 +90,7 @@ class NarrowLayoutGuest extends StatelessWidget {
                 ),
               ),
             ),
-            body: DataDetailGuest(data),
+            body: DataDetail(data),
           ),
         ),
       ),
@@ -93,14 +98,14 @@ class NarrowLayoutGuest extends StatelessWidget {
   }
 }
 
-class WideLayoutGuest extends StatefulWidget {
-  const WideLayoutGuest({super.key});
+class WideLayout extends StatefulWidget {
+  const WideLayout({super.key});
 
   @override
-  State<WideLayoutGuest> createState() => _WideLayoutGuestState();
+  State<WideLayout> createState() => _WideLayoutState();
 }
 
-class _WideLayoutGuestState extends State<WideLayoutGuest> {
+class _WideLayoutState extends State<WideLayout> {
   Map<String, dynamic>? _selectedData;
 
   @override
@@ -111,7 +116,7 @@ class _WideLayoutGuestState extends State<WideLayoutGuest> {
           width: 300,
           child: Padding(
             padding: const EdgeInsets.all(12.0),
-            child: DataListGuest(
+            child: DataList(
               onDataTap: (data) => setState(() => _selectedData = data),
             ),
           ),
@@ -120,28 +125,23 @@ class _WideLayoutGuestState extends State<WideLayoutGuest> {
           flex: 3,
           child: _selectedData == null
               ? const Center(child: Text("Pilih data untuk melihat detail"))
-              : DataDetailGuest(_selectedData!),
+              : DataDetail(_selectedData!),
         ),
       ],
     );
   }
 }
 
-class DataListGuest extends StatelessWidget {
+class DataList extends StatelessWidget {
   final void Function(Map<String, dynamic>) onDataTap;
 
-  const DataListGuest({super.key, required this.onDataTap});
+  const DataList({super.key, required this.onDataTap});
 
   final List<Map<String, dynamic>> data = const [
     {
-      "name": "Data Pengguna",
-      "info": "Profile Pengguna",
-      "icon": Icons.person,
-    },
-    {
       "name": "Personal Trainer",
       "info": "Booking Personal Trainer",
-      "icon": Icons.person,
+      "icon": Icons.fitness_center,
     },
     {
       "name": "Alat GYM",
@@ -161,7 +161,7 @@ class DataListGuest extends StatelessWidget {
       children: [
         for (var item in data)
           Card(
-            color: Colors.pink, 
+            color: Colors.pink,
             margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -170,7 +170,7 @@ class DataListGuest extends StatelessWidget {
               leading: Icon(
                 item["icon"],
                 size: 40,
-                color: Colors.white, 
+                color: Colors.white,
               ),
               title: Text(
                 item["name"]!,
@@ -191,30 +191,26 @@ class DataListGuest extends StatelessWidget {
   }
 }
 
-class DataDetailGuest extends StatelessWidget {
+class DataDetail extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const DataDetailGuest(this.data, {super.key});
+  const DataDetail(this.data, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (data['name'] == "Data Pengguna") {
-      return const ProfileGuest();
-    }
 
     if (data['name'] == "Personal Trainer") {
-      return const PersonalTrainerDetailGuest();
+      return const PersonalTrainerDetail();
     }
 
     if (data['name'] == "Alat GYM") {
-      return const AlatGymDetailGuest();
+      return const AlatGymDetail();
     }
 
     if (data['name'] == "Kelas Olahraga") {
-      return const KelasOlahragaDetailGuest();
+      return const KelasOlahragaDetail();
     }
 
-  
     return Center(
       child: Card(
         margin: const EdgeInsets.all(16),
