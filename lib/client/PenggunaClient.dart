@@ -12,7 +12,8 @@ class Penggunaclient {
     try {
       final response = await get(Uri.parse('$url$endpoint'));
 
-      if (response.statusCode != 200) throw Exception('Failed to load users: ${response.reasonPhrase}');
+      if (response.statusCode != 200)
+        throw Exception('Failed to load users: ${response.reasonPhrase}');
 
       Iterable list = json.decode(response.body)['data'];
 
@@ -27,7 +28,8 @@ class Penggunaclient {
     try {
       final response = await get(Uri.parse('$url$endpoint/$id'));
 
-      if (response.statusCode != 200) throw Exception('Failed to find user: ${response.reasonPhrase}');
+      if (response.statusCode != 200)
+        throw Exception('Failed to find user: ${response.reasonPhrase}');
 
       return Pengguna.fromJson(json.decode(response.body)['data']);
     } catch (e) {
@@ -42,19 +44,19 @@ class Penggunaclient {
 
   // Membuat pengguna baru
   static Future<Pengguna> create(Pengguna pengguna) async {
-      final response = await post(
-        Uri.parse('$url$endpoint'),
-        headers:<String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: pengguna.toRawJson(),
-      );
+    final response = await post(
+      Uri.parse('$url$endpoint'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: pengguna.toRawJson(),
+    );
 
-      if (response.statusCode == 201) {
-        return Pengguna.fromJson(json.decode(response.body)['data']);
-      }else {
-        throw Exception('Failed to create user: ${response.reasonPhrase}');
-      }
+    if (response.statusCode == 201) {
+      return Pengguna.fromJson(json.decode(response.body)['data']);
+    } else {
+      throw Exception('Failed to create user: ${response.reasonPhrase}');
+    }
   }
 
   // Memperbarui data pengguna
@@ -80,7 +82,8 @@ class Penggunaclient {
         final data = json.decode(response.body)['data'];
         return Pengguna.fromJson(data);
       } else {
-        throw Exception('Gagal memperbarui data pengguna: ${response.reasonPhrase}');
+        throw Exception(
+            'Gagal memperbarui data pengguna: ${response.reasonPhrase}');
       }
     } catch (e) {
       return Future.error('Error updating user: $e');
@@ -92,7 +95,8 @@ class Penggunaclient {
     try {
       final response = await delete(Uri.parse('$url$endpoint/$id'));
 
-      if (response.statusCode != 204) throw Exception('Failed to delete user: ${response.reasonPhrase}');
+      if (response.statusCode != 204)
+        throw Exception('Failed to delete user: ${response.reasonPhrase}');
     } catch (e) {
       return Future.error('Error deleting user: $e');
     }
@@ -111,27 +115,26 @@ class Penggunaclient {
       );
 
       if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      final token = responseBody['token'];
+        final responseBody = json.decode(response.body);
+        final token = responseBody['token'];
 
-      if (token != null) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('authToken', token);
+        if (token != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('authToken', token);
+        } else {
+          throw Exception('Token is null');
+        }
       } else {
-        throw Exception('Token is null');
+        throw Exception('Failed to login: ${response.reasonPhrase}');
       }
-    } else {
-      throw Exception('Failed to login: ${response.reasonPhrase}');
-    }
-
 
       return response;
     } catch (e) {
       return Future.error('Error logging in: $e');
     }
   }
-	
-static Future<void> logout() async {
+
+  static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('authToken');
 
@@ -180,5 +183,4 @@ static Future<void> logout() async {
     final data = json.decode(response.body)['data'];
     return Pengguna.fromJson(data);
   }
-
 }

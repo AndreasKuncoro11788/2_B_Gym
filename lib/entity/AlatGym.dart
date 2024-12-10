@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class AlatGym {
-  final String alatId;
+  final int alatId;
   final String namaAlat;
   final double harga;
 
@@ -12,10 +12,10 @@ class AlatGym {
   });
 
   factory AlatGym.fromRawJson(String str) => AlatGym.fromJson(json.decode(str));
-  
+
   factory AlatGym.fromJson(Map<String, dynamic> json) {
     return AlatGym(
-      alatId: json["id"].toString(), // Pastikan ini sesuai dengan nama kolom di database
+      alatId: json["id"],
       namaAlat: json["namaAlat"],
       harga: json["harga"].toDouble(),
     );
@@ -24,8 +24,8 @@ class AlatGym {
   String toRawJson() => json.encode(toJson());
 
   Map<String, dynamic> toJson() => {
-    "id": alatId, // Pastikan ini sesuai dengan nama kolom di database
-    "namaAlat": namaAlat,
-    "harga": harga,
-  };
+        "id": alatId,
+        "namaAlat": namaAlat,
+        "harga": harga,
+      };
 }
