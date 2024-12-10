@@ -6,7 +6,6 @@ import 'package:flutter_application_1/entity/Pengguna.dart';
 import 'package:flutter_application_1/view/editProfile.dart';
 import 'package:flutter_application_1/view/login.dart';
 
-// Provider untuk mengambil data pengguna login
 final profileProvider = FutureProvider<Pengguna>((ref) async {
   return await Penggunaclient.fetchCurrentUser();
 });
@@ -87,7 +86,6 @@ class UserProfile extends ConsumerWidget {
           _buildDataContainer(Icons.phone, pengguna.nomorTelepon, 'Nomor Telepon'),
           const SizedBox(height: 20),
 
-          // Tombol Edit Profile
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFB3286),
@@ -100,7 +98,7 @@ class UserProfile extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Editprofile()),
-              ).then((_) => ref.refresh(profileProvider)); // Refresh data setelah edit
+              ).then((_) => ref.refresh(profileProvider)); 
             },
             child: const Text(
               'Edit Profile',
@@ -113,7 +111,6 @@ class UserProfile extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
 
-          // Tombol Logout
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
@@ -137,7 +134,6 @@ class UserProfile extends ConsumerWidget {
     );
   }
 
-  // Dialog Logout
   void _showLogoutDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -196,10 +192,8 @@ class UserProfile extends ConsumerWidget {
                           ),
                           onPressed: () async {
                             try {
-                              // Panggil fungsi logout
                               await Penggunaclient.logout();
 
-                              // Navigasi ke LoginView
                               Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                   builder: (context) => const LoginView(),
@@ -207,7 +201,6 @@ class UserProfile extends ConsumerWidget {
                                 (route) => false,
                               );
                             } catch (e) {
-                              // Tangani error
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Error: $e')),
                               );
@@ -228,8 +221,6 @@ class UserProfile extends ConsumerWidget {
   );
 }
 
-
-  // Widget Container untuk Data Pengguna
   Widget _buildDataContainer(IconData icon, String mainText, String subText) {
     return Container(
       padding: const EdgeInsets.all(12),

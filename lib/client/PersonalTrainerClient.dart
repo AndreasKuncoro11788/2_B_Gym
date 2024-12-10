@@ -7,25 +7,17 @@ class PersonalTrainerClient {
   static final String url = 'http://10.0.2.2:8000'; // Base URL
   static final String endpoint = '/api/personal-trainer'; // Endpoint yang benar
 
-  // Mendapatkan semua personal trainer
+  // Mengambil semua personal trainer
   Future<List<PersonalTrainer>> fetchPersonalTrainers() async {
     final response = await http.get(Uri.parse('$url$endpoint'));
 
     if (response.statusCode == 200) {
-      print('Response body: ${response.body}'); // Debugging line
-      final jsonResponse = json.decode(response.body);
-
-      // Ensure that response is Map and contains list
-      if (jsonResponse is Map && jsonResponse['data'] is List) {
-        return (jsonResponse['data'] as List)
-            .map((trainer) => PersonalTrainer.fromJson(trainer))
-            .toList();
-      } else {
-        throw Exception('Unexpected response format');
-      }
+      List jsonResponse = json.decode(response.body)['data'];
+      return jsonResponse
+          .map((trainer) => PersonalTrainer.fromJson(trainer))
+          .toList();
     } else {
-      throw Exception(
-          'Failed to load personal trainers: ${response.statusCode}');
+      throw Exception('Failed to load personal trainers');
     }
   }
 
@@ -74,8 +66,9 @@ class PersonalTrainerClient {
     }
   }
 
-  Future<PersonalTrainer> fetchPersonalTrainerById(int pemesananId) async {
-    final response = await http.get(Uri.parse('$url$endpoint/$pemesananId'));
+  // Mengambil personal trainer berdasarkan ID
+  Future<PersonalTrainer> fetchPersonalTrainerById(int id) async {
+    final response = await http.get(Uri.parse('$url$endpoint/$id'));
     if (response.statusCode == 200) {
       return PersonalTrainer.fromJson(json.decode(response.body)['data']);
     } else {

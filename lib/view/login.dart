@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_application_1/view/home.dart';
 import 'package:flutter_application_1/view/register.dart';
 import 'package:flutter_application_1/component/form_component.dart';
@@ -23,12 +24,20 @@ class _LoginViewState extends State<LoginView> {
   Future<void> login(String username, String password) async {
     try {
       await Penggunaclient.login(username, password);
+      Fluttertoast.showToast(
+        msg: "Login berhasil!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: const Color.fromARGB(255, 175, 76, 117),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeView()),
       );
     } catch (e) {
-      showLoginErrorDialog(context, e.toString());
+
     }
   }
 
@@ -71,6 +80,7 @@ class _LoginViewState extends State<LoginView> {
         );
       }
     } catch (e) {
+
       print(e);
     }
   }
@@ -88,17 +98,9 @@ class _LoginViewState extends State<LoginView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "ATMAGYM",
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const Text(
-                      "FITNESS CENTER",
-                      style: TextStyle(fontSize: 18, color: Colors.black54),
+                    Image.asset(
+                      'lib/assets/logo Atma GYM1.png',
+                      height: 300,
                     ),
                     const SizedBox(height: 40),
 
