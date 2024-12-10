@@ -23,7 +23,7 @@ class HomeViewState extends State<HomeView> {
     Center(
       child: IsiHomeGuest(), 
     ),
-    ListViewScreen(), // Mengganti ListViewScreenGuest ke ListViewScreen
+    ListViewScreen(), 
     Center(
       child: ProfileGuest(), 
     ),
