@@ -54,8 +54,8 @@ class UserProfile extends ConsumerWidget {
                   radius: 50,
                   backgroundColor: const Color(0xFFD9D9D9),
                   backgroundImage: (pengguna.fotoProfil != null && pengguna.fotoProfil.isNotEmpty)
-                      ? FileImage(File(pengguna.fotoProfil)) // Gunakan foto lokal
-                      : null as ImageProvider, // Gunakan foto default
+                      ? FileImage(File(pengguna.fotoProfil)) 
+                      : null as ImageProvider,
                 ),
                 const SizedBox(height: 16),
                 Text(
