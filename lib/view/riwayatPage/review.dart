@@ -34,7 +34,8 @@ class _ReviewPageState extends State<ReviewPage> {
   @override
   void initState() {
     super.initState();
-    _updatedRiwayat = RiwayatPemesanan(id: 0, review: '', rating: 0, id_pembayaran: 0);
+    _updatedRiwayat =
+        RiwayatPemesanan(id: 0, review: '', rating: 0, id_pembayaran: 0);
     _fetchData();
   }
 
@@ -44,13 +45,17 @@ class _ReviewPageState extends State<ReviewPage> {
     });
 
     try {
-      final pembayaranList = await PembayaranClient.fetchPembayaranByPemesananId(widget.idPemesanan);
+      final pembayaranList =
+          await PembayaranClient.fetchPembayaranByPemesananId(
+              widget.idPemesanan);
       print('Pembayaran List: $pembayaranList'); // Debug log
 
       if (pembayaranList.isNotEmpty && pembayaranList[0].id != null) {
-        _idPembayaran = pembayaranList[0].id;
+        _idPembayaran = pembayaranList[0].id ??  0;
 
-        final riwayat = await RiwayatPemesananClient.fetchRiwayatPemesananByPembayaranId(_idPembayaran);
+        final riwayat =
+            await RiwayatPemesananClient.fetchRiwayatPemesananByPembayaranId(
+                _idPembayaran);
 
         if (riwayat.isNotEmpty) {
           final singleRiwayat = riwayat[0];
@@ -163,7 +168,9 @@ class _ReviewPageState extends State<ReviewPage> {
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.05,
+                    vertical: screenHeight * 0.02),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -278,7 +285,8 @@ class _ReviewPageState extends State<ReviewPage> {
                         onPressed: onSubmit,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.pink,
-                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 12),
                         ),
                         child: const Text(
                           'Kirim Review',

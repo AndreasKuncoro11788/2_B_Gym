@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/entity/Pembayaran.dart'; // Ensure you import your Pembayaran model
+import 'package:flutter_application_1/client/PembayaranClient.dart'; // Ensure you import your PembayaranClient
 
-class Pembayaran extends StatelessWidget {
-  const Pembayaran({super.key});
+class Pembayaran extends StatefulWidget {
+  final String jenisKelas;
+  final String namaTrainer;
+  final String alatGym;
+  final String jadwalKelas;
+  final double hargaAlatGym; // Price of gym equipment
+  final int hargaKelas; // Class price
+  final int idPemesanan; // Keep only the order ID as an integer
 
+  const Pembayaran({
+    super.key,
+    required this.jenisKelas,
+    required this.namaTrainer,
+    required this.alatGym,
+    required this.jadwalKelas,
+    required this.hargaAlatGym,
+    required this.hargaKelas,
+    required this.idPemesanan, // Keep the order ID as an integer
+  });
+
+  @override
+  _PembayaranState createState() => _PembayaranState();
+}
+
+class _PembayaranState extends State<Pembayaran> {
+  String? jenisPembayaran; // Variable to hold the selected payment method
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -16,7 +43,7 @@ class Pembayaran extends StatelessWidget {
               height: 83,
               color: const Color(0xFFFB3286),
               child: Padding(
-                padding: const EdgeInsets.only(top: 20.0), // Jarak ke bawah
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Row(
                   children: [
                     IconButton(
@@ -25,7 +52,7 @@ class Pembayaran extends StatelessWidget {
                         Navigator.pop(context);
                       },
                     ),
-                    const Spacer(), // Membuat ruang antara ikon dan teks
+                    const Spacer(),
                     const Text(
                       'Pembayaran',
                       style: TextStyle(
@@ -35,10 +62,7 @@ class Pembayaran extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const Spacer(
-                        flex: 2,
-                        key: Key(
-                            'spacer_left')), // Menambahkan ruang di sisi kanan jika perlu
+                    const Spacer(flex: 2),
                   ],
                 ),
               ),
@@ -60,9 +84,10 @@ class Pembayaran extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'ID Pembayaran: 12#3456\nID Pemesanan: uytr34',
-                    style: TextStyle(
+                  // Display Order ID only
+                  Text(
+                    'ID Pemesanan: ${widget.idPemesanan}', // Displaying the integer ID
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 11,
                       fontFamily: 'Poppins',
@@ -70,13 +95,13 @@ class Pembayaran extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Container(
-                    width: double.infinity, // Fills the entire available width
+                    width: double.infinity,
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       color: const Color(0xFFD9D9D9),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Row for Class Type and Price
@@ -84,16 +109,16 @@ class Pembayaran extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Jenis Kelas : Yoga',
-                              style: TextStyle(
+                              'Jenis Kelas : ${widget.jenisKelas}',
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
                                 fontFamily: 'Poppins',
                               ),
                             ),
                             Text(
-                              'Rp. 50.000,',
-                              style: TextStyle(
+                              'Rp. ${widget.hargaKelas.toStringAsFixed(0)},', // Display the class price
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
                                 fontFamily: 'Poppins',
@@ -101,32 +126,32 @@ class Pembayaran extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 4), // Spacing between rows
+                        const SizedBox(height: 4),
                         // Trainer Row
                         Text(
-                          'Trainer : Bowo',
-                          style: TextStyle(
+                          'Trainer : ${widget.namaTrainer}',
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 11,
                             fontFamily: 'Poppins',
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         // Row for Gym Equipment and Price
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Alat GYM : Yoga Matt',
-                              style: TextStyle(
+                              'Alat GYM : ${widget.alatGym}',
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
                                 fontFamily: 'Poppins',
                               ),
                             ),
                             Text(
-                              'Rp. 15.000,',
-                              style: TextStyle(
+                              'Rp. ${widget.hargaAlatGym.toStringAsFixed(0)},', // Display the dynamic price
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
                                 fontFamily: 'Poppins',
@@ -134,11 +159,11 @@ class Pembayaran extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         // Schedule Row
                         Text(
-                          'Jadwal : Senin 08.00 - 09.00',
-                          style: TextStyle(
+                          'Jadwal : ${widget.jadwalKelas}',
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 11,
                             fontFamily: 'Poppins',
@@ -148,10 +173,10 @@ class Pembayaran extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'Total Pembayaran',
                         style: TextStyle(
                           color: Colors.black,
@@ -161,8 +186,8 @@ class Pembayaran extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Rp. 65.000,',
-                        style: TextStyle(
+                        'Rp. ${(widget.hargaKelas + widget.hargaAlatGym).toStringAsFixed(0)},', // Calculate total payment
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
                           fontFamily: 'Poppins',
@@ -192,109 +217,63 @@ class Pembayaran extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Transfer Bank',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.arrow_forward_ios),
-                      ),
-                    ],
+                  // Radio buttons for payment methods with icons
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Image.asset('lib/assets/bca_mobile.png',
+                            width: 30, height: 30),
+                        const SizedBox(width: 10),
+                        const Text('Kartu Kredit'),
+                      ],
+                    ),
+                    leading: Radio<String>(
+                      value: 'Kartu Kredit',
+                      groupValue: jenisPembayaran,
+                      onChanged: (value) {
+                        setState(() {
+                          jenisPembayaran = value;
+                        });
+                      },
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Image.asset(
-                        'lib/assets/bca_mobile.png',
-                        width: 50,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 16),
-                      Image.asset(
-                        'lib/assets/bni.png',
-                        width: 50,
-                        height: 30,
-                      ),
-                    ],
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Image.asset('lib/assets/bni.png',
+                            width: 30, height: 30),
+                        const SizedBox(width: 10),
+                        const Text('Debit'),
+                      ],
+                    ),
+                    leading: Radio<String>(
+                      value: 'Debit',
+                      groupValue: jenisPembayaran,
+                      onChanged: (value) {
+                        setState(() {
+                          jenisPembayaran = value;
+                        });
+                      },
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Kartu Kredit',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.arrow_forward_ios),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Image.asset(
-                        'lib/assets/bca_mobile.png',
-                        width: 50,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 16),
-                      Image.asset(
-                        'lib/assets/bni.png',
-                        width: 50,
-                        height: 30,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'E-Wallet',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.arrow_forward_ios),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Image.asset(
-                        'lib/assets/Shopeepay.png',
-                        width: 50,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 16),
-                      Image.asset(
-                        'lib/assets/gopay.png',
-                        width: 50,
-                        height: 30,
-                      ),
-                    ],
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Image.asset('lib/assets/gopay.png',
+                            width: 30, height: 30),
+                        const SizedBox(width: 10),
+                        const Text('E - Wallet'),
+                      ],
+                    ),
+                    leading: Radio<String>(
+                      value: 'E - Wallet',
+                      groupValue: jenisPembayaran,
+                      onChanged: (value) {
+                        setState(() {
+                          jenisPembayaran = value;
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -303,12 +282,12 @@ class Pembayaran extends StatelessWidget {
             const Divider(height: 40, color: Color(0xFFD9D9D9), thickness: 2),
 
             // Final Payment Summary
-            const Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Total Pembayaran',
                     style: TextStyle(
                       color: Colors.black,
@@ -318,8 +297,8 @@ class Pembayaran extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Rp. 65.000,',
-                    style: TextStyle(
+                    'Rp. ${(widget.hargaKelas + widget.hargaAlatGym).toStringAsFixed(0)},', // Calculate total payment
+                    style: const TextStyle(
                       color: Color(0xFFFB3286),
                       fontSize: 20,
                       fontFamily: 'Poppins',
@@ -346,7 +325,10 @@ class Pembayaran extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      // Handle cancel action
+                      Navigator.pop(context); // Go back to the previous screen
+                    },
                     child: const Text(
                       'BATAL',
                       style: TextStyle(
@@ -366,7 +348,45 @@ class Pembayaran extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (jenisPembayaran != null) {
+                        try {
+                          // Calculate total payment
+                          int totalPembayaran =
+                              (widget.hargaKelas + widget.hargaAlatGym).toInt();
+
+                          await PembayaranClient.createPembayaran(
+                            idPemesanan:
+                                widget.idPemesanan, // Pastikan ini adalah int
+                            jenisPembayaran: jenisPembayaran!,
+                            statusPembayaran: 'On Going', // Set initial status
+                            totalPembayaran: totalPembayaran,
+                          );
+
+                          // Show success message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Pesanan berhasil dibuat!')),
+                          );
+
+                          // Optionally, navigate to another screen or reset the form
+                          Navigator.pop(
+                              context); // Go back to the previous screen
+                        } catch (e) {
+                          // Show an error message if the order creation fails
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Gagal membuat pesanan: $e')),
+                          );
+                        }
+                      } else {
+                        // Show an error message if no payment method is selected
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Pilih metode pembayaran')),
+                        );
+                      }
+                    },
                     child: const Text(
                       'BUAT PESANAN',
                       style: TextStyle(
