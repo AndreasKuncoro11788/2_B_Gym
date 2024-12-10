@@ -3,11 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/entity/PersonalTrainer.dart';
 
 class PersonalTrainerClient {
-  // Untuk emulator
-  static final String url = 'http://10.0.2.2:8000'; // Base URL
-  static final String endpoint = '/api/personal-trainer'; // Endpoint yang benar
+  static final String url = 'http://10.0.2.2:8000'; 
+  static final String endpoint = '/api/personal-trainer'; 
 
-  // Mengambil semua personal trainer
   Future<List<PersonalTrainer>> fetchPersonalTrainers() async {
     final response = await http.get(Uri.parse('$url$endpoint'));
 
@@ -21,7 +19,6 @@ class PersonalTrainerClient {
     }
   }
 
-  // Menambahkan personal trainer baru
   Future<PersonalTrainer> createPersonalTrainer(PersonalTrainer trainer) async {
     final response = await http.post(
       Uri.parse('$url$endpoint'),
@@ -38,7 +35,6 @@ class PersonalTrainerClient {
     }
   }
 
-  // Mengupdate personal trainer
   Future<PersonalTrainer> updatePersonalTrainer(PersonalTrainer trainer) async {
     final response = await http.put(
       Uri.parse('$url$endpoint/${trainer.id}'),
@@ -55,7 +51,6 @@ class PersonalTrainerClient {
     }
   }
 
-  // Menghapus personal trainer
   Future<void> deletePersonalTrainer(int id) async {
     final response = await http.delete(
       Uri.parse('$url$endpoint/$id'),
@@ -66,7 +61,6 @@ class PersonalTrainerClient {
     }
   }
 
-  // Mengambil personal trainer berdasarkan ID
   Future<PersonalTrainer> fetchPersonalTrainerById(int id) async {
     final response = await http.get(Uri.parse('$url$endpoint/$id'));
     if (response.statusCode == 200) {

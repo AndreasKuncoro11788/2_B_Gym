@@ -14,7 +14,6 @@ class ListViewScreen extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Add "Hi, Users" and date below it in the AppBar
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -30,14 +29,14 @@ class ListViewScreen extends StatelessWidget {
                   '10 Okt 2024',
                   style: TextStyle(
                     color: Colors.blue[200],
-                    fontSize: 14, // Smaller text size for the date
+                    fontSize: 14,
                   ),
                 ),
               ],
             ),
           ],
         ),
-        backgroundColor: Colors.pink, // Set to pink to match the design
+        backgroundColor: Colors.pink, 
       ),
       body: LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
@@ -68,7 +67,7 @@ class NarrowLayout extends StatelessWidget {
                 ),
               ),
               backgroundColor: Colors.pink,
-              centerTitle: true, // Correctly placed centerTitle
+              centerTitle: true, 
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -162,7 +161,7 @@ class DataList extends StatelessWidget {
       children: [
         for (var item in data)
           Card(
-            color: Colors.pink, // Set card background to pink
+            color: Colors.pink,
             margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -171,18 +170,18 @@ class DataList extends StatelessWidget {
               leading: Icon(
                 item["icon"],
                 size: 40,
-                color: Colors.white, // Icon color to white
+                color: Colors.white,
               ),
               title: Text(
                 item["name"]!,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.white), // Text color to white
+                    color: Colors.white), 
               ),
               subtitle: Text(
                 item["info"]!,
                 style: const TextStyle(
-                    color: Colors.white70), // Subtitle color to a lighter shade
+                    color: Colors.white70), 
               ),
               onTap: () => onDataTap(item),
             ),
@@ -203,7 +202,6 @@ class DataDetail extends StatelessWidget {
       return const UserProfile();
     }
 
-    // Show details based on the selected data
     if (data['name'] == "Personal Trainer") {
       return const PersonalTrainerDetail();
     }
@@ -216,7 +214,6 @@ class DataDetail extends StatelessWidget {
       return const KelasOlahragaDetail();
     }
 
-    // Ini yang lama jangan dihapus dulu
     return Center(
       child: Card(
         margin: const EdgeInsets.all(16),
@@ -230,7 +227,7 @@ class DataDetail extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(data['icon'],
-                  size: 80, color: Colors.pink), // Display icon in larger size
+                  size: 80, color: Colors.pink), 
               const SizedBox(height: 16),
               Text(
                 data['name']!,

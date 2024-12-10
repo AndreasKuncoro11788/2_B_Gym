@@ -6,7 +6,6 @@ class PembayaranClient {
   static final String url = 'http://10.0.2.2:8000';
   static final String endpoint = '/api/pembayaran';
 
-  // Mengambil semua pembayaran
   static Future<List<Pembayaran>> fetchPembayaran() async {
     final response = await http.get(Uri.parse('$url$endpoint'));
 
@@ -18,15 +17,14 @@ class PembayaranClient {
     }
   }
 
-  // Membuat pembayaran baru
   static Future<Pembayaran> createPembayaran({
-    required int idPemesanan, // Pastikan ini adalah int
+    required int idPemesanan, 
     required String jenisPembayaran,
     required String statusPembayaran,
     required int totalPembayaran,
   }) async {
     final pembayaran = Pembayaran(
-      id: null, // Set to null for new entries
+      id: null, 
       id_pemesanan: idPemesanan,
       jenisPembayaran: jenisPembayaran,
       statusPembayaran: statusPembayaran,
@@ -48,7 +46,6 @@ class PembayaranClient {
     }
   }
 
-  // Mengupdate pembayaran
   static Future<Pembayaran> updatePembayaran(Pembayaran pembayaran) async {
     final response = await http.put(
       Uri.parse('$url$endpoint/${pembayaran.id}'),
@@ -65,7 +62,6 @@ class PembayaranClient {
     }
   }
 
-  // Menghapus pembayaran
   static Future<void> deletePembayaran(int id) async {
     final response = await http.delete(
       Uri.parse('$url$endpoint/$id'),
@@ -75,7 +71,6 @@ class PembayaranClient {
     }
   }
 
-  // Mengambil pembayaran berdasarkan ID
   static Future<Pembayaran> fetchPembayaranById(int id) async {
     final response = await http.get(Uri.parse('$url$endpoint/$id'));
 
@@ -86,7 +81,6 @@ class PembayaranClient {
     }
   }
 
-  // Mengambil pembayaran berdasarkan ID pemesanan
   static Future<List<Pembayaran>> fetchPembayaranByPemesananId(
       int idPemesanan) async {
     final response = await http.get(Uri.parse('$url$endpoint'));
@@ -103,15 +97,13 @@ class PembayaranClient {
     }
   }
 
-  // Menghapus pembayaran berdasarkan ID pemesanan
   static Future<void> deletePembayaranByPemesananId(int idPemesanan) async {
     final response = await http.delete(
       Uri.parse(
-          '$url$endpoint/$idPemesanan'), // Endpoint untuk menghapus data pembayaran berdasarkan id_pemesanan
+          '$url$endpoint/$idPemesanan'), 
     );
 
     if (response.statusCode == 200) {
-      // Data pembayaran berhasil dihapus
       print('Pembayaran dengan id_pemesanan $idPemesanan berhasil dihapus');
     } else {
       throw Exception('Gagal menghapus data pembayaran');

@@ -32,7 +32,6 @@ class UserProfile extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Header Profile
           Container(
             height: 318,
             color: const Color(0xFFFB3286),
@@ -79,7 +78,6 @@ class UserProfile extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
 
-          // Data Pengguna
           _buildDataContainer(Icons.person, pengguna.namaPengguna, 'Nama Pengguna'),
           _buildDataContainer(Icons.person, pengguna.nomorIdentitas, 'Nomor Identitas'),
           _buildDataContainer(Icons.email, pengguna.email, 'Email'),

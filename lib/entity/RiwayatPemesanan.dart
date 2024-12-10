@@ -34,7 +34,7 @@ class RiwayatPemesanan {
         "id_pembayaran": id_pembayaran,
       };
 
-  // copyWith method with only optional fields that can change
+
   RiwayatPemesanan copyWith({
     int? rating,
     String? review,
