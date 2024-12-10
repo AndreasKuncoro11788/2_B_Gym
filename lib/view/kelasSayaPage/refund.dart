@@ -247,13 +247,13 @@ class RefundPage extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 await DataPemesananClient.deleteDataPemesanan(id);
-                Navigator.pop(context); // Menutup dialog konfirmasi
+                Navigator.pop(context); 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Data Pemesanan berhasil dihapus')),
+                  const SnackBar(content: Text('Kelas Kamu Brehasil di refund')),
                 );
 
-                // Refresh halaman sebelumnya
-                Navigator.pop(context); // Kembali ke halaman sebelumnya
+                
+                Navigator.pop(context);
               },
               child: const Text('Hapus'),
             ),

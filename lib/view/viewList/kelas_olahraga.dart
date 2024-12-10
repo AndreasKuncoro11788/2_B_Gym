@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/client/KelasOlahragaClient.dart'; // Import API client
-import 'package:flutter_application_1/entity/KelasOlahraga.dart'; // Import KelasOlahraga model
-import 'package:flutter_animate/flutter_animate.dart'; // Import animation package
+import 'package:flutter_application_1/client/KelasOlahragaClient.dart'; 
+import 'package:flutter_application_1/entity/KelasOlahraga.dart'; 
+import 'package:flutter_animate/flutter_animate.dart'; 
 
 class KelasOlahragaDetail extends StatelessWidget {
   const KelasOlahragaDetail({super.key});
@@ -29,10 +29,10 @@ class KelasOlahragaDetail extends StatelessWidget {
               return KelasItem(
                 namaKelas: kelas.namaKelas,
                 jadwalKelas:
-                    kelas.jadwalKelas, // Use jadwalKelas instead of jadwal
-                id_alatGym: kelas.idAlatGym.toString(), // Use id_alatGym
+                    kelas.jadwalKelas, 
+                id_alatGym: kelas.idAlatGym.toString(), 
                 id_personalTrainer: kelas.idPersonalTrainer
-                    .toString(), // Use id_personalTrainer
+                    .toString(), 
               ).animate().fade(duration: 500.ms).slide();
             },
           );
@@ -44,9 +44,9 @@ class KelasOlahragaDetail extends StatelessWidget {
 
 class KelasItem extends StatelessWidget {
   final String namaKelas;
-  final String jadwalKelas; // Updated to jadwalKelas
-  final String id_alatGym; // Updated to id_alatGym
-  final String id_personalTrainer; // Updated to id_personalTrainer
+  final String jadwalKelas;
+  final String id_alatGym; 
+  final String id_personalTrainer; 
 
   const KelasItem({
     required this.namaKelas,
@@ -61,9 +61,9 @@ class KelasItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
       child: Container(
         width: double.infinity,
-        height: 120, // Adjust height as needed
+        height: 120, 
         decoration: BoxDecoration(
-          color: Colors.blueAccent, // Background color
+          color: Colors.blueAccent, 
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -75,11 +75,10 @@ class KelasItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Styled Icon Container
             Container(
               margin: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.white, // Background color for the icon
+                color: Colors.white, 
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
@@ -92,9 +91,9 @@ class KelasItem extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: Icon(
                 Icons
-                    .fitness_center, // You can change this to any icon you prefer
+                    .fitness_center, 
                 size: 40,
-                color: Colors.blueAccent, // Icon color
+                color: Colors.blueAccent, 
               ),
             ),
             Expanded(
@@ -112,21 +111,21 @@ class KelasItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'ID Alat Gym: $id_alatGym', // Display id_alatGym
+                    'ID Alat Gym: $id_alatGym', 
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    'ID Personal Trainer: $id_personalTrainer', // Display id_personalTrainer
+                    'ID Personal Trainer: $id_personalTrainer', 
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    'Jadwal: $jadwalKelas', // Display jadwalKelas
+                    'Jadwal: $jadwalKelas', 
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
