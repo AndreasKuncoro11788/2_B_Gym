@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter_application_1/view/pesananPage/pesanan.dart';
 import 'package:flutter_application_1/view/kelasSayaPage/kelasSaya.dart';
 import 'package:flutter_application_1/view/riwayatPage/riwayat.dart';
+import 'package:intl/intl.dart';
+
 
 class IsiHome extends StatefulWidget {
   const IsiHome({super.key});
@@ -48,6 +50,9 @@ class _IsiHomeState extends State<IsiHome> {
 
   @override
   Widget build(BuildContext context) {
+
+    String formattedDate = DateFormat('dd MMM yyyy').format(DateTime.now());
+
     return Scaffold(
       backgroundColor: Colors.pink[400],
       body: SafeArea(
@@ -77,7 +82,7 @@ class _IsiHomeState extends State<IsiHome> {
                               height: 6,
                             ),
                             Text(
-                              '10 Okt 2024',
+                              formattedDate,
                               style: TextStyle(color: Colors.blue[200]),
                             ),
                           ],
