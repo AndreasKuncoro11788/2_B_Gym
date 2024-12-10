@@ -37,14 +37,6 @@ class _LoginViewState extends State<LoginView> {
         MaterialPageRoute(builder: (_) => const HomeView()),
       );
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Login gagal: $e",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
 
     }
   }
@@ -88,14 +80,6 @@ class _LoginViewState extends State<LoginView> {
         );
       }
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Login gagal: $e",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
 
       print(e);
     }
@@ -114,17 +98,9 @@ class _LoginViewState extends State<LoginView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "ATMAGYM",
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const Text(
-                      "FITNESS CENTER",
-                      style: TextStyle(fontSize: 18, color: Colors.black54),
+                    Image.asset(
+                      'lib/assets/logo Atma GYM1.png',
+                      height: 300,
                     ),
                     const SizedBox(height: 40),
 
