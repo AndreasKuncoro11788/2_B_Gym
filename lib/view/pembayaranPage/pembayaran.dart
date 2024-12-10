@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/entity/Pembayaran.dart'; // Ensure you import your Pembayaran model
-import 'package:flutter_application_1/client/PembayaranClient.dart'; // Ensure you import your PembayaranClient
+import 'package:flutter_application_1/entity/Pembayaran.dart'; 
+import 'package:flutter_application_1/client/PembayaranClient.dart'; 
 
 class Pembayaran extends StatefulWidget {
   final String jenisKelas;
   final String namaTrainer;
   final String alatGym;
   final String jadwalKelas;
-  final double hargaAlatGym; // Price of gym equipment
-  final int hargaKelas; // Class price
-  final int idPemesanan; // Keep only the order ID as an integer
+  final double hargaAlatGym; 
+  final int hargaKelas; 
+  final int idPemesanan; 
 
   const Pembayaran({
     super.key,
@@ -19,7 +19,7 @@ class Pembayaran extends StatefulWidget {
     required this.jadwalKelas,
     required this.hargaAlatGym,
     required this.hargaKelas,
-    required this.idPemesanan, // Keep the order ID as an integer
+    required this.idPemesanan, 
   });
 
   @override
@@ -27,7 +27,7 @@ class Pembayaran extends StatefulWidget {
 }
 
 class _PembayaranState extends State<Pembayaran> {
-  String? jenisPembayaran; // Variable to hold the selected payment method
+  String? jenisPembayaran; 
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,6 @@ class _PembayaranState extends State<Pembayaran> {
         color: const Color(0xFFEFEFEF),
         child: Column(
           children: [
-            // Header
             Container(
               width: double.infinity,
               height: 83,
@@ -67,7 +66,6 @@ class _PembayaranState extends State<Pembayaran> {
                 ),
               ),
             ),
-            // Detail Pembayaran Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: Column(
@@ -84,9 +82,8 @@ class _PembayaranState extends State<Pembayaran> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  // Display Order ID only
                   Text(
-                    'ID Pemesanan: ${widget.idPemesanan}', // Displaying the integer ID
+                    'ID Pemesanan: ${widget.idPemesanan}', 
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 11,
@@ -104,7 +101,6 @@ class _PembayaranState extends State<Pembayaran> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Row for Class Type and Price
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -117,7 +113,7 @@ class _PembayaranState extends State<Pembayaran> {
                               ),
                             ),
                             Text(
-                              'Rp. ${widget.hargaKelas.toStringAsFixed(0)},', // Display the class price
+                              'Rp. ${widget.hargaKelas.toStringAsFixed(0)},', 
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
@@ -127,7 +123,6 @@ class _PembayaranState extends State<Pembayaran> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        // Trainer Row
                         Text(
                           'Trainer : ${widget.namaTrainer}',
                           style: const TextStyle(
@@ -137,7 +132,6 @@ class _PembayaranState extends State<Pembayaran> {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // Row for Gym Equipment and Price
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -150,7 +144,7 @@ class _PembayaranState extends State<Pembayaran> {
                               ),
                             ),
                             Text(
-                              'Rp. ${widget.hargaAlatGym.toStringAsFixed(0)},', // Display the dynamic price
+                              'Rp. ${widget.hargaAlatGym.toStringAsFixed(0)},', 
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
@@ -160,7 +154,6 @@ class _PembayaranState extends State<Pembayaran> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        // Schedule Row
                         Text(
                           'Jadwal : ${widget.jadwalKelas}',
                           style: const TextStyle(
@@ -186,7 +179,7 @@ class _PembayaranState extends State<Pembayaran> {
                         ),
                       ),
                       Text(
-                        'Rp. ${(widget.hargaKelas + widget.hargaAlatGym).toStringAsFixed(0)},', // Calculate total payment
+                        'Rp. ${(widget.hargaKelas + widget.hargaAlatGym).toStringAsFixed(0)},', 
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -202,7 +195,6 @@ class _PembayaranState extends State<Pembayaran> {
 
             const Divider(height: 40, color: Color(0xFFD9D9D9), thickness: 2),
 
-            // Payment Method Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: Column(
@@ -217,7 +209,6 @@ class _PembayaranState extends State<Pembayaran> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  // Radio buttons for payment methods with icons
                   ListTile(
                     title: Row(
                       children: [
@@ -281,7 +272,6 @@ class _PembayaranState extends State<Pembayaran> {
 
             const Divider(height: 40, color: Color(0xFFD9D9D9), thickness: 2),
 
-            // Final Payment Summary
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: Row(
@@ -297,7 +287,7 @@ class _PembayaranState extends State<Pembayaran> {
                     ),
                   ),
                   Text(
-                    'Rp. ${(widget.hargaKelas + widget.hargaAlatGym).toStringAsFixed(0)},', // Calculate total payment
+                    'Rp. ${(widget.hargaKelas + widget.hargaAlatGym).toStringAsFixed(0)},', 
                     style: const TextStyle(
                       color: Color(0xFFFB3286),
                       fontSize: 20,
@@ -309,7 +299,7 @@ class _PembayaranState extends State<Pembayaran> {
               ),
             ),
 
-            // Action Buttons
+            
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -326,8 +316,8 @@ class _PembayaranState extends State<Pembayaran> {
                       ),
                     ),
                     onPressed: () {
-                      // Handle cancel action
-                      Navigator.pop(context); // Go back to the previous screen
+                      
+                      Navigator.pop(context); 
                     },
                     child: const Text(
                       'BATAL',
@@ -351,36 +341,36 @@ class _PembayaranState extends State<Pembayaran> {
                     onPressed: () async {
                       if (jenisPembayaran != null) {
                         try {
-                          // Calculate total payment
+                          
                           int totalPembayaran =
                               (widget.hargaKelas + widget.hargaAlatGym).toInt();
 
                           await PembayaranClient.createPembayaran(
                             idPemesanan:
-                                widget.idPemesanan, // Pastikan ini adalah int
+                                widget.idPemesanan, 
                             jenisPembayaran: jenisPembayaran!,
-                            statusPembayaran: 'On Going', // Set initial status
+                            statusPembayaran: 'On Going', 
                             totalPembayaran: totalPembayaran,
                           );
 
-                          // Show success message
+                          
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('Pesanan berhasil dibuat!')),
                           );
 
-                          // Optionally, navigate to another screen or reset the form
+                          
                           Navigator.pop(
-                              context); // Go back to the previous screen
+                              context); 
                         } catch (e) {
-                          // Show an error message if the order creation fails
+                          
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text('Gagal membuat pesanan: $e')),
                           );
                         }
                       } else {
-                        // Show an error message if no payment method is selected
+                      
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text('Pilih metode pembayaran')),

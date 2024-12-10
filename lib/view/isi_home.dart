@@ -25,7 +25,6 @@ class _IsiHomeState extends State<IsiHome> {
   @override
   void initState() {
     super.initState();
-    // Memulai timer untuk autoplay
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       if (_currentPage < carouselImages.length - 1) {
         _currentPage++;

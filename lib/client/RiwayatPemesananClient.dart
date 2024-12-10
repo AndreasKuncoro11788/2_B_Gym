@@ -67,7 +67,6 @@ class RiwayatPemesananClient {
     }
   }
 
-  // Fungsi untuk menghapus riwayat pemesanan
   static Future<void> deleteRiwayatPemesanan(int id) async {
     final response = await http.delete(
       Uri.parse('$url$endpoint/$id'),
@@ -77,7 +76,6 @@ class RiwayatPemesananClient {
     }
   }
 
-  // Fungsi untuk mengambil riwayat pemesanan berdasarkan ID
   static Future<RiwayatPemesanan> fetchRiwayatPemesananById(int id) async {
     final response = await http.get(Uri.parse('$url$endpoint/$id'));
 
@@ -91,7 +89,7 @@ class RiwayatPemesananClient {
   static Future<List<RiwayatPemesanan>> fetchRiwayatPemesananByPembayaranId(
       int idPembayaran) async {
     final response =
-        await http.get(Uri.parse('$url$endpoint')); // Ambil semua data riwayat
+        await http.get(Uri.parse('$url$endpoint')); 
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body)['data'];

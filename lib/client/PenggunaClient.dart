@@ -7,7 +7,6 @@ class Penggunaclient {
   static final String url = 'http://10.0.2.2:8000';
   static final String endpoint = '/api/pengguna';
 
-  // Mengambil semua data pengguna dari API
   static Future<List<Pengguna>> fetchAll() async {
     try {
       final response = await get(Uri.parse('$url$endpoint'));
@@ -23,7 +22,6 @@ class Penggunaclient {
     }
   }
 
-  // Mencari pengguna berdasarkan ID
   static Future<Pengguna> find(int id) async {
     try {
       final response = await get(Uri.parse('$url$endpoint/$id'));
@@ -37,12 +35,10 @@ class Penggunaclient {
     }
   }
 
-  // Mengambil data pengguna berdasarkan ID untuk profil
   static Future<Pengguna> fetchUser(int id) async {
     return await find(id);
   }
 
-  // Membuat pengguna baru
   static Future<Pengguna> create(Pengguna pengguna) async {
     final response = await post(
       Uri.parse('$url$endpoint'),
@@ -59,7 +55,6 @@ class Penggunaclient {
     }
   }
 
-  // Memperbarui data pengguna
   static Future<Pengguna> update(Pengguna pengguna) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('authToken');
@@ -90,7 +85,6 @@ class Penggunaclient {
     }
   }
 
-  // Menghapus pengguna berdasarkan ID
   static Future<void> destroy(int id) async {
     try {
       final response = await delete(Uri.parse('$url$endpoint/$id'));
@@ -102,7 +96,6 @@ class Penggunaclient {
     }
   }
 
-  // Metode untuk login pengguna
   static Future<Response> login(String namaPengguna, String password) async {
     try {
       final response = await post(
@@ -151,7 +144,7 @@ class Penggunaclient {
     );
 
     if (response.statusCode == 200) {
-      await prefs.remove('authToken'); // Hapus token dari perangkat lokal
+      await prefs.remove('authToken'); 
     } else {
       throw Exception(
         'Logout gagal: ${response.statusCode} - ${json.decode(response.body)['message']}',
@@ -159,7 +152,6 @@ class Penggunaclient {
     }
   }
 
-// Mengambil data pengguna yang sedang login
   static Future<Pengguna> fetchCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('authToken');

@@ -185,7 +185,7 @@ class _EditProfileState extends ConsumerState<Editprofile> {
                   jenisKelamin: genderController.text,
                   umur: ageController.text,
                   email: emailController.text,
-                  nomorTelepon: phoneController.text,kataSandi: pengguna.kataSandi, // Menggunakan data sebelumnya
+                  nomorTelepon: phoneController.text,kataSandi: pengguna.kataSandi, 
                   fotoProfil: pengguna.fotoProfil,
                 );
 

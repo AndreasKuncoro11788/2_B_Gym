@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/client/PersonalTrainerClient.dart'; // Import API client
-import 'package:flutter_application_1/entity/PersonalTrainer.dart'; // Import PersonalTrainer model
-import 'package:flutter_animate/flutter_animate.dart'; // Import animation package
+import 'package:flutter_application_1/client/PersonalTrainerClient.dart'; 
+import 'package:flutter_application_1/entity/PersonalTrainer.dart'; 
+import 'package:flutter_animate/flutter_animate.dart'; 
 
 class PersonalTrainerDetail extends StatelessWidget {
   const PersonalTrainerDetail({super.key});
@@ -51,7 +51,7 @@ class TrainerCard extends StatelessWidget {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: Colors.blueAccent, // Set a default background color
+          color: Colors.blueAccent, 
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -72,7 +72,7 @@ class TrainerCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage(_getImageByIdentity(trainer
-                      .nomorIdentitas)), // Load image based on identity number
+                      .nomorIdentitas)),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -108,8 +108,7 @@ class TrainerCard extends StatelessWidget {
   }
 
   String _getImageByIdentity(String identity) {
-    // You can customize the image selection logic based on the identity or any other criteria
-    // For now, we will return a default image
-    return 'lib/assets/default_trainer.jpg'; // Default image if no specific logic is applied
+    
+    return 'lib/assets/default_trainer.jpg'; 
   }
 }
