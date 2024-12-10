@@ -1,6 +1,7 @@
 import 'package:flutter_application_1/entity/Pengguna.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Penggunaclient {
   static final String url = 'http://10.0.2.2:8000';
@@ -11,7 +12,8 @@ class Penggunaclient {
     try {
       final response = await get(Uri.parse('$url$endpoint'));
 
-      if (response.statusCode != 200) throw Exception('Failed to load users: ${response.reasonPhrase}');
+      if (response.statusCode != 200)
+        throw Exception('Failed to load users: ${response.reasonPhrase}');
 
       Iterable list = json.decode(response.body)['data'];
 
@@ -26,7 +28,8 @@ class Penggunaclient {
     try {
       final response = await get(Uri.parse('$url$endpoint/$id'));
 
-      if (response.statusCode != 200) throw Exception('Failed to find user: ${response.reasonPhrase}');
+      if (response.statusCode != 200)
+        throw Exception('Failed to find user: ${response.reasonPhrase}');
 
       return Pengguna.fromJson(json.decode(response.body)['data']);
     } catch (e) {
@@ -40,33 +43,47 @@ class Penggunaclient {
   }
 
   // Membuat pengguna baru
-  static Future<Response> create(Pengguna pengguna) async {
-      final response = await post(
-        Uri.parse('$url$endpoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(pengguna.toJson()),
-      );
+  static Future<Pengguna> create(Pengguna pengguna) async {
+    final response = await post(
+      Uri.parse('$url$endpoint'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: pengguna.toRawJson(),
+    );
 
-      if (response.statusCode != 201) {
-        print('Response body: ${response.body}');
-        throw Exception('Failed to create user: ${response.reasonPhrase}');
-      }
-      return response;
+    if (response.statusCode == 201) {
+      return Pengguna.fromJson(json.decode(response.body)['data']);
+    } else {
+      throw Exception('Failed to create user: ${response.reasonPhrase}');
+    }
   }
 
   // Memperbarui data pengguna
-  static Future<void> update(Pengguna pengguna) async {
+  static Future<Pengguna> update(Pengguna pengguna) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+
+    if (token == null) {
+      throw Exception("Token tidak ditemukan. Silakan login kembali.");
+    }
+
     try {
       final response = await put(
-        Uri.parse('$url$endpoint/${pengguna.id}'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(pengguna.toJson()),
+        Uri.parse('$url/api/update'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: pengguna.toRawJson(),
       );
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        print('User updated successfully');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['data'];
+        return Pengguna.fromJson(data);
       } else {
-        throw Exception('Failed to update user. Status: ${response.statusCode}');
+        throw Exception(
+            'Gagal memperbarui data pengguna: ${response.reasonPhrase}');
       }
     } catch (e) {
       return Future.error('Error updating user: $e');
@@ -78,7 +95,8 @@ class Penggunaclient {
     try {
       final response = await delete(Uri.parse('$url$endpoint/$id'));
 
-      if (response.statusCode != 204) throw Exception('Failed to delete user: ${response.reasonPhrase}');
+      if (response.statusCode != 204)
+        throw Exception('Failed to delete user: ${response.reasonPhrase}');
     } catch (e) {
       return Future.error('Error deleting user: $e');
     }
@@ -96,12 +114,73 @@ class Penggunaclient {
         }),
       );
 
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final token = responseBody['token'];
 
-      if (response.statusCode != 200) throw Exception('Failed to login: ${response.reasonPhrase}');
+        if (token != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('authToken', token);
+        } else {
+          throw Exception('Token is null');
+        }
+      } else {
+        throw Exception('Failed to login: ${response.reasonPhrase}');
+      }
 
       return response;
     } catch (e) {
       return Future.error('Error logging in: $e');
     }
+  }
+
+  static Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+
+    if (token == null) {
+      throw Exception("Token tidak ditemukan. Anda mungkin sudah logout.");
+    }
+
+    final response = await post(
+      Uri.parse('$url/api/logout'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      await prefs.remove('authToken'); // Hapus token dari perangkat lokal
+    } else {
+      throw Exception(
+        'Logout gagal: ${response.statusCode} - ${json.decode(response.body)['message']}',
+      );
+    }
+  }
+
+// Mengambil data pengguna yang sedang login
+  static Future<Pengguna> fetchCurrentUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+
+    if (token == null) {
+      throw Exception("Token tidak ditemukan. Silakan login kembali.");
+    }
+
+    final response = await get(
+      Uri.parse('$url/api/me'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Gagal mengambil data pengguna: ${response.body}');
+    }
+
+    final data = json.decode(response.body)['data'];
+    return Pengguna.fromJson(data);
   }
 }

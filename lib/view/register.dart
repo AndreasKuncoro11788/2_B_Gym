@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:camera/camera.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/login.dart';
 import 'package:flutter_application_1/component/form_component.dart';
@@ -5,7 +8,8 @@ import 'package:flutter_application_1/entity/Pengguna.dart';
 import 'package:flutter_application_1/client/PenggunaClient.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  final Map? data;
+  const RegisterView({super.key, this.data});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -14,16 +18,16 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
 
-  final _namaController = TextEditingController();
-  final _nomorIdentitasController = TextEditingController();
-  final _jenisKelaminController = TextEditingController();
-  final _umurController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _kataSandiController = TextEditingController();
-  final _confirmKataSandiController = TextEditingController();
-  final _nomorTeleponController = TextEditingController();
-  
-  final _fotoProfileController = TextEditingController(text: 'https://media.istockphoto.com/id/1495088043/id/vektor/ikon-profil-pengguna-avatar-atau-ikon-orang-gambar-profil-simbol-potret-gambar-potret.jpg?s=612x612&w=0&k=20&c=vMnxIgiQh5EFyQrFGGNKtbb6tuGCT04L58nwwEGzIbc');
+  TextEditingController _namaController = TextEditingController();
+  TextEditingController _nomorIdentitasController = TextEditingController();
+  TextEditingController _jenisKelaminController = TextEditingController();
+  TextEditingController _umurController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _kataSandiController = TextEditingController();
+  TextEditingController _confirmKataSandiController = TextEditingController();
+  TextEditingController _nomorTeleponController = TextEditingController();
+
+  File? _fotoProfil;
 
   Future<void> _registerUser() async {
     if (_kataSandiController.text != _confirmKataSandiController.text) {
@@ -33,24 +37,30 @@ class _RegisterViewState extends State<RegisterView> {
       return;
     }
 
-      Pengguna pengguna = Pengguna(
-        namaPengguna: _namaController.text,
-        nomorIdentitas: _nomorIdentitasController.text,
-        jenisKelamin: _jenisKelaminController.text,
-        email: _emailController.text,
-        umur: int.parse(_umurController.text).toString(),
-        kataSandi: _kataSandiController.text,
-        nomorTelepon: _nomorTeleponController.text,
-        fotoProfile: _fotoProfileController.text,
-      );
+    Pengguna pengguna = Pengguna(
+      namaPengguna: _namaController.text,
+      nomorIdentitas: _nomorIdentitasController.text,
+      jenisKelamin: _jenisKelaminController.text,
+      email: _emailController.text,
+      umur: _umurController.text,
+      kataSandi: _kataSandiController.text,
+      nomorTelepon: _nomorTeleponController.text,
+      fotoProfil: _fotoProfil?.path ?? 'https://default-profile-url.com/default.jpg',
 
+    );
 
     try {
       await Penggunaclient.create(pengguna);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pendaftaran berhasil!')),
+      Fluttertoast.showToast(
+        msg: "Register berhasil!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: const Color.fromARGB(255, 175, 76, 135),
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
+
 
       Navigator.pushReplacement(
         context,
@@ -59,9 +69,26 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pendaftaran gagal: $e')),
-      );
+      
+
+    }
+  }
+
+  Future<void> _takePicture() async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePictureScreen(camera: firstCamera),
+      ),
+    );
+
+    if (result != null && result is File) {
+      setState(() {
+        _fotoProfil = result;
+      });
     }
   }
 
@@ -91,6 +118,20 @@ class _RegisterViewState extends State<RegisterView> {
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     const SizedBox(height: 40),
+
+                    GestureDetector(
+                      onTap: _takePicture,
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.grey.shade200,
+                        backgroundImage:
+                            _fotoProfil != null ? FileImage(_fotoProfil!) : null,
+                        child: _fotoProfil == null
+                            ? const Icon(Icons.camera_alt, size: 40, color: Colors.grey)
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
 
                     inputForm(
                       (value) {
@@ -243,6 +284,67 @@ class _RegisterViewState extends State<RegisterView> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TakePictureScreen extends StatefulWidget {
+  final CameraDescription camera;
+
+  const TakePictureScreen({super.key, required this.camera});
+
+  @override
+  TakePictureScreenState createState() => TakePictureScreenState();
+}
+
+class TakePictureScreenState extends State<TakePictureScreen> {
+  late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(
+      widget.camera,
+      ResolutionPreset.medium,
+    );
+    _initializeControllerFuture = _controller.initialize();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _takePicture() async {
+    try {
+      await _initializeControllerFuture;
+      final image = await _controller.takePicture();
+      Navigator.pop(context, File(image.path));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Ambil Foto')),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(_controller);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _takePicture,
+        child: const Icon(Icons.camera),
       ),
     );
   }

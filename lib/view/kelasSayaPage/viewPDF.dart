@@ -65,14 +65,19 @@ class _PdfGeneratorState extends State<PdfGenerator> {
               child: pw.Center(
                 child: pw.Text(
                   "Detail Pemesanan",
-                  style: pw.TextStyle(fontSize: 24, color: PdfColors.white, fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                      fontSize: 24,
+                      color: PdfColors.white,
+                      fontWeight: pw.FontWeight.bold),
                 ),
               ),
             ),
             pw.SizedBox(height: 10),
 
             // Payment and Order Details
-            pw.Text("Bukti Pembayaran", style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+            pw.Text("Bukti Pembayaran",
+                style:
+                    pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
             pw.SizedBox(height: 5),
             pw.Text("ID Pembayaran : ${widget.paymentId}"),
             pw.Text("ID Pemesanan : ${widget.orderId}"),
@@ -136,7 +141,8 @@ class _PdfGeneratorState extends State<PdfGenerator> {
               alignment: pw.Alignment.centerRight,
               child: pw.Text(
                 "Total Pembayaran : Rp. ${widget.totalPayment}",
-                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+                style:
+                    pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
               ),
             ),
 
@@ -162,7 +168,8 @@ class _PdfGeneratorState extends State<PdfGenerator> {
     await file.writeAsBytes(await doc.save());
 
     // Open PDF
-    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => doc.save());
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
   }
 
   @override
