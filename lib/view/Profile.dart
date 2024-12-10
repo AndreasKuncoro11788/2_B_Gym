@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_1/client/PenggunaClient.dart';
@@ -16,7 +17,7 @@ class UserProfile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var listener = ref.watch(profileProvider);
+    final listener = ref.watch(profileProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFEFEFEF),
@@ -49,12 +50,12 @@ class UserProfile extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 50,
-                  backgroundColor: Color(0xFFD9D9D9),
-                  backgroundImage: NetworkImage(
-                    'https://storage.googleapis.com/a1aa/image/r2zxfcEaRKRIQyJ93rkhZOGaF5nkwCef8wobNoQ7cCHDOcJnA.jpg',
-                  ),
+                  backgroundColor: const Color(0xFFD9D9D9),
+                  backgroundImage: (pengguna.fotoProfil != null && pengguna.fotoProfil.isNotEmpty)
+                      ? FileImage(File(pengguna.fotoProfil)) 
+                      : null as ImageProvider,
                 ),
                 const SizedBox(height: 16),
                 Text(
