@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/entity/DataPemesanan.dart';
 
 class DataPemesananClient {
-  static final String url = 'http://10.0.2.2:8000'; // base URL // base URL
+  static final String url = 'http://10.0.2.2:8000'; 
   static final String endpoint = '/api/data-pemesanan';
 
 

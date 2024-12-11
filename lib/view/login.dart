@@ -22,24 +22,25 @@ class _LoginViewState extends State<LoginView> {
   final LocalAuthentication auth = LocalAuthentication();
 
   Future<void> login(String username, String password) async {
-    try {
-      await Penggunaclient.login(username, password);
-      Fluttertoast.showToast(
-        msg: "Login berhasil!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: const Color.fromARGB(255, 175, 76, 117),
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeView()),
-      );
-    } catch (e) {
-
-    }
+  try {
+    await Penggunaclient.login(username, password);
+    Fluttertoast.showToast(
+      msg: "Login berhasil!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: const Color.fromARGB(255, 175, 76, 117),
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeView()),
+    );
+  } catch (e) {
+    showLoginErrorDialog(context, "Nama pengguna atau kata sandi salah.");
   }
+}
+
 
   Future<bool> isBiometricSupported() async {
     return await auth.canCheckBiometrics;

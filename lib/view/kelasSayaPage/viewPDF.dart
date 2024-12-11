@@ -49,15 +49,13 @@ class _PdfGeneratorState extends State<PdfGenerator> {
 
   Future<void> createPdf() async {
     final doc = pw.Document();
-
-    // Create PDF content
+    
     doc.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            // Header
             pw.Container(
               color: PdfColors.pinkAccent,
               width: double.infinity,
@@ -74,7 +72,6 @@ class _PdfGeneratorState extends State<PdfGenerator> {
             ),
             pw.SizedBox(height: 10),
 
-            // Payment and Order Details
             pw.Text("Bukti Pembayaran",
                 style:
                     pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
@@ -86,10 +83,8 @@ class _PdfGeneratorState extends State<PdfGenerator> {
             pw.Text("pengguna : ${widget.name}"),
             pw.Text("email : ${widget.email}"),
             pw.Text("no telepon : ${widget.phone}"),
-            pw.Text("Tanggal Pemesanan : ${widget.orderDate}"),
             pw.SizedBox(height: 15),
 
-            // Product details
             pw.Container(
               padding: pw.EdgeInsets.all(10),
               decoration: pw.BoxDecoration(
@@ -99,7 +94,6 @@ class _PdfGeneratorState extends State<PdfGenerator> {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  // Menampilkan data kelas olahraga
                   ...widget.kelasOlahraga.map((item) {
                     return pw.Padding(
                       padding: const pw.EdgeInsets.symmetric(vertical: 5),
@@ -112,8 +106,7 @@ class _PdfGeneratorState extends State<PdfGenerator> {
                       ),
                     );
                   }).toList(),
-
-                  // Menampilkan data alat gym
+                  
                   ...widget.dataAlatGym.map((item) {
                     return pw.Padding(
                       padding: const pw.EdgeInsets.symmetric(vertical: 5),
@@ -132,7 +125,6 @@ class _PdfGeneratorState extends State<PdfGenerator> {
 
             pw.SizedBox(height: 15),
 
-            // Payment method
             pw.Text("Metode Pembayaran : ${widget.paymentMethod}"),
             pw.Text("No : ${widget.paymentNumber}"),
             pw.SizedBox(height: 15),
@@ -146,7 +138,6 @@ class _PdfGeneratorState extends State<PdfGenerator> {
               ),
             ),
 
-            // Barcode and ID
             pw.SizedBox(height: 30),
             pw.Center(
               child: pw.BarcodeWidget(
@@ -156,18 +147,15 @@ class _PdfGeneratorState extends State<PdfGenerator> {
                 height: 70,
               ),
             ),
-            pw.Center(child: pw.Text(widget.paymentId)),
           ],
         ),
       ),
     );
 
-    // Save PDF
     final output = await getTemporaryDirectory();
     final file = File("${output.path}/transaction.pdf");
     await file.writeAsBytes(await doc.save());
 
-    // Open PDF
     await Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save());
   }

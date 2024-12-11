@@ -3,11 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/entity/KelasOlahraga.dart';
 
 class KelasOlahragaClient {
-  // For emulator
-  static final String url = 'http://10.0.2.2:8000'; // base URL
-  static final String endpoint = '/api/kelas-olahraga'; // Correct endpoint
+  static final String url = 'http://10.0.2.2:8000'; 
+  static final String endpoint = '/api/kelas-olahraga'; 
 
-  // Fetch all Kelas Olahraga
   Future<List<KelasOlahraga>> fetchKelasOlahraga() async {
     final response = await http.get(Uri.parse('$url$endpoint'));
 
@@ -21,7 +19,6 @@ class KelasOlahragaClient {
     }
   }
 
-  // Create a new Kelas Olahraga
   Future<KelasOlahraga> createKelasOlahraga(KelasOlahraga kelasOlahraga) async {
     final response = await http.post(
       Uri.parse('$url$endpoint'),
@@ -38,10 +35,9 @@ class KelasOlahragaClient {
     }
   }
 
-  // Update Kelas Olahraga
   Future<KelasOlahraga> updateKelasOlahraga(KelasOlahraga kelasOlahraga) async {
     final response = await http.put(
-      Uri.parse('$url$endpoint/${kelasOlahraga.id}'), // Use id instead of idKelas
+      Uri.parse('$url$endpoint/${kelasOlahraga.id}'), 
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -55,7 +51,6 @@ class KelasOlahragaClient {
     }
   }
 
-  // Delete Kelas Olahraga
   Future<void> deleteKelasOlahraga(int id) async { 
     final response = await http.delete(
       Uri.parse('$url$endpoint/$id'), 
@@ -66,7 +61,6 @@ class KelasOlahragaClient {
     }
   }
 
-  // Fetch Kelas Olahraga by id
   Future<KelasOlahraga> fetchKelasOlahragaById(int id) async { 
     final response = await http.get(Uri.parse('$url$endpoint/$id'));
     if (response.statusCode == 200) {

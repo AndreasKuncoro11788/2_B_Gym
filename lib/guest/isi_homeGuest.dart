@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/login.dart';
+import 'package:intl/intl.dart';
+
 
 class IsiHomeGuest extends StatefulWidget {
   const IsiHomeGuest({super.key});
@@ -47,6 +49,7 @@ class _IsiHomeGuestState extends State<IsiHomeGuest> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate = DateFormat('dd MMM yyyy').format(DateTime.now());
     return Scaffold(
       backgroundColor: Colors.pink[400],
       body: SafeArea(
@@ -76,7 +79,7 @@ class _IsiHomeGuestState extends State<IsiHomeGuest> {
                               height: 6,
                             ),
                             Text(
-                              '10 Okt 2024',
+                              formattedDate,
                               style: TextStyle(color: Colors.blue[200]),
                             ),
                           ],
