@@ -174,12 +174,13 @@
                 try {
                   final updatedUser = Pengguna(
                     id: pengguna.id,
-                    namaPengguna: nameController.text,
-                    nomorIdentitas: nomorIdentitasController.text,
-                    jenisKelamin: genderController.text,
-                    umur: ageController.text,
-                    email: emailController.text,
-                    nomorTelepon: phoneController.text,kataSandi: pengguna.kataSandi, 
+                    namaPengguna: nameController.text.isNotEmpty ? nameController.text : pengguna.namaPengguna,
+                    nomorIdentitas: nomorIdentitasController.text.isNotEmpty ? nomorIdentitasController.text : pengguna.nomorIdentitas,
+                    jenisKelamin: genderController.text.isNotEmpty ? genderController.text : pengguna.jenisKelamin,
+                    umur: ageController.text.isNotEmpty ? ageController.text ?? pengguna.umur : pengguna.umur,
+                    email: emailController.text.isNotEmpty ? emailController.text : pengguna.email,
+                    nomorTelepon: phoneController.text.isNotEmpty ? phoneController.text : pengguna.nomorTelepon,
+                    kataSandi: pengguna.kataSandi,
                     fotoProfil: pengguna.fotoProfil,
                   );
 
