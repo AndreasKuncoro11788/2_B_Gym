@@ -37,7 +37,6 @@ class _LoginViewState extends State<LoginView> {
       MaterialPageRoute(builder: (_) => const HomeView()),
     );
   } catch (e) {
-    // Menangani kesalahan login dan menampilkan pesan error
     showLoginErrorDialog(context, "Nama pengguna atau kata sandi salah.");
   }
 }

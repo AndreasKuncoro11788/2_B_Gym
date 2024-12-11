@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/view/home.dart';
 import 'package:flutter_application_1/view/viewList/alat_gym.dart';
 import 'package:flutter_application_1/view/viewList/kelas_olahraga.dart';
 import 'package:flutter_application_1/view/viewList/personal_trainer.dart';
 import 'package:flutter_application_1/view/Profile.dart';
+
 
 class ListViewScreen extends StatelessWidget {
   const ListViewScreen({super.key});
@@ -11,32 +13,35 @@ class ListViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Hi, Users',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '10 Okt 2024',
-                  style: TextStyle(
-                    color: Colors.blue[200],
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ],
+        title: const Text(
+          'View List',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.pink, 
+        backgroundColor: Colors.pink,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const HomeView()),
+    (route) => true, // Menghapus semua route sebelumnya
+  );
+},
+          child: Container(
+            margin: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.pink,
+            ),
+          ),
+        ),
       ),
       body: LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
@@ -134,11 +139,6 @@ class DataList extends StatelessWidget {
 
   final List<Map<String, dynamic>> data = const [
     {
-      "name": "Data Pengguna",
-      "info": "Profile Pengguna",
-      "icon": Icons.person,
-    },
-    {
       "name": "Personal Trainer",
       "info": "Booking Personal Trainer",
       "icon": Icons.fitness_center,
@@ -198,9 +198,6 @@ class DataDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data['name'] == "Data Pengguna") {
-      return const UserProfile();
-    }
 
     if (data['name'] == "Personal Trainer") {
       return const PersonalTrainerDetail();

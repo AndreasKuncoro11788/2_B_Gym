@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/View/view_list.dart'; 
+import 'package:flutter_application_1/guest/view_listGuest.dart'; 
 import 'package:flutter_application_1/guest/isi_homeGuest.dart'; 
 import 'package:flutter_application_1/guest/profileGuest.dart'; 
 
@@ -31,6 +31,7 @@ class HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: NavigationBar(
