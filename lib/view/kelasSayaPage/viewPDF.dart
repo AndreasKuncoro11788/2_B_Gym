@@ -86,7 +86,6 @@ class _PdfGeneratorState extends State<PdfGenerator> {
             pw.Text("pengguna : ${widget.name}"),
             pw.Text("email : ${widget.email}"),
             pw.Text("no telepon : ${widget.phone}"),
-            pw.Text("Tanggal Pemesanan : ${widget.orderDate}"),
             pw.SizedBox(height: 15),
 
             // Product details
