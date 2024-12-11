@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class PersonalTrainer {
-  final int id; // Using int for id
+  final int id; 
   final String namaTrainer;
   final String nomorIdentitas;
 
@@ -16,7 +16,7 @@ class PersonalTrainer {
 
   factory PersonalTrainer.fromJson(Map<String, dynamic> json) {
     return PersonalTrainer(
-      id: json['id'], // Get id from JSON
+      id: json['id'], 
       namaTrainer: json['namaTrainer'],
       nomorIdentitas: json['nomorIdentitas'],
     );
@@ -25,7 +25,7 @@ class PersonalTrainer {
   String toRawJson() => json.encode(toJson());
 
   Map<String, dynamic> toJson() => {
-        'id': id, // Add id to JSON
+        'id': id, 
         'namaTrainer': namaTrainer,
         'nomorIdentitas': nomorIdentitas,
       };

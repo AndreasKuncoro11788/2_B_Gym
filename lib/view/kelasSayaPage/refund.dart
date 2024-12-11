@@ -5,7 +5,6 @@ import 'package:flutter_application_1/entity/DataPemesanan.dart';
 import 'package:flutter_application_1/entity/Pembayaran.dart';
 import 'package:flutter_application_1/entity/AlatGym.dart';
 import 'package:flutter_application_1/entity/KelasOlahraga.dart';
-import 'package:flutter_application_1/view/kelasSayaPage/viewPDF.dart';
 import 'package:flutter_application_1/client/PembayaranClient.dart';
 import 'package:flutter_application_1/client/AlatGymClient.dart';
 import 'package:flutter_application_1/client/KelasOlahragaClient.dart';
@@ -247,13 +246,13 @@ class RefundPage extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 await DataPemesananClient.deleteDataPemesanan(id);
-                Navigator.pop(context); // Menutup dialog konfirmasi
+                Navigator.pop(context); 
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Data Pemesanan berhasil dihapus')),
+                  const SnackBar(content: Text('Kelas Kamu Berhasil di refund')),
                 );
 
-                // Refresh halaman sebelumnya
-                Navigator.pop(context); // Kembali ke halaman sebelumnya
+                
+                Navigator.pop(context); 
               },
               child: const Text('Hapus'),
             ),

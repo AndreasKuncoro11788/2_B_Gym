@@ -31,7 +31,7 @@ class _AlatGymDetailState extends State<AlatGymDetail> {
       case 'Punching Bag':
         return Icons.sports_martial_arts;
       default:
-        return Icons.fitness_center; // Default icon
+        return Icons.fitness_center;
     }
   }
 
@@ -71,7 +71,6 @@ class _AlatGymDetailState extends State<AlatGymDetail> {
                           style: const TextStyle(fontSize: 16),
                         ),
                         onTap: () {
-                          // Tambahkan aksi saat item ditekan jika diperlukan
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Anda memilih ${item.namaAlat}')),
                           );

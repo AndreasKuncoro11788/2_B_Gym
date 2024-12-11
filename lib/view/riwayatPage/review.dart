@@ -41,14 +41,14 @@ class _ReviewPageState extends State<ReviewPage> {
 
   Future<void> _fetchData() async {
     setState(() {
-      _isLoading = true; // Tampilkan loading saat data sedang diproses
+      _isLoading = true;
     });
 
     try {
       final pembayaranList =
           await PembayaranClient.fetchPembayaranByPemesananId(
               widget.idPemesanan);
-      print('Pembayaran List: $pembayaranList'); // Debug log
+      print('Pembayaran List: $pembayaranList');
 
       if (pembayaranList.isNotEmpty && pembayaranList[0].id != null) {
         _idPembayaran = pembayaranList[0].id ??  0;
@@ -66,7 +66,6 @@ class _ReviewPageState extends State<ReviewPage> {
             _isLoading = false;
           });
         } else {
-          // Inisialisasi riwayat baru jika tidak ditemukan
           setState(() {
             _updatedRiwayat = RiwayatPemesanan(
               id: 0,
@@ -77,7 +76,7 @@ class _ReviewPageState extends State<ReviewPage> {
             _isLoading = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Membuat riwayat baru!')),
+            const SnackBar(content: Text('Masukkan review kamu 🤗')),
           );
         }
       } else {
@@ -89,7 +88,7 @@ class _ReviewPageState extends State<ReviewPage> {
         );
       }
     } catch (e) {
-      print('Error: $e'); // Log error untuk debugging
+      print('Error: $e');
       setState(() {
         _isLoading = false;
       });
@@ -113,12 +112,12 @@ class _ReviewPageState extends State<ReviewPage> {
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Review berhasil dikirim!')),
+        const SnackBar(content: Text('Terima Kasih Buat Review Kamu🥰')),
       );
 
       Navigator.pop(context);
     } catch (e) {
-      print('Error: $e'); // Log error untuk debugging
+      print('Error: $e'); 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal mengirim review: ${e.toString()}')),
       );
@@ -127,7 +126,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   void dispose() {
-    _reviewController.dispose(); // Pastikan controller dibersihkan
+    _reviewController.dispose(); 
     super.dispose();
   }
 
@@ -174,7 +173,6 @@ class _ReviewPageState extends State<ReviewPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Detail Pemesanan
                     Container(
                       width: screenWidth * 0.90,
                       padding: EdgeInsets.all(screenHeight * 0.02),
@@ -225,7 +223,6 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
                     SizedBox(height: screenHeight * 0.04),
 
-                    // Rating
                     const Text(
                       'Berikan Rating: ',
                       style: TextStyle(
@@ -255,7 +252,6 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
                     SizedBox(height: screenHeight * 0.04),
 
-                    // Review Input Field
                     const Text(
                       'Tulis Review: ',
                       style: TextStyle(
@@ -279,7 +275,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
                     SizedBox(height: screenHeight * 0.04),
 
-                    // Submit Button
+                    
                     Center(
                       child: ElevatedButton(
                         onPressed: onSubmit,

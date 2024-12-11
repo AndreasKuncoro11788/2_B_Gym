@@ -3,11 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/entity/AlatGym.dart';
 
 class AlatGymClient {
-  // Untuk emulator
-  static final String url = 'http://10.0.2.2:8000'; // base URL // base URL
-  static final String endpoint = '/api/alat-gym'; // Endpoint yang benar
 
-  // Mendapatkan semua alat gym
+  static final String url = 'http://10.0.2.2:8000'; 
+  static final String endpoint = '/api/alat-gym';
+
   Future<List<AlatGym>> fetchAlatGym() async {
     final response = await http.get(Uri.parse('$url$endpoint'));
 
@@ -19,7 +18,6 @@ class AlatGymClient {
     }
   }
 
-  // Menambahkan alat gym baru
   Future<AlatGym> createAlatGym(AlatGym alatGym) async {
     final response = await http.post(
       Uri.parse('$url$endpoint'),
@@ -36,7 +34,6 @@ class AlatGymClient {
     }
   }
 
-  // Mengupdate alat gym
   Future<AlatGym> updateAlatGym(AlatGym alatGym) async {
     final response = await http.put(
       Uri.parse('$url$endpoint/${alatGym.alatId}'),
@@ -53,7 +50,6 @@ class AlatGymClient {
     }
   }
 
-  // Menghapus alat gym
   Future<void> deleteAlatGym(String alatId) async {
     final response = await http.delete(
       Uri.parse('$url$endpoint/$alatId'),
